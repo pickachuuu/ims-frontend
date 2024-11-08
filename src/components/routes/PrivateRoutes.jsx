@@ -4,7 +4,7 @@ import { AuthContext } from '../../context/AuthContext';
 
 
 const PrivateRoutes = () => {
-  const {token, isAuthenticated} = useContext(AuthContext)
+  const {isAuthenticated} = useContext(AuthContext)
   if (!isAuthenticated) {
     return <Navigate to="/" replace />;
   }
