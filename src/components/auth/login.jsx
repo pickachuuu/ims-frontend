@@ -1,11 +1,8 @@
 import React from 'react';
 import axios from 'axios';
-import { AuthContext } from '../../context/AuthContext';
 import { loginSchema } from '../validations/loginSchema';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-
-
 
 const Login = ({ toggleComponent }) => {
   const { 
@@ -18,7 +15,8 @@ const Login = ({ toggleComponent }) => {
     mode: 'onBlur',
     defaultValues: {
       email: '',
-      password: ''
+      password: '',
+      rememberMe: false
     }
   });
 
@@ -44,17 +42,18 @@ const Login = ({ toggleComponent }) => {
   };
 
   return (
-    <div className='container-fluid fixed-width-container my-custom mb-5'>
-      <div className="col-lg-9 p-4 mx-auto shadow rounded">
+    <div className='container-fluid p-1 mb-5'>
+      <div className='row'>
+        <div className="col-12 p-1">
         <div>
-          <span className='lead'>Welcome Back</span>
+          <span className='lead'>Login</span>
         </div>
         <div>
-          <h1 className='d-none d-md-block'>Login to your account</h1>
+          <span className='d-none d-md-block my-3'>Streamline your inventory, maximize your business</span>
         </div>
         
         <form onSubmit={handleSubmit(onSubmit)} className='needs-validation mt-4'>
-          <div className='mb-2'>
+          <div className='mb-3'>
             <label className='form-label'>Email</label>
             <input
               type="email"
@@ -66,7 +65,7 @@ const Login = ({ toggleComponent }) => {
             )}
           </div>
 
-          <div className='mb-2'>
+          <div className='mb-3'>
             <label className='form-label'>Password</label>
             <input
               type="password"
@@ -78,9 +77,30 @@ const Login = ({ toggleComponent }) => {
             )}
           </div>
 
-          <div>
+          <div className="row mb-3">
+            <div className="col-12">
+              <div className="form-check">
+                <input
+                  type="checkbox"
+                  className="form-check-input"
+                  id="rememberMe"
+                  {...register('rememberMe')}
+                />
+                <label className="form-check-label" htmlFor="rememberMe">
+                  Remember me
+                </label>
+              </div>
+            </div>
+            <div className="col-6 text-end">
+              <a href="#" cl  assName="text-decoration-none text-muted">
+                Forgot password?
+              </a>
+            </div>
+          </div>
+
+          <div className='mb-5'>
             <button 
-              className='btn btn-dark btn-lg my-3 btn-block rounded-pill' 
+              className='btn btn-dark btn-lg w-100 my-3 rounded-pill' 
               type='submit'
             >
               Login
@@ -91,23 +111,19 @@ const Login = ({ toggleComponent }) => {
                 {errors.root.message}
               </div>
             )}
-
-            <hr/>
-
-            <div className='text-center'>
-              <span>Don't have an account? </span>
+              <span className='my-3'>Not registered yet? </span>
               <a 
-                className='text-custom' 
+                className='text-decoration-none' 
                 href='#' 
                 onClick={toggleComponent}
               >
-                Register
+                Create a new account
               </a>
-            </div>
           </div>
         </form>
       </div>
     </div>
+  </div>
   );
 };
 
