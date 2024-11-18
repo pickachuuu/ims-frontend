@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
-import LandingPage from '../../pages/HomePage';
+import LandingPage from '../../pages/landingPage';
 import PrivateRoutes from './PrivateRoutes';
 import DashboardPage from '../../pages/dashboardPage';
 
