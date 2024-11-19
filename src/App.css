@@ -5,10 +5,17 @@ body {
     background-color: #000000;
 }
 
+/* ------ react-hook-form text color ------ */
+
+.text-red-500{
+    color: #ff0000;
+}
+
+/* ------ box properties ------ */
+
 .box-area{
     width: 930px;
 }
-
 
 .right-box {
     padding: 40px 30px 40px 40px;
