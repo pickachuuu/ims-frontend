@@ -1,12 +1,12 @@
 export const registerSchema = {
-  firstName: {
+  first_name: {
       required: "First name is required",
       minLength: {
           value: 2,
           message: "First name must be at least 2 characters"
       }
   },
-  lastName: {
+  last_name: {
       required: "Last name is required",
       minLength: {
           value: 2,
