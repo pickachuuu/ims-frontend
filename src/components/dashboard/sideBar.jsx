@@ -33,7 +33,7 @@ const handleSignOut = () => {
       )}
 
       <div 
-        className={`d-flex flex-column flex-shrink-0 p-3 bg-light sidebar ${isOpen ? 'show' : ''}`}
+        className={`d-flex flex-column flex-shrink-0 p-3  sidebar ${isOpen ? 'show' : ''}`}
         style={{ 
           width: '240px', 
           height: '100vh',
@@ -45,19 +45,21 @@ const handleSignOut = () => {
           transition: 'transform 0.3s ease-in-out'
         }}
       >
-        <div className="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
-            <div className='mx-auto'>
+        <div className="position-relative mb-3">
+            <div className="d-flex justify-content-center">
                 <img 
                     src={Logo} 
                     alt="Company Logo" 
                     className="img-fluid"
                     style={{ maxWidth: '75px', height: 'auto' }}
-                />
+                />  
             </div>
-          <button 
-            className="btn-close d-lg-none ms-auto" 
-            onClick={toggleSidebar}/>
+            <button 
+                className="btn-close d-lg-none position-absolute top-50 end-0 translate-middle-y" 
+                onClick={toggleSidebar}/>
         </div>
+
+
         <hr />
         <ul className="nav nav-pills flex-column mb-auto">
           <li className="nav-item">
