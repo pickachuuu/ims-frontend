@@ -1,55 +1,106 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import { FaHome, FaBox, FaUsers, FaChartBar, FaCog } from 'react-icons/fa'; // Install react-icons if not already installed
+import { FaHome, FaBox, FaUsers, FaChartBar, FaCog, FaBars } from 'react-icons/fa';
+import Logo from '../../assets/Logo.png'
 
 const Sidebar = () => {
+    const [isOpen, setIsOpen] = useState(false);
+    const toggleSidebar = () => setIsOpen(!isOpen);
+
+const handleSignOut = () => {
+    document.cookie = "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    const navigate = useNavigate();
+    navigate('/Dashboard');
+};
+
   return (
-    <div className="d-flex flex-column flex-shrink-0 p-3 bg-light sidebar" style={{ width: '280px', height: '100vh' }}>
-      <div className="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
-        <span className="fs-4">Your Logo</span>
-      </div>
-      <hr />
-      <ul className="nav nav-pills flex-column mb-auto">
-        <li className="nav-item">
-          <Link to="/dashboard" className="nav-link active d-flex align-items-center gap-2">
-            <FaHome /> Dashboard
-          </Link>
-        </li>
-        <li>
-          <Link to="/inventory" className="nav-link link-dark d-flex align-items-center gap-2">
-            <FaBox /> Inventory
-          </Link>
-        </li>
-        <li>
-          <Link to="/users" className="nav-link link-dark d-flex align-items-center gap-2">
-            <FaUsers /> Users
-          </Link>
-        </li>
-        <li>
-          <Link to="/reports" className="nav-link link-dark d-flex align-items-center gap-2">
-            <FaChartBar /> Reports
-          </Link>
-        </li>
-        <li>
-          <Link to="/settings" className="nav-link link-dark d-flex align-items-center gap-2">
-            <FaCog /> Settings
-          </Link>
-        </li>
-      </ul>
-      <hr />
-      <div className="dropdown">
-        <a href="#" className="d-flex align-items-center link-dark text-decoration-none dropdown-toggle" 
-           id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
-          <img src="https://github.com/mdo.png" alt="" width="32" height="32" className="rounded-circle me-2" />
-          <strong>Username</strong>
-        </a>
-        <ul className="dropdown-menu text-small shadow" aria-labelledby="dropdownUser">
-          <li><a className="dropdown-item" href="#">Profile</a></li>
-          <li><hr className="dropdown-divider" /></li>
-          <li><a className="dropdown-item" href="#">Sign out</a></li>
+    <>
+      <button 
+        className="btn btn-primary d-lg-none position-fixed top-0 start-0 m-2" 
+        onClick={toggleSidebar}
+        style={{ zIndex: 1031 }}
+      >
+        <FaBars />
+      </button>
+
+      {isOpen && (
+        <div 
+          className="position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50 d-lg-none" 
+          onClick={toggleSidebar}
+          style={{ zIndex: 1032 }}
+        />
+      )}
+
+      <div 
+        className={`d-flex flex-column flex-shrink-0 p-3 bg-light sidebar ${isOpen ? 'show' : ''}`}
+        style={{ 
+          width: '240px', 
+          height: '100vh',
+          position: 'fixed',
+          left: 0,
+          top: 0,
+          zIndex: 1033,
+          transform: isOpen ? 'translateX(0)' : 'translateX(-100%)',
+          transition: 'transform 0.3s ease-in-out'
+        }}
+      >
+        <div className="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+            <div className='mx-auto'>
+                <img 
+                    src={Logo} 
+                    alt="Company Logo" 
+                    className="img-fluid"
+                    style={{ maxWidth: '75px', height: 'auto' }}
+                />
+            </div>
+          <button 
+            className="btn-close d-lg-none ms-auto" 
+            onClick={toggleSidebar}/>
+        </div>
+        <hr />
+        <ul className="nav nav-pills flex-column mb-auto">
+          <li className="nav-item">
+            <Link to="/dashboard" className="nav-link active d-flex align-items-center gap-2" onClick={() => setIsOpen(false)}>
+              <FaHome /> Dashboard
+            </Link>
+          </li>
+          <li>
+            <Link to="/inventory" className="nav-link link-dark d-flex align-items-center gap-2" onClick={() => setIsOpen(false)}>
+              <FaBox /> Inventory
+            </Link>
+          </li>
+          <li>
+            <Link to="/users" className="nav-link link-dark d-flex align-items-center gap-2" onClick={() => setIsOpen(false)}>
+              <FaUsers /> Products
+            </Link>
+          </li>
+          <li>
+            <Link to="/reports" className="nav-link link-dark d-flex align-items-center gap-2" onClick={() => setIsOpen(false)}>
+              <FaChartBar /> Suppliers
+            </Link>
+          </li>
+          <li>
+            <Link to="/settings" className="nav-link link-dark d-flex align-items-center gap-2" onClick={() => setIsOpen(false)}>
+              <FaCog /> Settings
+            </Link>
+          </li>
         </ul>
+        <hr />
+        <div className="dropdown">
+          <a href="#" className="d-flex align-items-center link-dark text-decoration-none dropdown-toggle" 
+             id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="https://github.com/mdo.png" alt="" width="32" height="32" className="rounded-circle me-2" />
+            <strong>Username</strong>
+          </a>
+          <ul className="dropdown-menu text-small shadow" aria-labelledby="dropdownUser">
+            <li><a className="dropdown-item" href="#">Profile</a></li>
+            <li><hr className="dropdown-divider" /></li>
+            <li><a className="dropdown-item" href="/" onClick={handleSignOut}>Sign out</a></li>
+          </ul>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
