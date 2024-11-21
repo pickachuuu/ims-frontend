@@ -1,6 +1,6 @@
 import React from 'react';
 import RegisterForm from '../components/auth/register';
-import SideBanner from '../components/auth/sideBannerReg';
+import SideBanner from '../components/banners/sideBannerReg';
 import BG from '../assets/curve.svg';
 import '../App.css';
 
