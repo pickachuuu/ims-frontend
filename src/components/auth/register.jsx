@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import axios from 'axios';
 import { registerSchema } from '../validations/registerSchema';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 const Login = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
@@ -10,11 +10,14 @@ const Login = () => {
 
   const onSubmit = async (data) => {
     try {
+      console.log(data);
       const response = await axios.post('http://localhost:3000/api/users/register', data);
-
+      if (response.status === 201) {
+        navigate('/');
+      }
     } catch (error) {
       console.error(error);
-      errors.root.message = error.response.data.message;
+      // errors.root.message = error.response?.data?.message || 'Registration failed';
     }
   };
 
@@ -24,7 +27,7 @@ const Login = () => {
       <h2 className='mb-2 p-1'>Register</h2>
       <h5 className='mb-1 p-1'>Manage your inventory efficiently</h5>
         <div className="header-text mb-4 p-1">
-          <p>Let's get you all set up so you can verify your personal account and begin setting up your work profile</p>
+          <p>Let's get started! Verify your personal account and set up your work profile.</p>
         </div>
         
         <div className='row'>
@@ -34,8 +37,8 @@ const Login = () => {
               type="text" 
               className="form-control form-control-lg bg-light fs-6" 
               placeholder="First name"
-              {...register("firstName", registerSchema.firstName)}/>
-              {errors.email && <div className='text-red-500 mt-1'>{errors.email.message}</div>}
+              {...register("first_name", registerSchema.first_name)}/>
+              {errors.first_name && <div className='text-red-500 mt-1'>{errors.first_name.message}</div>}
           </div>
           </div>
           <div className='col-6'>
@@ -44,13 +47,12 @@ const Login = () => {
               type="text" 
               className="form-control form-control-lg bg-light fs-6" 
               placeholder="Last name"
-              {...register("lastName", registerSchema.lastName)}
+              {...register("last_name", registerSchema.last_name)}
             />
-            {errors.password && <div className='text-red-500 mt-1'>{errors.password.message}</div>}
+            {errors.last_name && <div className='text-red-500 mt-1'>{errors.last_name.message}</div>}
           </div>
           </div>
         </div>
-
 
         <div className='row'>
           <div className='col-12'>
@@ -66,7 +68,7 @@ const Login = () => {
           <div className='col-12'>
           <div className="mb-3">
             <input 
-              type="text" 
+              type="password" 
               className="form-control form-control-lg bg-light fs-6" 
               placeholder="Password"
               {...register("password", registerSchema.password)}
@@ -101,7 +103,7 @@ const Login = () => {
         <div className="row">
           <div className="col-12">
             <small>
-              Already have an account? <a href="#">Log in</a>
+              Already have an account? <Link to ="/" className='custom-text'>Log in</Link>
             </small>
           </div>
         </div>
