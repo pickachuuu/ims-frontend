@@ -4,6 +4,7 @@ import { loginSchema } from '../validations/loginSchema';
 import { useForm } from 'react-hook-form';
 import { useNavigate, Link } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
+import logo from '../../assets/logo.png';
 
 const Login = () => {
   const { register, handleSubmit, setError, formState: { errors } } = useForm();
@@ -44,58 +45,67 @@ const Login = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="col-md-5 right-box">
+    <form onSubmit={handleSubmit(onSubmit)} className="col-md-5 col-lg-5 col-sm-12 right-box order-sm-1 order-md-1 order-2">
+      <div className='mt-3 mx-3 d-flex justify-content-center align-items-center'>
+        <img 
+          src={logo} 
+          alt="Company Logo" 
+          className="img-fluid"
+          style={{ maxWidth: '75px', height: 'auto' }}
+        />
+      </div>
       <div className="row align-items-center p-4">
-      <h2 className='mb-5 p-1'>Login</h2>
-        <div className="header-text mb-4">
-          <p>Streamline your inventory, maximize your business</p>
-        </div>
-        
-        <div className="mb-3">
-        <input 
-          type="text" 
-          className={`form-control form-control-lg bg-light fs-6 ${errors.email ? 'is-invalid border-danger' : ''}`}
-          placeholder="Email address"
-          {...register("email", loginSchema.email)}
-        />
-        {errors.email && <div className='text-danger mt-1 small'>{errors.email.message}</div>}
-      </div>
-      
-      <div className="mb-1">
-        <input 
-          type="password" 
-          className={`form-control form-control-lg bg-light fs-6 ${errors.password ? 'is-invalid border-danger' : ''}`}
-          placeholder="Password"
-          {...register("password", loginSchema.password)}
-        />
-        {errors.password && <div className='text-danger mt-1 small'>{errors.password.message}</div>}
-      </div>
-        
-        <div className="mb-3 mt-2 d-flex justify-content-start">  {/* Changed class and removed input-group */}
-          <div className="forgot">
-            <small>
-              <a href="#">Forgot Password?</a>
-            </small>
+        <h2 className='mb-2 p-1 justify-content-end'>Login</h2>
+        <h5 className='mb-2 p-1'>Streamline your inventory</h5>
+          <div className="header-text mb-4 p-1">
+            <p>Sign in to manage your inventory and track your business growth.</p>
           </div>
+          
+          <div className="mb-3">
+          <input 
+            type="text" 
+            className={`form-control form-control-lg bg-light fs-6 ${errors.email ? 'is-invalid border-danger' : ''}`}
+            placeholder="Email address"
+            {...register("email", loginSchema.email)}
+          />
+          {errors.email && <div className='text-danger mt-1 small'>{errors.email.message}</div>}
         </div>
         
-        <div className="input-group mb-3 flex-column"> 
-          <button type="submit" className="btn btn-lg btn-primary w-100 fs-6">
-            Login
-          </button>
-          {errors.root && errors.root.message && (
-            <div className="w-100 text-center mt-2">  
-              <span className="text-danger">{errors.root.message}</span>
+        <div className="mb-1">
+          <input 
+            type="password" 
+            className={`form-control form-control-lg bg-light fs-6 ${errors.password ? 'is-invalid border-danger' : ''}`}
+            placeholder="Password"
+            {...register("password", loginSchema.password)}
+          />
+          {errors.password && <div className='text-danger mt-1 small'>{errors.password.message}</div>}
+        </div>
+          
+          <div className="mb-3 mt-2 d-flex justify-content-start">  {/* Changed class and removed input-group */}
+            <div className="forgot">
+              <small>
+                <a href="#">Forgot Password?</a>
+              </small>
             </div>
-          )}
-        </div>
-        <div className="row">
-          <div className="col-12 text-center">
-            <small>
-              Not registered yet? < Link to="/register" className='custom-text'>Create an account</Link>
-            </small>
           </div>
-        </div>
+          
+          <div className="input-group mb-3 flex-column"> 
+            <button type="submit" className="btn btn-lg btn-primary w-100 fs-6">
+              Login
+            </button>
+            {errors.root && errors.root.message && (
+              <div className="w-100 text-center mt-2">  
+                <span className="text-danger">{errors.root.message}</span>
+              </div>
+            )}
+          </div>
+          <div className="row">
+            <div className="col-12 text-center">
+              <small>
+                Not registered yet? < Link to="/register" className='custom-text'>Create an account</Link>
+              </small>
+            </div>
+          </div>
       </div>
     </form>
   );
