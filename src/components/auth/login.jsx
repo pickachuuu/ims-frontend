@@ -8,7 +8,7 @@ import logo from '../../assets/logo.png';
 
 const Login = () => {
   const { register, handleSubmit, setError, formState: { errors } } = useForm();
-  const {isAuthenticated, setIsAuthenticated} = useContext(AuthContext);
+  const {isAuthenticated, setIsAuthenticated, login} = useContext(AuthContext);
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
@@ -20,6 +20,7 @@ const Login = () => {
         const token = response.data.token;
         document.cookie = `authToken=${token}`;
         setIsAuthenticated(true);
+        login(response.data.user);
         navigate('/dashboard');
       }
       
@@ -55,13 +56,8 @@ const Login = () => {
         />
       </div>
       <div className="row align-items-center p-4">
-        <h2 className='mb-2 p-1 justify-content-end'>Login</h2>
-        <h5 className='mb-2 p-1'>Streamline your inventory</h5>
-          <div className="header-text mb-4 p-1">
-            <p>Sign in to manage your inventory and track your business growth.</p>
-          </div>
-          
-          <div className="mb-3">
+        <h2 className='mb-1 p-1 text-center'>Login to your account</h2>
+          <div className="my-3">
           <input 
             type="text" 
             className={`form-control form-control-lg bg-light fs-6 ${errors.email ? 'is-invalid border-danger' : ''}`}
