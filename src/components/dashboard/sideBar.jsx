@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import { FaHome, FaBox, FaUsers, FaChartBar, FaCog, FaBars } from 'react-icons/fa';
+import { FaHome, FaBox, FaUsers, FaChartBar, FaCog, FaBars, FaUserCircle } from 'react-icons/fa';
+import { AuthContext } from '../../context/AuthContext';
 import Logo from '../../assets/Logo.png'
 
 const Sidebar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const toggleSidebar = () => setIsOpen(!isOpen);
+    const { user, logout } = useContext(AuthContext);
 
 const handleSignOut = () => {
-    document.cookie = "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    logout();
     const navigate = useNavigate();
     navigate('/Dashboard');
 };
@@ -91,9 +93,9 @@ const handleSignOut = () => {
         <hr />
         <div className="dropdown">
           <a href="#" className="d-flex align-items-center link-dark text-decoration-none dropdown-toggle" 
-             id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
-            <img src="https://github.com/mdo.png" alt="" width="32" height="32" className="rounded-circle me-2" />
-            <strong>Username</strong>
+            id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
+            <FaUserCircle size={32} className="me-2 text-primary" /> 
+            <strong>{user || 'user'}</strong>
           </a>
           <ul className="dropdown-menu text-small shadow" aria-labelledby="dropdownUser">
             <li><a className="dropdown-item" href="#">Profile</a></li>
