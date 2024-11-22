@@ -21,7 +21,7 @@ const Login = () => {
         document.cookie = `authToken=${token}`;
         setIsAuthenticated(true);
         login(response.data.user);
-        navigate('/dashboard');
+        navigate('/Home');
       }
       
     } catch (error) {
@@ -77,7 +77,7 @@ const Login = () => {
           {errors.password && <div className='text-danger mt-1 small'>{errors.password.message}</div>}
         </div>
           
-          <div className="mb-3 mt-2 d-flex justify-content-start">  {/* Changed class and removed input-group */}
+          <div className="mb-3 mt-2 d-flex justify-content-start">
             <div className="forgot">
               <small>
                 <a href="#">Forgot Password?</a>
