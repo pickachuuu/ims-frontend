@@ -3,6 +3,7 @@ import axios from 'axios';
 import { registerSchema } from '../validations/registerSchema';
 import { useForm } from 'react-hook-form';
 import { useNavigate, Link } from 'react-router-dom';
+import logo from '../../assets/logo.png';
 
 const Login = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
@@ -17,22 +18,24 @@ const Login = () => {
       }
     } catch (error) {
       console.error(error);
-      // errors.root.message = error.response?.data?.message || 'Registration failed';
     }
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="col-md-6 c0l-sm-12 col-lg-5 right-box">
+      <div className='mt-3 mx-3 d-flex justify-content-center align-items-center'>
+        <img 
+          src={logo} 
+          alt="Company Logo" 
+          className="img-fluid"
+          style={{ maxWidth: '75px', height: 'auto' }}
+        />
+      </div>
       <div className="row align-items-center p-4">
-      <h2 className='mb-2 p-1'>Register</h2>
-      <h5 className='mb-1 p-1'>Manage your inventory efficiently</h5>
-        <div className="header-text mb-4 p-1">
-          <p>Let's get started! Verify your personal account and set up your work profile.</p>
-        </div>
-        
+      <h2 className='mb-1 p-1 text-center'>Create your account</h2>
         <div className='row'>
-          <div className='col-6'>
-          <div className="mb-3">
+          <div className='col-12'>
+          <div className="my-3">
             <input 
               type="text" 
               className="form-control form-control-lg bg-light fs-6" 
@@ -41,7 +44,7 @@ const Login = () => {
               {errors.first_name && <div className='text-red-500 mt-1'>{errors.first_name.message}</div>}
           </div>
           </div>
-          <div className='col-6'>
+          <div className='col-12'>
           <div className="mb-3">
             <input 
               type="text" 
