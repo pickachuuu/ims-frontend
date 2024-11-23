@@ -34,14 +34,33 @@ const Sidebar = ({ onPageChange, currentPage }) => {
 
     return (
         <>
-            <button 
-                className="btn btn-primary d-lg-none position-fixed top-0 start-0 m-2" 
-                onClick={() => setIsOpen(!isOpen)}
-                style={{ zIndex: 1031 }}
+            {/* Mobile Header */}
+            <div 
+                className="d-lg-none position-fixed top-0 start-0 w-100 bg-white shadow-sm"
+                style={{ 
+                    height: '60px',
+                    zIndex: 1031
+                }}
             >
-                <MdMenu />
-            </button>
+                <div className="d-flex align-items-center justify-content-between h-100 px-3">
+                    <div className="d-flex align-items-center">
+                        <button 
+                            className="btn btn-link text-dark p-0 border-0"
+                            onClick={() => setIsOpen(!isOpen)}
+                        >
+                            <MdMenu size={24} />
+                        </button>
+                        <span className="ms-3 fw-bold">CATalog</span>
+                    </div>
+                    <img 
+                        src={Logo} 
+                        alt="Company Logo" 
+                        style={{ height: '40px' }}
+                    />
+                </div>
+            </div>
 
+            {/* Mobile Overlay */}
             {isOpen && (
                 <div 
                     className="position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50 d-lg-none" 
@@ -50,6 +69,7 @@ const Sidebar = ({ onPageChange, currentPage }) => {
                 />
             )}
 
+            {/* Sidebar */}
             <div 
                 className={`d-flex flex-column flex-shrink-0 p-3 bg-white sidebar ${isOpen ? 'show' : ''}`}
                 style={{ 
@@ -63,7 +83,8 @@ const Sidebar = ({ onPageChange, currentPage }) => {
                     transition: 'transform 0.3s ease-in-out'
                 }}
             >
-                <div className="position-relative mb-3">
+                {/* Desktop Logo */}
+                <div className="position-relative mb-3 d-none d-lg-block">
                     <div className="d-flex justify-content-center">
                         <img 
                             src={Logo} 
@@ -72,13 +93,9 @@ const Sidebar = ({ onPageChange, currentPage }) => {
                             style={{ maxWidth: '75px', height: 'auto' }}
                         />  
                     </div>
-                    <button 
-                        className="btn-close d-lg-none position-absolute top-50 end-0 translate-middle-y" 
-                        onClick={() => setIsOpen(false)}
-                    />
                 </div>
 
-                <hr />
+                <hr className="d-none d-lg-block" />
                 <ul className="nav nav-pills flex-column mb-auto">
                     {menuItems.map((item) => (
                         <li key={item.id} className="nav-item mb-2">
