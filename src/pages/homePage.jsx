@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
+import BusinessSetupModal from '../components/business/businessSetupModal';
 import Sidebar from '../components/dashboard/sideBar';
 import DashboardPage from './dashboard';
 import ProductPage from './product';
@@ -6,10 +8,26 @@ import CategoriesPage from './categories';
 import LowStockPage from './lowstock';
 import SuppliersPage from './supplier';
 import ReportsPage from './reports';
+import { jwtDecode } from 'jwt-decode';
+import Cookies from 'js-cookie';
+
 
 const HomePage = () => {
     const [currentPage, setCurrentPage] = useState('dashboard');
+    const [showBusinessSetup, setShowBusinessSetup] = useState(false);
     const [isMobile, setIsMobile] = useState(window.innerWidth < 992);
+    const { user, login } = useContext(AuthContext);
+
+    useEffect(() => {
+        const token = Cookies.get('authToken'); 
+        if (token) {
+            const decodedToken = jwtDecode(token); 
+            console.log(decodedToken.businessID);
+            if (!decodedToken.businessID) { 
+                setShowBusinessSetup(true);
+            }
+        }
+    }, [user]);
 
     useEffect(() => {
         const handleResize = () => {
@@ -17,6 +35,7 @@ const HomePage = () => {
         };
 
         window.addEventListener('resize', handleResize);
+        handleResize();
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
@@ -40,18 +59,28 @@ const HomePage = () => {
     };
 
     return (
-        <div className="d-flex">
+        <div className="d-flex" id='root'>
             <Sidebar onPageChange={setCurrentPage} currentPage={currentPage} />
             <main 
-                className="flex-grow-1 p-3" 
+                className="flex-grow-1" 
                 style={{ 
                     marginLeft: isMobile ? '0' : '240px',
-                    transition: 'margin-left 0.3s ease-in-out',
-                    width: '100%'
+                    marginTop: isMobile ? '60px' : '0',
+                    padding: '15px',
+                    transition: 'all 0.3s ease-in-out',
+                    width: '100%',
+                    minHeight: '100vh',
+                    backgroundColor: '#f8f9fa'
                 }}
             >
-                {renderContent()}
+                <div className="container-fluid px-0">
+                    {renderContent()}
+                </div>
             </main>
+            <BusinessSetupModal 
+                isOpen={showBusinessSetup} 
+                onRequestClose={() => setShowBusinessSetup(false)}
+            />
         </div>
     );
 };
