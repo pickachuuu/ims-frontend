@@ -73,7 +73,7 @@ const HomePage = () => {
                     backgroundColor: '#f8f9fa',
                     backgroundImage: `url(${BG})`, 
                     backgroundSize: 'cover', 
-                    backgroundPosition: 'center', e
+                    backgroundPosition: 'center', 
                 }}
             >
                 <div className="container-fluid px-0">
