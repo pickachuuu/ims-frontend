@@ -10,7 +10,7 @@ import SuppliersPage from './supplier';
 import ReportsPage from './reports';
 import { jwtDecode } from 'jwt-decode';
 import Cookies from 'js-cookie';
-
+import BG from '../assets/curve.svg';
 
 const HomePage = () => {
     const [currentPage, setCurrentPage] = useState('dashboard');
@@ -70,7 +70,10 @@ const HomePage = () => {
                     transition: 'all 0.3s ease-in-out',
                     width: '100%',
                     minHeight: '100vh',
-                    backgroundColor: '#f8f9fa'
+                    backgroundColor: '#f8f9fa',
+                    backgroundImage: `url(${BG})`, 
+                    backgroundSize: 'cover', 
+                    backgroundPosition: 'center', e
                 }}
             >
                 <div className="container-fluid px-0">
