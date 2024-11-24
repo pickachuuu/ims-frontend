@@ -2,8 +2,7 @@ import banner from '../../assets/rb_18760.png';
 
 const SideBanner = () => {
     return (
-        <div className="col-md-7 col-sm-12 col-lg-7 rounded-4 d-flex justify-content-center align-items-center flex-column left-box order-sm-1 order-md-1 order-1" 
-            style={{ background: '#103cbe' }}>
+        <div className="col-md-7 col-sm-12 col-lg-7 rounded-4 d-flex justify-content-center align-items-center flex-column left-box order-sm-1 order-md-1 order-1 bg-primary">
             <div className="featured-image mb-3">
                 <img 
                     src={banner} 
@@ -17,7 +16,7 @@ const SideBanner = () => {
                 fontFamily: 'Courier New, Courier, monospace',
                 fontWeight: 600 
             }}>
-            Inventory
+            Catalog
             </p>
             <small 
                 className="text-white text-wrap text-center" 
@@ -25,7 +24,7 @@ const SideBanner = () => {
                     width: '17rem',
                     fontFamily: 'Courier New, Courier, monospace'
                 }}>
-                Inventory Management System
+                Organizing your inventory with purr-fection.
             </small>
         </div> 
     )
