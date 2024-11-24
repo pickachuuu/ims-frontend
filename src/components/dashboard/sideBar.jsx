@@ -34,12 +34,11 @@ const Sidebar = ({ onPageChange, currentPage }) => {
 
     return (
         <>
-            {/* Mobile Header */}
             <div 
                 className="d-lg-none position-fixed top-0 start-0 w-100 bg-white shadow-sm"
                 style={{ 
                     height: '60px',
-                    zIndex: 1031
+                    zIndex: 1
                 }}
             >
                 <div className="d-flex align-items-center justify-content-between h-100 px-3">
@@ -60,7 +59,6 @@ const Sidebar = ({ onPageChange, currentPage }) => {
                 </div>
             </div>
 
-            {/* Mobile Overlay */}
             {isOpen && (
                 <div 
                     className="position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50 d-lg-none" 
@@ -69,7 +67,6 @@ const Sidebar = ({ onPageChange, currentPage }) => {
                 />
             )}
 
-            {/* Sidebar */}
             <div 
                 className={`d-flex flex-column flex-shrink-0 p-3 bg-white sidebar ${isOpen ? 'show' : ''}`}
                 style={{ 
@@ -83,7 +80,6 @@ const Sidebar = ({ onPageChange, currentPage }) => {
                     transition: 'transform 0.3s ease-in-out'
                 }}
             >
-                {/* Desktop Logo */}
                 <div className="position-relative mb-3 d-none d-lg-block">
                     <div className="d-flex justify-content-center">
                         <img 
