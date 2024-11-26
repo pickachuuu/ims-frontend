@@ -29,6 +29,7 @@ const ProductPage = () => {
     const [selectedSupplier, setSelectedSupplier] = useState('');
     const [stockSort, setStockSort] = useState('');
     const [open, setOpen] = useState(false); 
+    const [selectedItems, setSelectedItems] = useState([]);
 
     const selectStyle = {
         width: '100%',
@@ -81,6 +82,29 @@ const ProductPage = () => {
         const updateProducts = await fetchProducts();
         setProducts(updateProducts);
         setOpen(false); 
+    };
+
+    const handleSelectAll = () => {
+        if (selectedItems.length === filteredProducts.length) {
+            setSelectedItems([]); // Unselect all
+        } else {
+            setSelectedItems(filteredProducts.map(product => product.productID)); // Select all
+        }
+    };
+
+    const handleSelectItem = (productID) => {
+        setSelectedItems(prev => {
+            if (prev.includes(productID)) {
+                return prev.filter(id => id !== productID);
+            } else {
+                return [...prev, productID];
+            }
+        });
+    };
+
+    const handleDeleteSelected = () => {
+        // Add your delete logic here
+        console.log('Deleting items:', selectedItems);
     };
 
     if (loading) return <div>Loading...</div>;
@@ -180,7 +204,7 @@ const ProductPage = () => {
                         <TableHead>
                             <TableRow>
                                 <TableCell padding="checkbox">
-                                    <Checkbox />
+
                                 </TableCell>
                                 <TableCell>Product Name</TableCell>
                                 <TableCell>Quantity</TableCell>
@@ -195,7 +219,10 @@ const ProductPage = () => {
                                 filteredProducts.map((product) => (
                                     <TableRow key={product.productID}>
                                         <TableCell padding="checkbox">
-                                            <Checkbox />
+                                            <Checkbox
+                                                checked={selectedItems.includes(product.productID)}
+                                                onChange={() => handleSelectItem(product.productID)}
+                                            />
                                         </TableCell>
                                         <TableCell>{product.productName || 'N/A'}</TableCell>
                                         <TableCell>{product.quantity || 'N/A'}</TableCell>
@@ -218,6 +245,25 @@ const ProductPage = () => {
                         </TableBody>
                     </Table>
                 </TableContainer>
+                <div className='my-2 d-flex align-items-center gap-2'>
+                    <Button 
+                        variant="outlined"
+                        onClick={handleSelectAll}
+                        sx={{ textTransform: 'none' }}
+                    >
+                        {selectedItems.length === filteredProducts.length ? 'Unselect All' : 'Select All'}
+                    </Button>
+                    <Button 
+                        variant="contained" 
+                        color="error"
+                        disabled={selectedItems.length === 0}
+                        onClick={handleDeleteSelected}
+                        startIcon={<FaTrash />}
+                        sx={{ textTransform: 'none' }}
+                    >
+                        Delete ({selectedItems.length})
+                    </Button>
+                </div>
                 <CreateProductModal isOpen={open} onRequestClose={handleClose} categories={categories} suppliers={suppliers} />
             </div>
         </div>
