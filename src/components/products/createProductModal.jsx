@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { Select, MenuItem, TextField, Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
+import ProdToast from './prodToast';
 
 const CreateProductModal = ({ isOpen, onRequestClose, categories, suppliers }) => {
     const { register, handleSubmit, setError, formState: { errors } } = useForm();
@@ -29,7 +30,10 @@ const CreateProductModal = ({ isOpen, onRequestClose, categories, suppliers }) =
             }
 
             if (response.status === 201) {
+                ProdToast('Product created successfully!');
                 onRequestClose();
+            } else {
+                setError('root', { type: 'server', message: 'Failed to create product.' });
             }
 
         } catch (error) {
