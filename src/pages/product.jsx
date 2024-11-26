@@ -27,8 +27,19 @@ const ProductPage = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('');
     const [selectedSupplier, setSelectedSupplier] = useState('');
-    const [lowStock, setLowStock] = useState(false);
+    const [stockSort, setStockSort] = useState('');
     const [open, setOpen] = useState(false); 
+
+    const selectStyle = {
+        width: '100%',
+        maxWidth: '150px',
+        marginRight: '10px',
+        marginBottom: '10px',
+        '@media (max-width: 600px)': {
+            maxWidth: '100px',
+            fontSize: '0.875rem'
+        }
+    };
 
     useEffect(() => {
         const loadData = async () => {
@@ -52,8 +63,14 @@ const ProductPage = () => {
         const matchesSearch = product.productName.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesCategory = selectedCategory ? product.categoryID === selectedCategory : true;
         const matchesSupplier = selectedSupplier ? product.supplierID === selectedSupplier : true;
-        const matchesLowStock = lowStock ? product.quantity <= 5 : true;
-        return matchesSearch && matchesCategory && matchesSupplier && matchesLowStock;
+        return matchesSearch && matchesCategory && matchesSupplier;
+    }).sort((a, b) => {
+        if (stockSort === 'highToLow') {
+            return b.quantity - a.quantity;
+        } else if (stockSort === 'lowToHigh') {
+            return a.quantity - b.quantity;
+        }
+        return 0;
     });
 
     const handleClickOpen = () => {
@@ -80,8 +97,19 @@ const ProductPage = () => {
     }, {});
 
     return (
-        <div className="container mt-5">
-            <div className="border rounded-5 p-3 bg-white shadow mx-auto">
+        <div style={{
+            left: 0,
+            right: 0,
+            bottom: 0,
+            width: '100%',
+            height: '100vh',
+            padding: '20px',
+            overflowY: 'auto',
+        }}>
+            <div className="border rounded-5 p-3 bg-white shadow mx-auto" style={{
+                maxWidth: '1200px',
+                margin: '0 auto'
+            }}>
                 <div className="d-flex justify-content-between align-items-center mb-4">
                     <Typography variant="h4">In Stock</Typography>
                     <Button variant="contained" color="primary" onClick={handleClickOpen}>
@@ -104,7 +132,7 @@ const ProductPage = () => {
                         displayEmpty
                         size='small'
                         variant="outlined"
-                        style={{ width: '100%', maxWidth: '150px', marginRight: '10px', marginBottom: '10px' }}
+                        sx={selectStyle}
                     >
                         <MenuItem value="">
                             <em>By Category</em>
@@ -121,7 +149,7 @@ const ProductPage = () => {
                         displayEmpty
                         size='small'
                         variant="outlined"
-                        style={{ width: '100%', maxWidth: '150px', marginBottom: '10px' }}
+                        sx={selectStyle}
                     >
                         <MenuItem value="">
                             <em>By Supplier</em>
@@ -132,13 +160,20 @@ const ProductPage = () => {
                             </MenuItem>
                         ))}
                     </Select>
-                    <div style={{ display: 'inline-block', alignItems: 'center' }}>
-                        <Checkbox
-                            checked={lowStock}
-                            onChange={(e) => setLowStock(e.target.checked)}
-                        />
-                        <label style={{ marginLeft: '5px' }}>Low Stock</label>
-                    </div>
+                    <Select
+                        value={stockSort}
+                        onChange={(e) => setStockSort(e.target.value)}
+                        displayEmpty
+                        size='small'
+                        variant="outlined"
+                        sx={{...selectStyle, marginRight: 0}}
+                    >
+                        <MenuItem value="">
+                            <em>Sort by Stock</em>
+                        </MenuItem>
+                        <MenuItem value="highToLow">Highest to Lowest</MenuItem>
+                        <MenuItem value="lowToHigh">Lowest to Highest</MenuItem>
+                    </Select>
                 </Box>
                 <TableContainer style={{ maxHeight: 400 }}> 
                     <Table stickyHeader>
