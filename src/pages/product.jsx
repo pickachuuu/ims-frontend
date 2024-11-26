@@ -201,10 +201,9 @@ const ProductPage = () => {
                 </Box>
                 <TableContainer style={{ maxHeight: 400 }}> 
                     <Table stickyHeader>
-                        <TableHead>
-                            <TableRow>
+                        <TableHead >
+                            <TableRow sx={{ '& th': { fontWeight: 'bold' } }}>
                                 <TableCell padding="checkbox">
-
                                 </TableCell>
                                 <TableCell>Product Name</TableCell>
                                 <TableCell>Quantity</TableCell>
