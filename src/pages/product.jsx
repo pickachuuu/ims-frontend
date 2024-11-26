@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import Cookies from 'js-cookie';
 import {
     Table,
     TableBody,
@@ -14,8 +12,11 @@ import {
     Button,
     MenuItem,
     Select,
+    Box,
 } from '@mui/material';
+import { FaEdit, FaTrash } from 'react-icons/fa';
 import CreateProductModal from '../components/products/createProductModal';
+import { fetchProducts, fetchCategories, fetchSuppliers } from '../utils/productUtils/productApi';
 
 const ProductPage = () => {
     const [products, setProducts] = useState([]);
@@ -30,61 +31,28 @@ const ProductPage = () => {
     const [open, setOpen] = useState(false); 
 
     useEffect(() => {
-        const fetchProducts = async () => {
+        const loadData = async () => {
             try {
-                const token = Cookies.get('authToken');
-                const response = await axios.get('http://localhost:3000/api/products/get', {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-                setProducts(response.data.products);
+                const productsData = await fetchProducts();
+                setProducts(productsData);
+                const categoriesData = await fetchCategories();
+                setCategories(categoriesData);
+                const suppliersData = await fetchSuppliers();
+                setSuppliers(suppliersData);
             } catch (err) {
                 setError(err.message);
             } finally {
                 setLoading(false);
             }
         };
-
-        const fetchCategories = async () => {
-            try {
-                const token = Cookies.get('authToken');
-                const response = await axios.get('http://localhost:3000/api/categories/get', {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-                setCategories(response.data.categories);
-            } catch (err) {
-                setError(err.message);
-            }
-        };
-
-        const fetchSuppliers = async () => {
-            try {
-                const token = Cookies.get('authToken');
-                const response = await axios.get('http://localhost:3000/api/suppliers/get', {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-                console.log(suppliers);
-                setSuppliers(response.data.suppliers);
-            } catch (err) {
-                setError(err.message);
-            }
-        };
-
-        fetchProducts();
-        fetchCategories();
-        fetchSuppliers();
+        loadData();
     }, []);
 
     const filteredProducts = products.filter(product => {
         const matchesSearch = product.productName.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesCategory = selectedCategory ? product.categoryID === selectedCategory : true;
         const matchesSupplier = selectedSupplier ? product.supplierID === selectedSupplier : true;
-        const matchesLowStock = lowStock ? product.quantity < 20 : true;
+        const matchesLowStock = lowStock ? product.quantity <= 5 : true;
         return matchesSearch && matchesCategory && matchesSupplier && matchesLowStock;
     });
 
@@ -92,7 +60,9 @@ const ProductPage = () => {
         setOpen(true); 
     };
 
-    const handleClose = () => {
+    const handleClose = async () => {
+        const updateProducts = await fetchProducts();
+        setProducts(updateProducts);
         setOpen(false); 
     };
 
@@ -125,15 +95,16 @@ const ProductPage = () => {
                     size="small"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    style={{ width: '250px', marginBottom: '20px' }}
+                    style={{ width: '100%', maxWidth: '250px', marginBottom: '20px' }} 
                 />
-                <div className="d-flex mb-3">
+                <Box className="mb-3" sx={{ display: 'block', marginBottom: '20px' }}>
                     <Select
                         value={selectedCategory}
                         onChange={(e) => setSelectedCategory(e.target.value)}
                         displayEmpty
+                        size='small'
                         variant="outlined"
-                        style={{ marginRight: '10px', width: '150px', height: '40px' }}
+                        style={{ width: '100%', maxWidth: '150px', marginRight: '10px', marginBottom: '10px' }}
                     >
                         <MenuItem value="">
                             <em>By Category</em>
@@ -148,8 +119,9 @@ const ProductPage = () => {
                         value={selectedSupplier}
                         onChange={(e) => setSelectedSupplier(e.target.value)}
                         displayEmpty
+                        size='small'
                         variant="outlined"
-                        style={{ marginRight: '10px', width: '150px', height: '40px' }}
+                        style={{ width: '100%', maxWidth: '150px', marginBottom: '10px' }}
                     >
                         <MenuItem value="">
                             <em>By Supplier</em>
@@ -160,16 +132,16 @@ const ProductPage = () => {
                             </MenuItem>
                         ))}
                     </Select>
-                    <div>
+                    <div style={{ display: 'inline-block', alignItems: 'center' }}>
                         <Checkbox
                             checked={lowStock}
                             onChange={(e) => setLowStock(e.target.checked)}
                         />
-                        <label>Low Stock</label>
+                        <label style={{ marginLeft: '5px' }}>Low Stock</label>
                     </div>
-                </div>
-                <TableContainer>
-                    <Table>
+                </Box>
+                <TableContainer style={{ maxHeight: 400 }}> 
+                    <Table stickyHeader>
                         <TableHead>
                             <TableRow>
                                 <TableCell padding="checkbox">
@@ -180,6 +152,7 @@ const ProductPage = () => {
                                 <TableCell>Price</TableCell>
                                 <TableCell>Category</TableCell>
                                 <TableCell>Supplier</TableCell>
+                                <TableCell>Actions</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -194,11 +167,15 @@ const ProductPage = () => {
                                         <TableCell>{product.price || 'N/A'}</TableCell>
                                         <TableCell>{categoryMap[product.categoryID] || 'N/A'}</TableCell> 
                                         <TableCell>{supplierMap[product.supplierID] || 'N/A'}</TableCell> 
+                                        <TableCell>
+                                            <FaEdit style={{ cursor: 'pointer' }} />
+                                            <FaTrash style={{ cursor: 'pointer' }} />
+                                        </TableCell>
                                     </TableRow>
                                 ))
                             ) : (
                                 <TableRow>
-                                    <TableCell colSpan={6} align="center">
+                                    <TableCell colSpan={7} align="center">
                                         No products found.
                                     </TableCell>
                                 </TableRow>
