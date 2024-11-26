@@ -11,6 +11,8 @@ import ReportsPage from './reports';
 import { jwtDecode } from 'jwt-decode';
 import Cookies from 'js-cookie';
 import BG from '../assets/curve.svg';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'; 
 
 const HomePage = () => {
     const [currentPage, setCurrentPage] = useState('dashboard');
@@ -84,6 +86,15 @@ const HomePage = () => {
                 isOpen={showBusinessSetup} 
                 onRequestClose={() => setShowBusinessSetup(false)}
             />
+            <ToastContainer 
+                position="top-right" 
+                autoClose={5000} 
+                hideProgressBar={false} 
+                closeOnClick 
+                pauseOnHover 
+                draggable 
+                theme="light" 
+            /> {/* Add ToastContainer here */}
         </div>
     );
 };
