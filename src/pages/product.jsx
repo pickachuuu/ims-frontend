@@ -130,7 +130,7 @@ const ProductPage = () => {
             padding: '20px',
             overflowY: 'auto',
         }}>
-            <div className="border rounded-5 p-3 bg-white shadow mx-auto" style={{
+            <div className="border rounded-5 p-5 bg-white shadow mx-auto" style={{
                 maxWidth: '1200px',
                 margin: '0 auto'
             }}>
