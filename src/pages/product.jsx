@@ -14,9 +14,11 @@ import {
     Select,
     Box,
 } from '@mui/material';
-import { FaEdit, FaTrash } from 'react-icons/fa';
+import { FaEdit, FaTrash } from 'react-icons/fa';;
 import CreateProductModal from '../components/products/createProductModal';
 import { fetchProducts, fetchCategories, fetchSuppliers } from '../utils/productUtils/productApi';
+import axios from 'axios';
+import Cookies from 'js-cookie';    
 
 const ProductPage = () => {
     const [products, setProducts] = useState([]);
@@ -102,9 +104,23 @@ const ProductPage = () => {
         });
     };
 
-    const handleDeleteSelected = () => {
-        // Add your delete logic here
-        console.log('Deleting items:', selectedItems);
+    const handleDeleteSelected = async () => {
+        try {
+            const token = Cookies.get('authToken');
+            console.log('Deleting items:', selectedItems);
+            await axios.delete('http://localhost:3000/api/products/deleteAll/', { 
+                data: {
+                    productIDs: selectedItems
+                },
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            const updatedProducts = await fetchProducts();
+            setProducts(updatedProducts);
+        } catch (error) {
+            console.error('Error deleting items:', error);
+        }
     };
 
     if (loading) return <div>Loading...</div>;
@@ -126,12 +142,10 @@ const ProductPage = () => {
             right: 0,
             bottom: 0,
             width: '100%',
-            height: '100vh',
+            height: '110vh',
             padding: '20px',
-            overflowY: 'auto',
         }}>
-            <div className="border rounded-5 p-5 bg-white shadow mx-auto" style={{
-                maxWidth: '1200px',
+            <div className="border rounded-5 p-3 bg-white shadow mx-auto" style={{
                 margin: '0 auto'
             }}>
                 <div className="d-flex justify-content-between align-items-center mb-4">
@@ -205,7 +219,7 @@ const ProductPage = () => {
                             <TableRow sx={{ '& th': { fontWeight: 'bold' } }}>
                                 <TableCell padding="checkbox">
                                 </TableCell>
-                                <TableCell>Product Name</TableCell>
+                                <TableCell>Product</TableCell>
                                 <TableCell>Quantity</TableCell>
                                 <TableCell>Price</TableCell>
                                 <TableCell>Category</TableCell>
@@ -244,7 +258,7 @@ const ProductPage = () => {
                         </TableBody>
                     </Table>
                 </TableContainer>
-                <div className='my-2 d-flex align-items-center gap-2'>
+                <div className='mt-3 d-flex align-items-center gap-2'>
                     <Button 
                         variant="outlined"
                         onClick={handleSelectAll}
