@@ -75,10 +75,10 @@ const HomePage = () => {
                     backgroundColor: '#f8f9fa',
                     backgroundImage: `url(${BG})`, 
                     backgroundSize: 'cover', 
-                    backgroundPosition: 'center', 
+                    backgroundPosition: 'center',
                 }}
             >
-                <div className="container-fluid px-0">
+                <div className="container-fluio px-0" >
                     {renderContent()}
                 </div>
             </main>
@@ -87,14 +87,14 @@ const HomePage = () => {
                 onRequestClose={() => setShowBusinessSetup(false)}
             />
             <ToastContainer 
-                position="top-right" 
+                position="top-center" 
                 autoClose={5000} 
                 hideProgressBar={false} 
                 closeOnClick 
                 pauseOnHover 
                 draggable 
                 theme="light" 
-            /> {/* Add ToastContainer here */}
+            />
         </div>
     );
 };
