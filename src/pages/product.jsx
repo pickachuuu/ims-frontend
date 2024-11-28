@@ -16,7 +16,7 @@ import {
 } from '@mui/material';
 import { FaEdit, FaTrash } from 'react-icons/fa';;
 import CreateProductModal from '../components/products/createProductModal';
-import { fetchProducts, fetchCategories, fetchSuppliers } from '../utils/productUtils/productApi';
+import { fetchProducts, fetchCategories, fetchSuppliers, handleDeleteSelected } from '../utils/productUtils/productApi';
 import axios from 'axios';
 import Cookies from 'js-cookie';    
 
@@ -104,23 +104,9 @@ const ProductPage = () => {
         });
     };
 
-    const handleDeleteSelected = async () => {
-        try {
-            const token = Cookies.get('authToken');
-            console.log('Deleting items:', selectedItems);
-            await axios.delete('http://localhost:3000/api/products/deleteAll/', { 
-                data: {
-                    productIDs: selectedItems
-                },
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-            const updatedProducts = await fetchProducts();
-            setProducts(updatedProducts);
-        } catch (error) {
-            console.error('Error deleting items:', error);
-        }
+    const DeleteSelected = () => {
+        handleDeleteSelected(selectedItems);
+        setProducts(updatedProducts);
     };
 
     if (loading) return <div>Loading...</div>;
@@ -270,7 +256,7 @@ const ProductPage = () => {
                         variant="contained" 
                         color="error"
                         disabled={selectedItems.length === 0}
-                        onClick={handleDeleteSelected}
+                        onClick={DeleteSelected}
                         startIcon={<FaTrash />}
                         sx={{ textTransform: 'none' }}
                     >
