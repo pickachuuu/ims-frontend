@@ -16,9 +16,7 @@ import {
 } from '@mui/material';
 import { FaEdit, FaTrash } from 'react-icons/fa';;
 import CreateProductModal from '../components/products/createProductModal';
-import { fetchProducts, fetchCategories, fetchSuppliers, handleDeleteSelected } from '../utils/productUtils/productApi';
-import axios from 'axios';
-import Cookies from 'js-cookie';    
+import { fetchProducts, fetchCategories, fetchSuppliers, handleDeleteSelected } from '../utils/productUtils/productApi'; 
 
 const ProductPage = () => {
     const [products, setProducts] = useState([]);
