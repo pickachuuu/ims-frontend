@@ -131,7 +131,7 @@ const ProductPage = () => {
             height: '110vh',
             padding: '20px',
         }}>
-            <div className="border rounded-5 p-3 bg-white shadow mx-auto" style={{
+            <div className="border rounded-5 p-4 bg-white shadow mx-auto" style={{
                 margin: '0 auto'
             }}>
                 <div className="d-flex justify-content-between align-items-center mb-4">
@@ -229,7 +229,7 @@ const ProductPage = () => {
                                         <TableCell>{categoryMap[product.categoryID] || 'N/A'}</TableCell> 
                                         <TableCell>{supplierMap[product.supplierID] || 'N/A'}</TableCell> 
                                         <TableCell>
-                                            <FaEdit style={{ cursor: 'pointer' }} />
+                                            <FaEdit style={{ cursor: 'pointer', marginRight: '10px' }} />
                                             <FaTrash style={{ cursor: 'pointer' }} />
                                         </TableCell>
                                     </TableRow>
