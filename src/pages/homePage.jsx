@@ -18,7 +18,7 @@ const HomePage = () => {
     const [currentPage, setCurrentPage] = useState('dashboard');
     const [showBusinessSetup, setShowBusinessSetup] = useState(false);
     const [isMobile, setIsMobile] = useState(window.innerWidth < 992);
-    const { user, login } = useContext(AuthContext);
+    const { user } = useContext(AuthContext);
 
     useEffect(() => {
         const token = Cookies.get('authToken'); 
@@ -61,7 +61,7 @@ const HomePage = () => {
     };
 
     return (
-        <div className="d-flex" id='root'>
+        <div className="d-flex" id='root' >
             <Sidebar onPageChange={setCurrentPage} currentPage={currentPage} />
             <main 
                 className="flex-grow-1" 
@@ -78,7 +78,7 @@ const HomePage = () => {
                     backgroundPosition: 'center',
                 }}
             >
-                <div className="container-fluio px-0" >
+                <div className="container-fluid px-0">
                     {renderContent()}
                 </div>
             </main>
