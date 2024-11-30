@@ -140,7 +140,7 @@ const ProductPage = () => {
                     size="small"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    style={{ width: '100%', maxWidth: '250px', marginBottom: '20px' }} 
+                    style={{ width: '100%', maxWidth: '250px', marginBottom: '20px', zIndex: '0' }} 
                 />
                 <Box className="mb-3" sx={{ display: 'block', marginBottom: '20px' }}>
                     <Select
@@ -238,28 +238,28 @@ const ProductPage = () => {
                     </Table>
                 </TableContainer>
                 <div className='mt-3 d-flex align-items-center gap-2'>
-                <Button 
-                    variant="outlined"
-                    onClick={handleSelectAll}
-                    sx={{ textTransform: 'none' }}
-                >
-                    {filteredProducts.length === 0 
-                        ? 'Select All' 
-                        : selectedItems.length === filteredProducts.length 
-                            ? 'Unselect All' 
-                            : 'Select All'}
-                </Button>
-                <Button 
-                    variant="contained" 
-                    color="error"
-                    disabled={selectedItems.length === 0}
-                    onClick={DeleteSelected}
-                    startIcon={<FaTrash />}
-                    sx={{ textTransform: 'none' }}
-                >
-                    Delete ({selectedItems.length})
-                </Button>
-            </div>
+            <Button 
+                variant="outlined"
+                onClick={handleSelectAll}
+                sx={{ textTransform: 'none' }}
+            >
+                {filteredProducts.length === 0 
+                    ? 'Select All' 
+                    : selectedItems.length === filteredProducts.length 
+                        ? 'Unselect All' 
+                        : 'Select All'}
+            </Button>
+            <Button 
+                variant="contained" 
+                color="error"
+                disabled={selectedItems.length === 0}
+                onClick={DeleteSelected}
+                startIcon={<FaTrash />}
+                sx={{ textTransform: 'none' }}
+            >
+                Delete ({selectedItems.length})
+            </Button>
+        </div>
                 <CreateProductModal isOpen={open} onRequestClose={handleClose} categories={categories} suppliers={suppliers} />
             </div>
     );
