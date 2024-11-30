@@ -17,6 +17,7 @@ import {
 import { FaEdit, FaTrash } from 'react-icons/fa';;
 import CreateProductModal from '../components/products/createProductModal';
 import { fetchProducts, fetchCategories, fetchSuppliers, handleDeleteSelected } from '../utils/productUtils/productApi'; 
+import ConfirmModal from '../components/products/confirmModal'
 
 const ProductPage = () => {
     const [products, setProducts] = useState([]);
@@ -86,9 +87,9 @@ const ProductPage = () => {
 
     const handleSelectAll = () => {
         if (selectedItems.length === filteredProducts.length) {
-            setSelectedItems([]); // Unselect all
+            setSelectedItems([]);
         } else {
-            setSelectedItems(filteredProducts.map(product => product.productID)); // Select all
+            setSelectedItems(filteredProducts.map(product => product.productID));
         }
     };
 
@@ -102,9 +103,11 @@ const ProductPage = () => {
         });
     };
 
-    const DeleteSelected = () => {
-        handleDeleteSelected(selectedItems);
-        setProducts(updatedProducts);
+    const DeleteSelected = async () => {
+        await handleDeleteSelected(selectedItems); 
+        const updatedProducts = await fetchProducts(); 
+        setProducts(updatedProducts); 
+        setSelectedItems([]); 
     };
 
     if (loading) return <div>Loading...</div>;
@@ -121,15 +124,7 @@ const ProductPage = () => {
     }, {});
 
     return (
-        <div style={{
-            left: 0,
-            right: 0,
-            bottom: 0,
-            width: '100%',
-            height: '110vh',
-            padding: '20px',
-        }}>
-            <div className="border rounded-5 p-4 bg-white shadow mx-auto" style={{
+            <div className="border rounded-3 p-4 bg-white shadow mx-auto" style={{
                 margin: '0 auto'
             }}>
                 <div className="d-flex justify-content-between align-items-center mb-4">
@@ -243,27 +238,30 @@ const ProductPage = () => {
                     </Table>
                 </TableContainer>
                 <div className='mt-3 d-flex align-items-center gap-2'>
-                    <Button 
-                        variant="outlined"
-                        onClick={handleSelectAll}
-                        sx={{ textTransform: 'none' }}
-                    >
-                        {selectedItems.length === filteredProducts.length ? 'Unselect All' : 'Select All'}
-                    </Button>
-                    <Button 
-                        variant="contained" 
-                        color="error"
-                        disabled={selectedItems.length === 0}
-                        onClick={DeleteSelected}
-                        startIcon={<FaTrash />}
-                        sx={{ textTransform: 'none' }}
-                    >
-                        Delete ({selectedItems.length})
-                    </Button>
-                </div>
+                <Button 
+                    variant="outlined"
+                    onClick={handleSelectAll}
+                    sx={{ textTransform: 'none' }}
+                >
+                    {filteredProducts.length === 0 
+                        ? 'Select All' 
+                        : selectedItems.length === filteredProducts.length 
+                            ? 'Unselect All' 
+                            : 'Select All'}
+                </Button>
+                <Button 
+                    variant="contained" 
+                    color="error"
+                    disabled={selectedItems.length === 0}
+                    onClick={DeleteSelected}
+                    startIcon={<FaTrash />}
+                    sx={{ textTransform: 'none' }}
+                >
+                    Delete ({selectedItems.length})
+                </Button>
+            </div>
                 <CreateProductModal isOpen={open} onRequestClose={handleClose} categories={categories} suppliers={suppliers} />
             </div>
-        </div>
     );
 };
 
