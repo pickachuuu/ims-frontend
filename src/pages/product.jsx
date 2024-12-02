@@ -189,7 +189,7 @@ const ProductPage = () => {
                     <MenuItem value="lowToHigh">Lowest to Highest</MenuItem>
                 </Select>
             </Box>
-            <TableContainer style={{ maxHeight: 400, height:'100vh' }}> 
+            <TableContainer style={{ maxHeight: 650, height:'100vh' }}> 
                 <Table stickyHeader>
                     <TableHead>
                         <TableRow sx={{ '& th': { fontWeight: 'bold' } }}>
