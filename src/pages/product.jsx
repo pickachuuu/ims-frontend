@@ -14,10 +14,10 @@ import {
     Select,
     Box,
 } from '@mui/material';
-import { FaEdit, FaTrash } from 'react-icons/fa';;
+import { FaEdit, FaTrash } from 'react-icons/fa';
 import CreateProductModal from '../components/products/createProductModal';
+import ConfirmModal from '../components/products/confirmModal'; // Import your ConfirmModal
 import { fetchProducts, fetchCategories, fetchSuppliers, handleDeleteSelected } from '../utils/productUtils/productApi'; 
-import ConfirmModal from '../components/products/confirmModal'
 
 const ProductPage = () => {
     const [products, setProducts] = useState([]);
@@ -31,17 +31,7 @@ const ProductPage = () => {
     const [stockSort, setStockSort] = useState('');
     const [open, setOpen] = useState(false); 
     const [selectedItems, setSelectedItems] = useState([]);
-
-    const selectStyle = {
-        width: '100%',
-        maxWidth: '150px',
-        marginRight: '10px',
-        marginBottom: '10px',
-        '@media (max-width: 600px)': {
-            maxWidth: '100px',
-            fontSize: '0.875rem'
-        }
-    };
+    const [confirmModalOpen, setConfirmModalOpen] = useState(false);
 
     useEffect(() => {
         const loadData = async () => {
@@ -103,11 +93,20 @@ const ProductPage = () => {
         });
     };
 
-    const DeleteSelected = async () => {
+    const handleDeleteClick = () => {
+        setConfirmModalOpen(true); 
+    };
+
+    const handleConfirmDelete = async () => {
         await handleDeleteSelected(selectedItems); 
         const updatedProducts = await fetchProducts(); 
         setProducts(updatedProducts); 
         setSelectedItems([]); 
+        setConfirmModalOpen(false); 
+    };
+
+    const handleCloseConfirmModal = () => {
+        setConfirmModalOpen(false); 
     };
 
     if (loading) return <div>Loading...</div>;
@@ -124,144 +123,147 @@ const ProductPage = () => {
     }, {});
 
     return (
-            <div className="border rounded-3 p-4 bg-white shadow mx-auto" style={{
-                margin: '0 auto'
-            }}>
-                <div className="d-flex justify-content-between align-items-center mb-4">
-                    <Typography variant="h4">In Stock</Typography>
-                    <Button variant="contained" color="primary" onClick={handleClickOpen}>
-                        + New Stock
-                    </Button>
-                </div>
-                <hr />
-                <TextField
-                    label="Quick search"
+        <div className="border rounded-3 p-4 bg-white shadow mx-auto" style={{ margin: '0 auto' }}>
+            <div className="d-flex justify-content-between align-items-center mb-4">
+                <Typography variant="h4">In Stock</Typography>
+                <Button variant="contained" color="primary" onClick={handleClickOpen}>
+                    + New Stock
+                </Button>
+            </div>
+            <hr />
+            <TextField
+                label="Quick search"
+                variant="outlined"
+                size="small"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                style={{ width: '100%', maxWidth: '250px', marginBottom: '20px' }}
+            />
+            <Box className="mb-3" sx={{ display: 'block', marginBottom: '20px' }}>
+                <Select
+                    value={selectedCategory}
+                    onChange={(e) => setSelectedCategory(e.target.value)}
+                    displayEmpty
+                    size='small'
                     variant="outlined"
-                    size="small"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    style={{ width: '100%', maxWidth: '250px', marginBottom: '20px', zIndex: '0' }} 
-                />
-                <Box className="mb-3" sx={{ display: 'block', marginBottom: '20px' }}>
-                    <Select
-                        value={selectedCategory}
-                        onChange={(e) => setSelectedCategory(e.target.value)}
-                        displayEmpty
-                        size='small'
-                        variant="outlined"
-                        sx={selectStyle}
-                    >
-                        <MenuItem value="">
-                            <em>By Category</em>
+                    sx={{ width: '100%', maxWidth: '130px', marginRight: '10px', marginBottom: '10px' }}
+                >
+                    <MenuItem value="">
+                        <em>By Category</em>
+                    </MenuItem>
+                    {categories.map((category) => (
+                        <MenuItem key={category.categoryID} value={category.categoryID}>
+                            {category.categoryName}
                         </MenuItem>
-                        {categories.map((category) => (
-                            <MenuItem key={category.categoryID} value={category.categoryID}>
-                                {category.categoryName}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                    <Select
-                        value={selectedSupplier}
-                        onChange={(e) => setSelectedSupplier(e.target.value)}
-                        displayEmpty
-                        size='small'
-                        variant="outlined"
-                        sx={selectStyle}
-                    >
-                        <MenuItem value="">
-                            <em>By Supplier</em>
+                    ))}
+                </Select>
+                <Select
+                    value={selectedSupplier}
+                    onChange={(e) => setSelectedSupplier(e.target.value)}
+                    displayEmpty
+                    size='small'
+                    variant="outlined"
+                    sx={{ width: '100%', maxWidth: '130px', marginRight: '10px', marginBottom: '10px' }}
+                >
+                    <MenuItem value="">
+                        <em>By Supplier</em>
+                    </MenuItem>
+                    {suppliers.map((supplier) => (
+                        <MenuItem key={supplier.supplierID} value={supplier.supplierID}>
+                            {supplier.supplierName}
                         </MenuItem>
-                        {suppliers.map((supplier) => (
-                            <MenuItem key={supplier.supplierID} value={supplier.supplierID}>
-                                {supplier.supplierName}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                    <Select
-                        value={stockSort}
-                        onChange={(e) => setStockSort(e.target.value)}
-                        displayEmpty
-                        size='small'
-                        variant="outlined"
-                        sx={{...selectStyle, marginRight: 0}}
-                    >
-                        <MenuItem value="">
-                            <em>Sort by Stock</em>
-                        </MenuItem>
-                        <MenuItem value="highToLow">Highest to Lowest</MenuItem>
-                        <MenuItem value="lowToHigh">Lowest to Highest</MenuItem>
-                    </Select>
-                </Box>
-                <TableContainer style={{ maxHeight: 400 }}> 
-                    <Table stickyHeader>
-                        <TableHead >
-                            <TableRow sx={{ '& th': { fontWeight: 'bold' } }}>
-                                <TableCell padding="checkbox">
-                                </TableCell>
-                                <TableCell>Product</TableCell>
-                                <TableCell>Quantity</TableCell>
-                                <TableCell>Price</TableCell>
-                                <TableCell>Category</TableCell>
-                                <TableCell>Supplier</TableCell>
-                                <TableCell>Actions</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {filteredProducts.length > 0 ? (
-                                filteredProducts.map((product) => (
-                                    <TableRow key={product.productID}>
-                                        <TableCell padding="checkbox">
-                                            <Checkbox
-                                                checked={selectedItems.includes(product.productID)}
-                                                onChange={() => handleSelectItem(product.productID)}
-                                            />
-                                        </TableCell>
-                                        <TableCell>{product.productName || 'N/A'}</TableCell>
-                                        <TableCell>{product.quantity || 'N/A'}</TableCell>
-                                        <TableCell>{product.price || 'N/A'}</TableCell>
-                                        <TableCell>{categoryMap[product.categoryID] || 'N/A'}</TableCell> 
-                                        <TableCell>{supplierMap[product.supplierID] || 'N/A'}</TableCell> 
-                                        <TableCell>
-                                            <FaEdit style={{ cursor: 'pointer', marginRight: '10px' }} />
-                                            <FaTrash style={{ cursor: 'pointer' }} />
-                                        </TableCell>
-                                    </TableRow>
-                                ))
-                            ) : (
-                                <TableRow>
-                                    <TableCell colSpan={7} align="center">
-                                        No products found.
+                    ))}
+                </Select>
+                <Select
+                    value={stockSort}
+                    onChange={(e) => setStockSort(e.target.value)}
+                    displayEmpty
+                    size='small'
+                    variant="outlined"
+                    sx={{ width: '100%', maxWidth: '130px', marginRight: '0', marginBottom: '10px' }}
+                >
+                    <MenuItem value="">
+                        <em>Sort by Stock</em>
+                    </MenuItem>
+                    <MenuItem value="highToLow">Highest to Lowest</MenuItem>
+                    <MenuItem value="lowToHigh">Lowest to Highest</MenuItem>
+                </Select>
+            </Box>
+            <TableContainer style={{ maxHeight: 400, height:'100vh' }}> 
+                <Table stickyHeader>
+                    <TableHead>
+                        <TableRow sx={{ '& th': { fontWeight: 'bold' } }}>
+                            <TableCell padding="checkbox"></TableCell>
+                            <TableCell>Product</TableCell>
+                            <TableCell>Quantity</TableCell>
+                            <TableCell>Price</TableCell>
+                            <TableCell>Category</TableCell>
+                            <TableCell>Supplier</TableCell>
+                            <TableCell>Actions</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {filteredProducts.length > 0 ? (
+                            filteredProducts.map((product) => (
+                                <TableRow key={product.productID} > 
+                                    <TableCell padding="checkbox" >
+                                        <Checkbox
+                                            checked={selectedItems.includes(product.productID)}
+                                            onChange={() => handleSelectItem(product.productID)}
+                                        />
+                                    </TableCell>
+                                    <TableCell>{product.productName || 'N/A'}</TableCell>
+                                    <TableCell>{product.quantity || 'N/A'}</TableCell>
+                                    <TableCell>{product.price || 'N/A'}</TableCell>
+                                    <TableCell>{categoryMap[product.categoryID] || 'N/A'}</TableCell> 
+                                    <TableCell>{supplierMap[product.supplierID] || 'N/A'}</TableCell> 
+                                    <TableCell>
+                                        <FaEdit style={{ cursor: 'pointer', marginRight: '10px' }} />
+                                        <FaTrash style={{ cursor: 'pointer' }} />
                                     </TableCell>
                                 </TableRow>
-                            )}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-                <div className='mt-3 d-flex align-items-center gap-2'>
-            <Button 
-                variant="outlined"
-                onClick={handleSelectAll}
-                sx={{ textTransform: 'none' }}
-            >
-                {filteredProducts.length === 0 
-                    ? 'Select All' 
-                    : selectedItems.length === filteredProducts.length 
-                        ? 'Unselect All' 
-                        : 'Select All'}
-            </Button>
-            <Button 
-                variant="contained" 
-                color="error"
-                disabled={selectedItems.length === 0}
-                onClick={DeleteSelected}
-                startIcon={<FaTrash />}
-                sx={{ textTransform: 'none' }}
-            >
-                Delete ({selectedItems.length})
-            </Button>
-        </div>
-                <CreateProductModal isOpen={open} onRequestClose={handleClose} categories={categories} suppliers={suppliers} />
+                            ))
+                        ) : (
+                            <TableRow>
+                                <TableCell colSpan={7} align="center">
+                                    No products found.
+                                </TableCell>
+                            </TableRow>
+                        )}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+            <div className='mt-3 d-flex align-items-center gap-2'>
+                <Button 
+                    variant="outlined"
+                    onClick={handleSelectAll}
+                    sx={{ textTransform: 'none' }}
+                >
+                    {filteredProducts.length === 0 
+                        ? 'Select All' 
+                        : selectedItems.length === filteredProducts.length 
+                            ? 'Unselect All' 
+                            : 'Select All'}
+                </Button>
+                <Button 
+                    variant="contained" 
+                    color="error"
+                    disabled={selectedItems.length === 0}
+                    onClick={handleDeleteClick} 
+                    startIcon={<FaTrash />}
+                    sx={{ textTransform: 'none' }}
+                >
+                    Delete ({selectedItems.length})
+                </Button>
             </div>
+            <CreateProductModal isOpen={open} onRequestClose={handleClose} categories={categories} suppliers={suppliers} />
+            <ConfirmModal 
+                isOpen={confirmModalOpen} 
+                onConfirm={handleConfirmDelete} 
+                onClose={handleCloseConfirmModal} 
+                message={`Are you sure you want to delete ${selectedItems.length} items?`}
+            />
+        </div>
     );
 };
 
