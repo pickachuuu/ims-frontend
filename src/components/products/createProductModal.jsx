@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import prodToast from '../products/prodToast'
 
 const CreateProductModal = ({ isOpen, onRequestClose, categories, suppliers }) => {
     const [formData, setFormData] = useState({
@@ -48,7 +49,7 @@ const CreateProductModal = ({ isOpen, onRequestClose, categories, suppliers }) =
             });
 
             if (response.status === 201) {
-                alert('Product created successfully!'); // Replace with your toast notification
+                prodToast('Product added sucessfully!');
                 onRequestClose();
             } else {
                 setServerError('Failed to create product.');
