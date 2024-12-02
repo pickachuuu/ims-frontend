@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import BusinessSetupModal from '../components/business/businessSetupModal';
 import Sidebar from '../components/dashboard/sideBar';
@@ -8,6 +8,7 @@ import CategoriesPage from './categories';
 import LowStockPage from './lowstock';
 import SuppliersPage from './supplier';
 import ReportsPage from './reports';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 import Cookies from 'js-cookie';
 import BG from '../assets/curve.svg';
@@ -15,16 +16,16 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'; 
 
 const HomePage = () => {
-    const [currentPage, setCurrentPage] = useState('dashboard');
-    const [showBusinessSetup, setShowBusinessSetup] = useState(false);
-    const [isMobile, setIsMobile] = useState(window.innerWidth < 992);
     const { user } = useContext(AuthContext);
+    const location = useLocation();
+    const navigate = useNavigate();
+    const [showBusinessSetup, setShowBusinessSetup] = React.useState(false);
+    const [isMobile, setIsMobile] = React.useState(window.innerWidth < 992);
 
     useEffect(() => {
         const token = Cookies.get('authToken'); 
         if (token) {
             const decodedToken = jwtDecode(token); 
-            console.log(decodedToken.businessID);
             if (!decodedToken.businessID) { 
                 setShowBusinessSetup(true);
             }
@@ -37,12 +38,12 @@ const HomePage = () => {
         };
 
         window.addEventListener('resize', handleResize);
-        handleResize();
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
     const renderContent = () => {
-        switch (currentPage) {
+        const page = location.pathname.split('/')[2] || 'dashboard'; 
+        switch (page) {
             case 'dashboard':
                 return <DashboardPage />;
             case 'products':
@@ -56,13 +57,17 @@ const HomePage = () => {
             case 'reports':
                 return <ReportsPage />;
             default:
-                return <DashboardPage />;
+                navigate('/Home/dashboard'); 
+                return null;
         }
     };
 
     return (
         <div className="d-flex" id='root' >
-            <Sidebar onPageChange={setCurrentPage} currentPage={currentPage} />
+            <Sidebar 
+                onPageChange={(page) => navigate(`/Home/${page}`)} 
+                currentPage={location.pathname.split('/')[2] || 'dashboard'} 
+            />
             <main 
                 className="flex-grow-1" 
                 style={{ 
