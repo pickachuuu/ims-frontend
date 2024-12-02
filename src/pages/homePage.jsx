@@ -86,14 +86,17 @@ const HomePage = () => {
                 isOpen={showBusinessSetup} 
                 onRequestClose={() => setShowBusinessSetup(false)}
             />
-            <ToastContainer 
-                position="top-center" 
-                autoClose={5000} 
-                hideProgressBar={false} 
-                closeOnClick 
-                pauseOnHover 
-                draggable 
-                theme="light" 
+        <ToastContainer
+            position="top-center"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="light"
             />
         </div>
     );
