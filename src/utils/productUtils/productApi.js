@@ -42,8 +42,6 @@ export const handleDeleteSelected = async (selectedItems) => {
                 Authorization: `Bearer ${token}`,
             },
         });
-        // const updatedProducts = await fetchProducts();
-        // setProducts(updatedProducts);
     } catch (error) {
         console.error('Error deleting items:', error);
     }
