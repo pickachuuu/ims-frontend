@@ -2,21 +2,18 @@ import { toast } from 'react-toastify';
 import { Bounce } from 'react-toastify';
 
 const ProdToast = (message, options = {}) => {
-    toast(message, {
-        position: "top-right",
+    toast.success(message, {
+        position: "top-center",
         autoClose: 5000,
-        hideProgressBar: true,
+        hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        style: {
-            backgroundColor: '#0d6efd', 
-            color: '#FFFFFF', 
-        },
+        theme: "light",
         transition: Bounce,
-        ...options, 
-    });
+        ...options
+});
 };
 
 export default ProdToast;
