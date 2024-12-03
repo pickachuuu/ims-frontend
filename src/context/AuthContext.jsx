@@ -35,7 +35,7 @@ const AuthProvider = ({ children }) => {
     };
 
     const removeToken = () => {
-        Cookies.remove('authToken', { path: '/', });
+        Cookies.remove('authToken', { path: '/Home', });
         setToken(null);
         setIsAuthenticated(false);
     };
@@ -46,12 +46,10 @@ const AuthProvider = ({ children }) => {
     };
   
     const logout = () => {
-      // Clear user data
       setUser(null);
       localStorage.removeItem('user');
       
-      // Clear token and auth state
-      Cookies.remove('authToken', { path: '/', });
+      removeToken();
       setToken(null);
       setIsAuthenticated(false);
     };
