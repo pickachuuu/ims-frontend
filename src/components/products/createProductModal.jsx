@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import prodToast from '../products/prodToast'
+import prodToast from '../products/prodToast';
 
-const CreateProductModal = ({ isOpen, onRequestClose, categories, suppliers }) => {
+const CreateProductModal = ({ isOpen, onRequestClose, categories, suppliers, product, mode }) => {
     const [formData, setFormData] = useState({
         productName: '',
         quantity: 0,
@@ -13,6 +13,26 @@ const CreateProductModal = ({ isOpen, onRequestClose, categories, suppliers }) =
     });
     const [errors, setErrors] = useState({});
     const [serverError, setServerError] = useState('');
+
+    useEffect(() => {
+        if (mode === 'edit' && product) {
+            setFormData({
+                productName: product.productName,
+                quantity: product.quantity,
+                price: product.price,
+                categoryID: product.categoryID || '',
+                supplierID: product.supplierID || ''
+            });
+        } else {
+            setFormData({
+                productName: '',
+                quantity: 0,
+                price: 0,
+                categoryID: '',
+                supplierID: ''
+            });
+        }
+    }, [product, mode]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -42,21 +62,32 @@ const CreateProductModal = ({ isOpen, onRequestClose, categories, suppliers }) =
                 supplierID: formData.supplierID || null,
             };
 
-            const response = await axios.post('http://localhost:3000/api/products/create', payload, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
+            let response;
+            if (mode === 'edit') {
+                // Update product API call
+                response = await axios.put(`http://localhost:3000/api/products/update/${product.productID}`, payload, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+            } else {
+                // Create product API call
+                response = await axios.post('http://localhost:3000/api/products/create', payload, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+            }
 
-            if (response.status === 201) {
-                prodToast('Product added sucessfully!');
+            if (response.status === 201 || response.status === 200) {
+                prodToast(mode === 'edit' ? 'Product updated successfully!' : 'Product added successfully!');
                 onRequestClose();
             } else {
-                setServerError('Failed to create product.');
+                setServerError('Failed to process the request.');
             }
         } catch (error) {
-            console.error("Error creating product:", error);
-            setServerError('Failed to create product.');
+            console.error("Error processing product:", error);
+            setServerError('Failed to process the request.');
         }
     };
 
@@ -65,7 +96,7 @@ const CreateProductModal = ({ isOpen, onRequestClose, categories, suppliers }) =
             <div className="modal-dialog" role="document">
                 <div className="modal-content">
                     <div className="modal-header">
-                        <h5 className="modal-title">Create New Product</h5>
+                        <h5 className="modal-title">{mode === 'edit' ? 'Edit Product' : 'Create New Product'}</h5>
                     </div>
                     <div className="modal-body">
                         <form onSubmit={onFormSubmit}>
@@ -145,7 +176,7 @@ const CreateProductModal = ({ isOpen, onRequestClose, categories, suppliers }) =
                                     Cancel
                                 </button>
                                 <button type="submit" className="btn btn-primary">
-                                    Create Product
+                                    {mode === 'edit' ? 'Update Product' : 'Create Product'}
                                 </button>
                             </div>
                         </form>
@@ -153,7 +184,7 @@ const CreateProductModal = ({ isOpen, onRequestClose, categories, suppliers }) =
                 </div>
             </div>
         </div>
-    );
+    );  
 };
 
 export default CreateProductModal;
