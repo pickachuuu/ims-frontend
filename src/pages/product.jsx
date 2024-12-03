@@ -32,6 +32,7 @@ const ProductPage = () => {
     const [open, setOpen] = useState(false); 
     const [selectedItems, setSelectedItems] = useState([]);
     const [confirmModalOpen, setConfirmModalOpen] = useState(false);
+    const [editingProduct, setEditingProduct] = useState(null); // State for the product being edited
 
     useEffect(() => {
         const loadData = async () => {
@@ -67,6 +68,7 @@ const ProductPage = () => {
 
     const handleClickOpen = () => {
         setOpen(true); 
+        setEditingProduct(null); 
     };
 
     const handleClose = async () => {
@@ -75,7 +77,12 @@ const ProductPage = () => {
         setOpen(false); 
     };
 
-    const handleSelectAll = () => {
+    const handleEditClick = (product) => {
+        setEditingProduct(product); // Set the product to be edited
+        setOpen(true); // Open the modal
+    };
+
+        const handleSelectAll = () => {
         if (selectedItems.length === filteredProducts.length) {
             setSelectedItems([]);
         } else {
@@ -189,7 +196,7 @@ const ProductPage = () => {
                     <MenuItem value="lowToHigh">Lowest to Highest</MenuItem>
                 </Select>
             </Box>
-            <TableContainer style={{ maxHeight: 650, height:'100vh' }}> 
+            <TableContainer style={{ maxHeight: 550, height:'50VH' }}> 
                 <Table stickyHeader>
                     <TableHead>
                         <TableRow sx={{ '& th': { fontWeight: 'bold' } }}>
@@ -205,8 +212,8 @@ const ProductPage = () => {
                     <TableBody>
                         {filteredProducts.length > 0 ? (
                             filteredProducts.map((product) => (
-                                <TableRow key={product.productID} > 
-                                    <TableCell padding="checkbox" >
+                                <TableRow key={product.productID}> 
+                                    <TableCell padding="checkbox">
                                         <Checkbox
                                             checked={selectedItems.includes(product.productID)}
                                             onChange={() => handleSelectItem(product.productID)}
@@ -218,8 +225,14 @@ const ProductPage = () => {
                                     <TableCell>{categoryMap[product.categoryID] || 'N/A'}</TableCell> 
                                     <TableCell>{supplierMap[product.supplierID] || 'N/A'}</TableCell> 
                                     <TableCell>
-                                        <FaEdit style={{ cursor: 'pointer', marginRight: '10px' }} />
-                                        <FaTrash style={{ cursor: 'pointer' }} />
+                                        <FaEdit 
+                                            style={{ cursor: 'pointer', marginRight: '10px' }} 
+                                            onClick={() => handleEditClick(product)} // Call edit function
+                                        />
+                                        <FaTrash 
+                                            style={{ cursor: 'pointer' }} 
+                                            onClick={handleDeleteClick} // Call delete function
+                                        />
                                     </TableCell>
                                 </TableRow>
                             ))
@@ -256,7 +269,14 @@ const ProductPage = () => {
                     Delete ({selectedItems.length})
                 </Button>
             </div>
-            <CreateProductModal isOpen={open} onRequestClose={handleClose} categories={categories} suppliers={suppliers} />
+            <CreateProductModal 
+                isOpen={open} 
+                onRequestClose={handleClose} 
+                categories={categories} 
+                suppliers={suppliers} 
+                product={editingProduct} // Pass the product to be edited
+                mode={editingProduct ? 'edit' : 'create'} // Determine mode based on whether editingProduct is set
+            />
             <ConfirmModal 
                 isOpen={confirmModalOpen} 
                 onConfirm={handleConfirmDelete} 
