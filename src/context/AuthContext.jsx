@@ -31,14 +31,14 @@ const AuthProvider = ({ children }) => {
 
     const updateToken = (newToken) => {
         setToken(newToken);
-        Cookies.set('authToken', newToken, { expires: 1 });
+        Cookies.set('authToken', newToken, { expires: 1 }); 
     };
 
     const removeToken = () => {
-        Cookies.remove('authToken', { path: '/Home', });
-        setToken(null);
-        setIsAuthenticated(false);
-    };
+      Cookies.remove('authToken'); 
+      setToken(null);
+      setIsAuthenticated(false);
+  };
 
     const login = (userData) => {
       setUser(userData);
@@ -48,11 +48,11 @@ const AuthProvider = ({ children }) => {
     const logout = () => {
       setUser(null);
       localStorage.removeItem('user');
-      
-      removeToken();
+      removeToken(); 
+      console.log(token)
       setToken(null);
-      setIsAuthenticated(false);
-    };
+      setIsAuthenticated(false); 
+  };
 
 
     const value = { token, isAuthenticated, setIsAuthenticated, login, logout, user };
