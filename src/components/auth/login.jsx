@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate, Link } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import logo from '../../assets/logo.png';
+import Cookies from 'js-cookie';  
 
 const Login = () => {
   const { register, handleSubmit, setError, formState: { errors } } = useForm();
@@ -18,7 +19,7 @@ const Login = () => {
 
       if (response.status === 200) {
         const token = response.data.token;
-        document.cookie = `authToken=${token}`;
+        Cookies.set('authToken', token, { expires: 1, sameSite: 'Lax' });
         setIsAuthenticated(true);
         login(response.data.user);
         navigate('/Home');
