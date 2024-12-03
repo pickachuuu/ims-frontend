@@ -3,7 +3,7 @@ import banner from '../../assets/rb_18760.png';
 const SideBanner = () => {
     return (
         <div className="col-md-6 col-sm-12 col-lg-7 rounded-4 d-flex justify-content-center align-items-center flex-column left-box" 
-            style={{ background: '#103cbe' }}>
+            style={{ background: '#0358E3' }}>
             <div className="featured-image mb-3">
                 <img 
                     src={banner} 
