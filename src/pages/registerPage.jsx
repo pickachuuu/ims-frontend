@@ -1,7 +1,7 @@
 import React from 'react';
 import RegisterForm from '../components/auth/register';
 import SideBanner from '../components/banners/sideBannerReg';
-import BG from '../assets/curve.svg';
+import BG from '../assets/auth.svg';
 import '../App.css';
 
 const RegisterPage = () => {
