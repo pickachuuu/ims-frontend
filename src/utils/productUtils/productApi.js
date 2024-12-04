@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import toast from '../../components/products/toastSuccess'
 
 export const fetchProducts = async () => {
     const token = Cookies.get('authToken');
@@ -34,7 +35,7 @@ export const fetchSuppliers = async () => {
 export const handleDeleteSelected = async (selectedItems) => {
     try {
         const token = Cookies.get('authToken');
-        await axios.delete('http://localhost:3000/api/products/deleteAll/', { 
+        const res = await axios.delete('http://localhost:3000/api/products/deleteAll/', { 
             data: {
                 productIDs: selectedItems
             },
@@ -42,6 +43,11 @@ export const handleDeleteSelected = async (selectedItems) => {
                 Authorization: `Bearer ${token}`,
             },
         });
+
+        
+        if (res.status == 200){
+            toast("product sucessfully deleted");
+        }
     } catch (error) {
         console.error('Error deleting items:', error);
     }
