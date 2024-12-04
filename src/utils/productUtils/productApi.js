@@ -1,6 +1,7 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import toast from '../../components/products/toastSuccess'
+import toastWarn from '../../components/products/toastWarning'
 
 export const fetchProducts = async () => {
     const token = Cookies.get('authToken');
@@ -32,6 +33,19 @@ export const fetchSuppliers = async () => {
     return response.data.suppliers;
 };
 
+export const handleDelete = async (prodID) => {
+    try {
+        const token = Cookies.get('authToken');
+        const res = await axios.delete(`http://localhost:3000/api/products/delete/${prodID}`, {
+            headers:{
+                Authorization: `bearer ${token},`
+            },
+        });
+    }catch (error) {
+        toastWarn("failed to delete product");
+    }
+};
+
 export const handleDeleteSelected = async (selectedItems) => {
     try {
         const token = Cookies.get('authToken');
@@ -46,7 +60,7 @@ export const handleDeleteSelected = async (selectedItems) => {
 
         
         if (res.status == 200){
-            toast("product sucessfully deleted");
+            toast("products sucessfully deleted");
         }
     } catch (error) {
         console.error('Error deleting items:', error);
