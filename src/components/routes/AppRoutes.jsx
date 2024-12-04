@@ -20,7 +20,7 @@ const AppRoutes = () => {
       <Routes>
         <Route path="/" element={!isAuthenticated ? <LandingPage /> : <Navigate to="/Home/dashboard" />} />
         <Route path="/register" element={<RegisterPage />} />
-        <Route element={<PrivateRoutes isAuthenticated={isAuthenticated} />}>
+        <Route element={<PrivateRoutes  />}>
           <Route path="/Home" element={<HomePage />}>
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="products" element={<ProductPage />} />
