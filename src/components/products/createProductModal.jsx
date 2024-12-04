@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import prodToast from '../products/prodToast';
+import prodToast from './toastSuccess';
 
 const CreateProductModal = ({ isOpen, onRequestClose, categories, suppliers, product, mode }) => {
     const [formData, setFormData] = useState({
