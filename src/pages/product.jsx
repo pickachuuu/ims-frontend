@@ -18,6 +18,8 @@ import { FaEdit, FaTrash } from 'react-icons/fa';
 import CreateProductModal from '../components/products/createProductModal';
 import ConfirmModal from '../components/products/confirmModal'; // Import your ConfirmModal
 import { fetchProducts, fetchCategories, fetchSuppliers, handleDeleteSelected } from '../utils/productUtils/productApi'; 
+import Skeleton from 'react-loading-skeleton'; // Import the Skeleton component
+import 'react-loading-skeleton/dist/skeleton.css'; // Import the default styles
 
 const ProductPage = () => {
     const [products, setProducts] = useState([]);
@@ -78,11 +80,11 @@ const ProductPage = () => {
     };
 
     const handleEditClick = (product) => {
-        setEditingProduct(product); // Set the product to be edited
-        setOpen(true); // Open the modal
+        setEditingProduct(product); 
+        setOpen(true); 
     };
 
-        const handleSelectAll = () => {
+    const handleSelectAll = () => {
         if (selectedItems.length === filteredProducts.length) {
             setSelectedItems([]);
         } else {
@@ -100,6 +102,10 @@ const ProductPage = () => {
         });
     };
 
+    const handleDelete = () => {
+        setConfirmModalOpen(true)
+    }
+
     const handleDeleteClick = () => {
         setConfirmModalOpen(true); 
     };
@@ -116,7 +122,6 @@ const ProductPage = () => {
         setConfirmModalOpen(false); 
     };
 
-    if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
 
     const categoryMap = categories.reduce((acc, category) => {
@@ -130,7 +135,7 @@ const ProductPage = () => {
     }, {});
 
     return (
-        <div className="border rounded-3 p-4 bg-white shadow mx-auto" style={{ margin: '0 auto' }}>
+        <div className="border rounded-3 p-4 bg-white shadow mx-auto" style={{ margin: '0 auto', height: '95vh' }}>
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <Typography variant="h4">Product</Typography>
                 <Button variant="contained" color="primary" onClick={handleClickOpen}>
@@ -196,7 +201,7 @@ const ProductPage = () => {
                     <MenuItem value="lowToHigh">Lowest to Highest</MenuItem>
                 </Select>
             </Box>
-            <TableContainer style={{ maxHeight: 550, height:'50VH' }}> 
+            <TableContainer style={{ maxHeight: 550, height: '50vh' }}> 
                 <Table stickyHeader>
                     <TableHead>
                         <TableRow sx={{ '& th': { fontWeight: 'bold' } }}>
@@ -210,7 +215,19 @@ const ProductPage = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {filteredProducts.length > 0 ? (
+                        {loading ? (
+                            [...Array(5)].map((_, index) => (
+                                <TableRow key={index}>
+                                    <TableCell padding="checkbox"><Skeleton circle width={20} height={20} /></TableCell>
+                                    <TableCell><Skeleton /></TableCell>
+                                    <TableCell><Skeleton /></TableCell>
+                                    <TableCell><Skeleton /></TableCell>
+                                    <TableCell><Skeleton /></TableCell>
+                                    <TableCell><Skeleton /></TableCell>
+                                    <TableCell><Skeleton /></TableCell>
+                                </TableRow>
+                            ))
+                        ) : filteredProducts.length > 0 ? (
                             filteredProducts.map((product) => (
                                 <TableRow key={product.productID}> 
                                     <TableCell padding="checkbox">
@@ -227,11 +244,11 @@ const ProductPage = () => {
                                     <TableCell>
                                         <FaEdit 
                                             style={{ cursor: 'pointer', marginRight: '10px' }} 
-                                            onClick={() => handleEditClick(product)} // Call edit function
+                                            onClick={() => handleEditClick(product)} 
                                         />
                                         <FaTrash 
                                             style={{ cursor: 'pointer' }} 
-                                            onClick={handleDeleteClick} // Call delete function
+                                            onClick={handleDeleteClick} 
                                         />
                                     </TableCell>
                                 </TableRow>
@@ -274,8 +291,8 @@ const ProductPage = () => {
                 onRequestClose={handleClose} 
                 categories={categories} 
                 suppliers={suppliers} 
-                product={editingProduct} // Pass the product to be edited
-                mode={editingProduct ? 'edit' : 'create'} // Determine mode based on whether editingProduct is set
+                product={editingProduct} 
+                mode={editingProduct ? 'edit' : 'create'}
             />
             <ConfirmModal 
                 isOpen={confirmModalOpen} 
