@@ -93,9 +93,9 @@ export const submitProduct = async (formData, mode, product) => {
             });
         }
 
-        return response; // Return the response for further handling
+    return response; 
     } catch (error) {
         console.error("Error processing product:", error);
-        throw new Error('Failed to process the request.'); // Throw an error to be caught in the calling function
+        throw new Error('Failed to process the request.'); 
     }
 };
