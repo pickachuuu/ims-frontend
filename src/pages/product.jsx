@@ -16,10 +16,12 @@ import {
 } from '@mui/material';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import CreateProductModal from '../components/products/createProductModal';
-import ConfirmModal from '../components/products/confirmModal'; // Import your ConfirmModal
-import { fetchProducts, fetchCategories, fetchSuppliers, handleDeleteSelected } from '../utils/productUtils/productApi'; 
-import Skeleton from 'react-loading-skeleton'; // Import the Skeleton component
-import 'react-loading-skeleton/dist/skeleton.css'; // Import the default styles
+import ConfirmModal from '../components/products/confirmModal'; 
+import { fetchProducts, handleDeleteSelected } from '../utils/productUtils/productApi'; 
+import { fetchCategories } from '../utils/categoryUtils/categoryApi';
+import { fetchSuppliers } from '../utils/supplierUtils/supplierApi';
+import Skeleton from 'react-loading-skeleton'; 
+import 'react-loading-skeleton/dist/skeleton.css'; 
 
 const ProductPage = () => {
     const [products, setProducts] = useState([]);
