@@ -66,3 +66,36 @@ export const handleDeleteSelected = async (selectedItems) => {
         console.error('Error deleting items:', error);
     }
 };
+
+export const submitProduct = async (formData, mode, product) => {
+    const token = Cookies.get('authToken');
+    const payload = {
+        productName: formData.productName,
+        quantity: formData.quantity,
+        price: formData.price,
+        categoryID: formData.categoryID || null,
+        supplierID: formData.supplierID || null,
+    };
+
+    let response;
+    try {
+        if (mode === 'edit') {
+            response = await axios.put(`http://localhost:3000/api/products/update/${product.productID}`, payload, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+        } else {
+            response = await axios.post('http://localhost:3000/api/products/create', payload, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+        }
+
+        return response; // Return the response for further handling
+    } catch (error) {
+        console.error("Error processing product:", error);
+        throw new Error('Failed to process the request.'); // Throw an error to be caught in the calling function
+    }
+};
