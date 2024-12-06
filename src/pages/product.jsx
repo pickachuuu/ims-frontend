@@ -124,8 +124,6 @@ const ProductPage = () => {
         setConfirmModalOpen(false); 
     };
 
-    if (error) return <div>Error: {error}</div>;
-
     const categoryMap = categories.reduce((acc, category) => {
         acc[category.categoryID] = category.categoryName; 
         return acc;
