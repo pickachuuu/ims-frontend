@@ -147,12 +147,8 @@ const CategoryPage = () => {
                 <TableContainer>
                     <Table>
                         <TableHead>
-                            <TableRow>
+                            <TableRow sx={{ '& th': { fontWeight: 'bold' } }}>
                                 <TableCell padding="checkbox">
-                                    <Checkbox
-                                        checked={selectedItems.length === filteredCategories.length}
-                                        onChange={handleSelectAll}
-                                    />
                                 </TableCell>
                                 <TableCell>Name</TableCell>
                                 <TableCell>Description</TableCell>
