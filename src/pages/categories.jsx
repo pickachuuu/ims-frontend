@@ -14,29 +14,34 @@ import {
     Select,
     Box,
 } from '@mui/material';
+import CategoryModal from '../components/category/categoryModal';
+import { fetchCategories } from '../utils/categoryUtils/categoryApi';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 
 const CategoryPage = () => {
     const [categories, setCategories] = useState([]);
     const [newCategory, setNewCategory] = useState({ name: '', description: '' });
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Fetch existing categories (static data for now)
-        const fetchCategories = () => {
-            const existingCategories = [
-                { id: 1, name: 'Electronics', description: 'Devices and gadgets' },
-                { id: 2, name: 'Furniture', description: 'Home and office furniture' },
-                { id: 3, name: 'Clothing', description: 'Apparel and accessories' },
-            ];
-            setCategories(existingCategories);
+        const loadData = async () => {
+            try {
+                const categoriesData = await fetchCategories();
+                setCategories(categoriesData);
+            } catch (err) {
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
         };
-        fetchCategories();
+        console.log(categories)
+        loadData();
     }, []);
 
+
     const handleAddCategory = () => {
-        // Temporary function for adding a category
         console.log('Add Category:', newCategory);
-        setNewCategory({ name: '', description: '' }); // Reset form
+        setNewCategory({ name: '', description: '' }); 
     };
 
     const handleEditCategory = (id) => {
@@ -70,8 +75,8 @@ const CategoryPage = () => {
                         </TableHead>
                         <TableBody>
                             {categories.map((category) => (
-                                <TableRow key={category.id}>
-                                    <TableCell>{category.name}</TableCell>
+                                <TableRow key={category.categoryID}>
+                                    <TableCell>{category.categoryName}</TableCell>
                                     <TableCell>{category.description}</TableCell>
                                     <TableCell>
                                         <FaEdit
