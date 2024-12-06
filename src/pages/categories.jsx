@@ -24,6 +24,7 @@ const CategoryPage = () => {
     const [loading, setLoading] = useState(true);
     const [open, setOpen] = useState(false);
     const [editingCategory, setEditingCategory] = useState(null);
+    const [selectedItems, setSelectedItems] = useState([]); // State for selected categories
 
     useEffect(() => {
         const loadData = async () => {
@@ -69,6 +70,33 @@ const CategoryPage = () => {
         }
     };
 
+    const handleSelectAll = () => {
+        if (selectedItems.length === categories.length) {
+            setSelectedItems([]);
+        } else {
+            setSelectedItems(categories.map(category => category.categoryID));
+        }
+    };
+
+    const handleSelectItem = (categoryID) => {
+        setSelectedItems(prev => {
+            if (prev.includes(categoryID)) {
+                return prev.filter(id => id !== categoryID);
+            } else {
+                return [...prev, categoryID];
+            }
+        });
+    };
+
+    const handleDeleteSelected = async () => {
+        for (const id of selectedItems) {
+            await handleDelete(id);
+        }
+        const updatedCategories = await fetchCategories();
+        setCategories(updatedCategories);
+        setSelectedItems([]);
+    };
+
     return (
         <div className="border rounded-3 p-4 bg-white shadow mx-auto" style={{ margin: '0 auto', height: '95vh' }}>
             <div className="d-flex justify-content-between align-items-center mb-4">
@@ -83,6 +111,12 @@ const CategoryPage = () => {
                     <Table>
                         <TableHead>
                             <TableRow>
+                                <TableCell padding="checkbox">
+                                    <Checkbox
+                                        checked={selectedItems.length === categories.length}
+                                        onChange={handleSelectAll}
+                                    />
+                                </TableCell>
                                 <TableCell>Name</TableCell>
                                 <TableCell>Description</TableCell>
                                 <TableCell>Actions</TableCell>
@@ -91,6 +125,12 @@ const CategoryPage = () => {
                         <TableBody>
                             {categories.map((category) => (
                                 <TableRow key={category.categoryID}>
+                                    <TableCell padding="checkbox">
+                                        <Checkbox
+                                            checked={selectedItems.includes(category.categoryID)}
+                                            onChange={() => handleSelectItem(category.categoryID)}
+                                        />
+                                    </TableCell>
                                     <TableCell>{category.categoryName}</TableCell>
                                     <TableCell>{category.description}</TableCell>
                                     <TableCell>
@@ -108,6 +148,27 @@ const CategoryPage = () => {
                         </TableBody>
                     </Table>
                 </TableContainer>
+            </div>
+            <div className='mt-3 d-flex align-items-center gap-2'>
+                <Button 
+                    variant="outlined"
+                    onClick={handleSelectAll}
+                    sx={{ textTransform: 'none' }}
+                >
+                    {selectedItems.length === categories.length 
+                        ? 'Unselect All' 
+                        : 'Select All'}
+                </Button>
+                <Button 
+                    variant="contained" 
+                    color="error"
+                    disabled={selectedItems.length === 0}
+                    onClick={handleDeleteSelected} 
+                    startIcon={<FaTrash />}
+                    sx={{ textTransform: 'none' }}
+                >
+                    Delete ({selectedItems.length})
+                </Button>
             </div>
             <div>
                 <CategoryModal
