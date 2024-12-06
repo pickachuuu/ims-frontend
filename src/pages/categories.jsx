@@ -15,13 +15,15 @@ import {
     Box,
 } from '@mui/material';
 import CategoryModal from '../components/category/categoryModal';
-import { fetchCategories } from '../utils/categoryUtils/categoryApi';
+import { fetchCategories, handleDelete } from '../utils/categoryUtils/categoryApi';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 
 const CategoryPage = () => {
     const [categories, setCategories] = useState([]);
     const [newCategory, setNewCategory] = useState({ name: '', description: '' });
     const [loading, setLoading] = useState(true);
+    const [open, setOpen] = useState(false);
+    const [editingCategory, setEditingCategory] = useState(null);
 
     useEffect(() => {
         const loadData = async () => {
@@ -29,36 +31,49 @@ const CategoryPage = () => {
                 const categoriesData = await fetchCategories();
                 setCategories(categoriesData);
             } catch (err) {
-                setError(err.message);
+                console.error(err.message);
             } finally {
                 setLoading(false);
             }
         };
-        console.log(categories)
         loadData();
     }, []);
 
+    const handleClickOpen = () => {
+        setOpen(true); 
+        setEditingCategory(null); 
+    };
+
+    const handleClose = async () => {
+        const updatedCategories = await fetchCategories();
+        setCategories(updatedCategories);
+        setOpen(false); 
+    };
 
     const handleAddCategory = () => {
-        console.log('Add Category:', newCategory);
         setNewCategory({ name: '', description: '' }); 
     };
 
-    const handleEditCategory = (id) => {
-        // Temporary function for editing a category
-        console.log('Edit Category ID:', id);
+    const handleEditCategory = (category) => {
+        setEditingCategory(category);
+        setOpen(true); 
     };
 
-    const handleDeleteCategory = (id) => {
-        // Temporary function for deleting a category
-        console.log('Delete Category ID:', id);
+    const handleDeleteCategory = async (id) => {
+        try {
+            await handleDelete(id);
+            const updatedCategories = await fetchCategories();
+            setCategories(updatedCategories);
+        } catch (error) {
+            console.error('Error deleting category:', error);
+        }
     };
 
     return (
         <div className="border rounded-3 p-4 bg-white shadow mx-auto" style={{ margin: '0 auto', height: '95vh' }}>
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <Typography variant="h4">Categories</Typography>
-                <Button variant="contained" color="primary" >
+                <Button variant="contained" color="primary" onClick={handleClickOpen}>
                     + Add category
                 </Button>
             </div>
@@ -81,11 +96,11 @@ const CategoryPage = () => {
                                     <TableCell>
                                         <FaEdit
                                             style={{ cursor: 'pointer', marginRight: '10px' }}
-                                            onClick={() => handleEditCategory(category.id)}
+                                            onClick={() => handleEditCategory(category)}
                                         />
                                         <FaTrash
                                             style={{ cursor: 'pointer' }}
-                                            onClick={() => handleDeleteCategory(category.id)}
+                                            onClick={() => handleDeleteCategory(category.categoryID)}
                                         />
                                     </TableCell>
                                 </TableRow>
@@ -93,6 +108,15 @@ const CategoryPage = () => {
                         </TableBody>
                     </Table>
                 </TableContainer>
+            </div>
+            <div>
+                <CategoryModal
+                    isOpen={open}
+                    onRequestClose={handleClose}
+                    category={editingCategory}
+                    mode={editingCategory ? 'edit' : 'create'}
+                    editingCategory={editingCategory}
+                />
             </div>
         </div>
     );
