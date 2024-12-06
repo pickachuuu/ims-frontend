@@ -1,58 +1,31 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import prodToast from './toastSuccess';
 import { submitProduct } from '../../utils/productUtils/productApi';
+import { useForm } from 'react-hook-form';
 
 const CreateProductModal = ({ isOpen, onRequestClose, categories, suppliers, product, mode }) => {
-    const [formData, setFormData] = useState({
-        productName: '',
-        quantity: 0,
-        price: 0,
-        categoryID: '',
-        supplierID: ''
-    });
-    const [errors, setErrors] = useState({});
+    const { register, handleSubmit, formState: { errors }, setValue } = useForm();
     const [serverError, setServerError] = useState('');
 
     useEffect(() => {
         if (mode === 'edit' && product) {
-            setFormData({
-                productName: product.productName,
-                quantity: product.quantity,
-                price: product.price,
-                categoryID: product.categoryID || '',
-                supplierID: product.supplierID || ''
-            });
+            setValue('productName', product.productName);
+            setValue('quantity', product.quantity);
+            setValue('price', product.price);
+            setValue('categoryID', product.categoryID || '');
+            setValue('supplierID', product.supplierID || '');
         } else {
-            setFormData({
-                productName: '',
-                quantity: 0,
-                price: 0,
-                categoryID: '',
-                supplierID: ''
-            });
+            setValue('productName', '');
+            setValue('quantity', 0);
+            setValue('price', 0);
+            setValue('categoryID', '');
+            setValue('supplierID', '');
         }
     }, [product, mode]);
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
-    };
-
-    const validateForm = () => {
-        const newErrors = {};
-        if (!formData.productName) newErrors.productName = 'Product name is required';
-        if (formData.quantity < 0) newErrors.quantity = 'Quantity cannot be negative';
-        if (formData.price < 0) newErrors.price = 'Price cannot be negative';
-        setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
-    };
-
-    const onFormSubmit = async (e) => {
-        e.preventDefault();
-        if (!validateForm()) return;
-
+    const onFormSubmit = async (data) => {
         try {
-            const response = await submitProduct(formData, mode, product);
+            const response = await submitProduct(data, mode, product);
 
             if (response.status === 201 || response.status === 200) {
                 prodToast(mode === 'edit' ? 'Product updated successfully!' : 'Product added successfully!');
@@ -73,7 +46,7 @@ const CreateProductModal = ({ isOpen, onRequestClose, categories, suppliers, pro
                         <h5 className="modal-title">{mode === 'edit' ? 'Edit Product' : 'Create New Product'}</h5>
                     </div>
                     <div className="modal-body">
-                        <form onSubmit={onFormSubmit}>
+                        <form onSubmit={handleSubmit(onFormSubmit)}>
                             {serverError && <div className="alert alert-danger">{serverError}</div>}
                             <div className="mb-3">
                                 <label htmlFor="productName" className="form-label">Product Name</label>
@@ -81,11 +54,9 @@ const CreateProductModal = ({ isOpen, onRequestClose, categories, suppliers, pro
                                     type="text"
                                     className={`form-control ${errors.productName ? 'is-invalid' : ''}`}
                                     id="productName"
-                                    name="productName"
-                                    value={formData.productName}
-                                    onChange={handleChange}
+                                    {...register("productName", { required: "Product name is required" })}
                                 />
-                                {errors.productName && <div className="invalid-feedback">{errors.productName}</div>}
+                                {errors.productName && <div className="invalid-feedback">{errors.productName.message}</div>}
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="quantity" className="form-label">Quantity</label>
@@ -93,11 +64,9 @@ const CreateProductModal = ({ isOpen, onRequestClose, categories, suppliers, pro
                                     type="number"
                                     className={`form-control ${errors.quantity ? 'is-invalid' : ''}`}
                                     id="quantity"
-                                    name="quantity"
-                                    value={formData.quantity}
-                                    onChange={handleChange}
+                                    {...register("quantity", { required: "Quantity is required", min: 0 })}
                                 />
-                                {errors.quantity && <div className="invalid-feedback">{errors.quantity}</div>}
+                                {errors.quantity && <div className="invalid-feedback">{errors.quantity.message}</div>}
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="price" className="form-label">Price</label>
@@ -105,20 +74,16 @@ const CreateProductModal = ({ isOpen, onRequestClose, categories, suppliers, pro
                                     type="number"
                                     className={`form-control ${errors.price ? 'is-invalid' : ''}`}
                                     id="price"
-                                    name="price"
-                                    value={formData.price}
-                                    onChange={handleChange}
+                                    {...register("price", { required: "Price is required", min: 0 })}
                                 />
-                                {errors.price && <div className="invalid-feedback">{errors.price}</div>}
+                                {errors.price && <div className="invalid-feedback">{errors.price.message}</div>}
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="categoryID" className="form-label">Category (Optional)</label>
                                 <select
                                     className="form-select"
                                     id="categoryID"
-                                    name="categoryID"
-                                    value={formData.categoryID}
-                                    onChange={handleChange}
+                                    {...register("categoryID")}
                                 >
                                     <option value="">Select Category</option>
                                     {categories.map((category) => (
@@ -133,9 +98,7 @@ const CreateProductModal = ({ isOpen, onRequestClose, categories, suppliers, pro
                                 <select
                                     className="form-select"
                                     id="supplierID"
-                                    name="supplierID"
-                                    value={formData.supplierID}
-                                    onChange={handleChange}
+                                    {...register("supplierID")}
                                 >
                                     <option value="">Select Supplier</option>
                                     {suppliers.map((supplier) => (
