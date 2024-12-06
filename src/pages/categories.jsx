@@ -25,6 +25,8 @@ const CategoryPage = () => {
     const [open, setOpen] = useState(false);
     const [editingCategory, setEditingCategory] = useState(null);
     const [selectedItems, setSelectedItems] = useState([]); // State for selected categories
+    const [searchTerm, setSearchTerm] = useState(''); // State for search term
+    const [sortOrder, setSortOrder] = useState(''); // State for sorting order
 
     useEffect(() => {
         const loadData = async () => {
@@ -39,6 +41,17 @@ const CategoryPage = () => {
         };
         loadData();
     }, []);
+
+    const filteredCategories = categories
+        .filter(category => category.categoryName.toLowerCase().includes(searchTerm.toLowerCase()))
+        .sort((a, b) => {
+            if (sortOrder === 'asc') {
+                return a.categoryName.localeCompare(b.categoryName);
+            } else if (sortOrder === 'desc') {
+                return b.categoryName.localeCompare(a.categoryName);
+            }
+            return 0;
+        });
 
     const handleClickOpen = () => {
         setOpen(true); 
@@ -71,10 +84,10 @@ const CategoryPage = () => {
     };
 
     const handleSelectAll = () => {
-        if (selectedItems.length === categories.length) {
+        if (selectedItems.length === filteredCategories.length) {
             setSelectedItems([]);
         } else {
-            setSelectedItems(categories.map(category => category.categoryID));
+            setSelectedItems(filteredCategories.map(category => category.categoryID));
         }
     };
 
@@ -106,6 +119,30 @@ const CategoryPage = () => {
                 </Button>
             </div>
             <hr />
+            <TextField
+                label="Quick search"
+                variant="outlined"
+                size="small"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                style={{ width: '100%', maxWidth: '250px', marginBottom: '20px' }}
+            />
+            <Box className="mb-3" sx={{ display: 'block', marginBottom: '20px' }}>
+                <Select
+                    value={sortOrder}
+                    onChange={(e) => setSortOrder(e.target.value)}
+                    displayEmpty
+                    size='small'
+                    variant="outlined"
+                    sx={{ width: '100%', maxWidth: '130px', marginRight: '10px', marginBottom: '10px' }}
+                >
+                    <MenuItem value="">
+                        <em>Sort by</em>
+                    </MenuItem>
+                    <MenuItem value="asc">A-Z</MenuItem>
+                    <MenuItem value="desc">Z-A</MenuItem>
+                </Select>
+            </Box>
             <div className='p-3'>
                 <TableContainer>
                     <Table>
@@ -113,7 +150,7 @@ const CategoryPage = () => {
                             <TableRow>
                                 <TableCell padding="checkbox">
                                     <Checkbox
-                                        checked={selectedItems.length === categories.length}
+                                        checked={selectedItems.length === filteredCategories.length}
                                         onChange={handleSelectAll}
                                     />
                                 </TableCell>
@@ -123,7 +160,7 @@ const CategoryPage = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {categories.map((category) => (
+                            {filteredCategories.map((category) => (
                                 <TableRow key={category.categoryID}>
                                     <TableCell padding="checkbox">
                                         <Checkbox
@@ -155,7 +192,7 @@ const CategoryPage = () => {
                     onClick={handleSelectAll}
                     sx={{ textTransform: 'none' }}
                 >
-                    {selectedItems.length === categories.length 
+                    {selectedItems.length === filteredCategories.length 
                         ? 'Unselect All' 
                         : 'Select All'}
                 </Button>
