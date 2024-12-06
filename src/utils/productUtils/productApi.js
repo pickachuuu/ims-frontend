@@ -3,14 +3,24 @@ import Cookies from 'js-cookie';
 import toast from '../../components/products/toastSuccess'
 import toastWarn from '../../components/products/toastWarning'
 
-export const fetchProducts = async () => {
+export const 
+fetchProducts = async () => {
     const token = Cookies.get('authToken');
-    const response = await axios.get('http://localhost:3000/api/products/get', {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    });
-    return response.data.products;
+    try {
+        const response = await axios.get('http://localhost:3000/api/products/get', {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        if (response.data.products && response.data.products.length > 0) {
+            return response.data.products;
+        } else {
+            return [];
+        }
+    } catch (error) {
+        console.error('Error fetching products:', error);
+        return [];
+    }
 };
 
 export const fetchCategories = async () => {
