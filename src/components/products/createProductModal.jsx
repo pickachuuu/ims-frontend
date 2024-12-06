@@ -61,7 +61,7 @@ const CreateProductModal = ({ isOpen, onRequestClose, categories, suppliers, pro
                 setServerError('Failed to process the request.');
             }
         } catch (error) {
-            setServerError(error.message); // Use the error message thrown from submitProduct
+            setServerError(error.message); 
         }
     };
 
