@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import Cookies from 'js-cookie';
 import prodToast from './toastSuccess';
+import { submitProduct } from '../../utils/productUtils/productApi';
 
 const CreateProductModal = ({ isOpen, onRequestClose, categories, suppliers, product, mode }) => {
     const [formData, setFormData] = useState({
@@ -53,31 +52,7 @@ const CreateProductModal = ({ isOpen, onRequestClose, categories, suppliers, pro
         if (!validateForm()) return;
 
         try {
-            const token = Cookies.get('authToken');
-            const payload = {
-                productName: formData.productName,
-                quantity: formData.quantity,
-                price: formData.price,
-                categoryID: formData.categoryID || null,
-                supplierID: formData.supplierID || null,
-            };
-
-            let response;
-            if (mode === 'edit') {
-                // Update product API call
-                response = await axios.put(`http://localhost:3000/api/products/update/${product.productID}`, payload, {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
-            } else {
-                // Create product API call
-                response = await axios.post('http://localhost:3000/api/products/create', payload, {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
-            }
+            const response = await submitProduct(formData, mode, product);
 
             if (response.status === 201 || response.status === 200) {
                 prodToast(mode === 'edit' ? 'Product updated successfully!' : 'Product added successfully!');
@@ -86,8 +61,7 @@ const CreateProductModal = ({ isOpen, onRequestClose, categories, suppliers, pro
                 setServerError('Failed to process the request.');
             }
         } catch (error) {
-            console.error("Error processing product:", error);
-            setServerError('Failed to process the request.');
+            setServerError(error.message); // Use the error message thrown from submitProduct
         }
     };
 
