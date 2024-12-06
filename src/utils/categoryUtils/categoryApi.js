@@ -37,33 +37,44 @@ export const handleDeleteSelected = async (selectedCat) => {
     }
 };
 
-export const submitCategory = async (formData, mode, product) => {
+export const submitCategory = async (formData, mode, category) => {
     const token = Cookies.get('authToken');
     console.log(formData);
     const payload = {
-        categoryName: formData.categoryNameName,
+        categoryName: formData.categoryName
     };
-
 
     let response;
     try {
         if (mode === 'edit') {
-            response = await axios.put(`http://localhost:3000/api/category/update/${product.productID}`, payload, {
+            response = await axios.put(`http://localhost:3000/api/categories/update/${category.categoryID}`, payload, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             });
+            if (response.status === 200) {
+                return { status: response.status, message: 'Category updated successfully.' };
+            } else {
+                throw new Error('Failed to update category.');
+            }
         } else {
-            response = await axios.post('http://localhost:3000/api/category/create', payload, {
+            response = await axios.post('http://localhost:3000/api/categories/create', payload, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             });
+            if (response.status === 201) {
+                return { status: response.status, message: 'Category created successfully.' };
+            } else {
+                throw new Error('Failed to create category.');
+            }
         }
-
-    return response; 
     } catch (error) {
-        console.error("Error processing product:", error);
-        throw new Error('Failed to process the request.'); 
+        console.error("Error processing category:", error);
+        if (error.response) {
+            throw new Error(`Failed to process the request. ${error.response.data.message}`);
+        } else {
+            throw new Error('Failed to process the request.');
+        }
     }
 };
