@@ -39,7 +39,6 @@ export const handleDeleteSelected = async (selectedCat) => {
 
 export const submitCategory = async (formData, mode, category) => {
     const token = Cookies.get('authToken');
-    console.log(formData);
     const payload = {
         categoryName: formData.categoryName
     };
