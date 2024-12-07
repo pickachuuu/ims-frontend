@@ -15,11 +15,13 @@ import {
     Box,
 } from '@mui/material';
 import CategoryModal from '../components/category/categoryModal';
-import { fetchCategories, handleDelete } from '../utils/categoryUtils/categoryApi';
+import { fetchCategories, handleDelete } from '../utils/categoryUtils/categoryApi'; // Ensure fetchProducts is imported
+import { fetchProducts } from '../utils/productUtils/productApi'
 import { FaEdit, FaTrash } from 'react-icons/fa';
 
 const CategoryPage = () => {
     const [categories, setCategories] = useState([]);
+    const [products, setProducts] = useState([]); // State for products
     const [newCategory, setNewCategory] = useState({ name: '', description: '' });
     const [loading, setLoading] = useState(true);
     const [open, setOpen] = useState(false);
@@ -32,7 +34,9 @@ const CategoryPage = () => {
         const loadData = async () => {
             try {
                 const categoriesData = await fetchCategories();
+                const productsData = await fetchProducts(); // Fetch products data
                 setCategories(categoriesData);
+                setProducts(productsData);
             } catch (err) {
                 console.error(err.message);
             } finally {
@@ -52,6 +56,10 @@ const CategoryPage = () => {
             }
             return 0;
         });
+
+    const getProductCount = (categoryId) => {
+        return products.filter(product => product.categoryID === categoryId).length; // Count products in the category
+    };
 
     const handleClickOpen = () => {
         setOpen(true); 
@@ -151,7 +159,7 @@ const CategoryPage = () => {
                                 <TableCell padding="checkbox">
                                 </TableCell>
                                 <TableCell>Name</TableCell>
-                                <TableCell>Description</TableCell>
+                                <TableCell>Product Count</TableCell>
                                 <TableCell>Actions</TableCell>
                             </TableRow>
                         </TableHead>
@@ -165,7 +173,7 @@ const CategoryPage = () => {
                                         />
                                     </TableCell>
                                     <TableCell>{category.categoryName}</TableCell>
-                                    <TableCell>{category.description}</TableCell>
+                                    <TableCell>{getProductCount(category.categoryID)}</TableCell>
                                     <TableCell>
                                         <FaEdit
                                             style={{ cursor: 'pointer', marginRight: '10px' }}
