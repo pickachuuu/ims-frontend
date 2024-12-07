@@ -10,10 +10,8 @@ const CategoryModal = ({isOpen, onRequestClose, mode, category}) => {
     useEffect(() => {
         if (mode === 'edit' && category) {
             setValue('categoryName', category.categoryName); 
-            setValue('description', category.description); 
         } else {
             setValue('categoryName', ''); 
-            setValue('description', ''); 
         }
     }, [category, mode, setValue]);
 
@@ -52,17 +50,6 @@ const CategoryModal = ({isOpen, onRequestClose, mode, category}) => {
                                 />
                                 {errors.categoryName && <div className="invalid-feedback">{errors.categoryName.message}</div>}
                             </div>
-                            <div className="mb-3">
-                                <label htmlFor="description" className="form-label">Description</label>
-                                <input
-                                    type="text"
-                                    className={`form-control ${errors.description ? 'is-invalid' : ''}`}
-                                    id="description"
-                                    {...register("description", { required: "Description is required" })}
-                                />
-                                {errors.description && <div className="invalid-feedback">{errors.description.message}</div>}
-                            </div>
-
                             <div className="d-flex justify-content-end">
                                 <button type="button" className="btn btn-secondary me-2" onClick={onRequestClose}>
                                     Cancel
