@@ -33,7 +33,25 @@ export const handleDelete = async (catID) => {
 
 export const handleDeleteSelected = async (selectedCat) => {
     try {
+        console.log(selectedCat);
+        const token = Cookies.get('authToken');
+        const res = await axios.delete('http://localhost:3000/api/categories/deleteAll/', { 
+            data: {
+                categoryIDs: selectedCat
+            },
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        console.log(res);
+
+        if (res.status === 200){
+            toast("categories successfully deleted");
+        }
     } catch (error) {
+        console.error('Error deleting categories:', error);
+        toastWarn("failed to delete categories");
     }
 };
 
