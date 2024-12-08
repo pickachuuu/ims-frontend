@@ -15,7 +15,7 @@ import {
     Box,
 } from '@mui/material';
 import CategoryModal from '../components/category/categoryModal';
-import { fetchCategories, handleDelete } from '../utils/categoryUtils/categoryApi'; // Ensure fetchProducts is imported
+import { fetchCategories, handleDelete, handleDeleteSelected } from '../utils/categoryUtils/categoryApi'; // Ensure fetchProducts is imported
 import { fetchProducts } from '../utils/productUtils/productApi'
 import { FaEdit, FaTrash } from 'react-icons/fa';
 
@@ -109,10 +109,8 @@ const CategoryPage = () => {
         });
     };
 
-    const handleDeleteSelected = async () => {
-        for (const id of selectedItems) {
-            await handleDelete(id);
-        }
+    const handleConfirmDelete = async () => {
+        handleDeleteSelected(selectedItems)
         const updatedCategories = await fetchCategories();
         setCategories(updatedCategories);
         setSelectedItems([]);
@@ -204,7 +202,7 @@ const CategoryPage = () => {
                     variant="contained" 
                     color="error"
                     disabled={selectedItems.length === 0}
-                    onClick={handleDeleteSelected} 
+                    onClick={handleConfirmDelete} 
                     startIcon={<FaTrash />}
                     sx={{ textTransform: 'none' }}
                 >
