@@ -150,9 +150,9 @@ const CategoryPage = () => {
                 </Select>
             </Box>
             <div className='p-3'>
-                <TableContainer>
-                    <Table>
-                        <TableHead>
+                <TableContainer style={{ maxHeight: 550, height: '50vh' }}> 
+                    <Table stickyHeader>
+                        <TableHead> 
                             <TableRow sx={{ '& th': { fontWeight: 'bold' } }}>
                                 <TableCell padding="checkbox">
                                 </TableCell>
