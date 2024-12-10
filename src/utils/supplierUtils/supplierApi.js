@@ -30,6 +30,27 @@ export const handleDelete = async (suppID) => {
     }
 };
 
+export const handleDeleteSelected = async (selectedItems) => {
+    try {
+        const token = Cookies.get('authToken');
+        const res = await axios.delete('http://localhost:3000/api/suppliers/deleteAll/', { 
+            data: {
+                supplierIDs: selectedItems
+            },
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        
+        if (res.status == 200){
+            toast("Supplier profiles sucessfully deleted");
+        }
+    } catch (error) {
+        console.error('Error deleting supplier profile:', error);
+    }
+};
+
 export const submitProduct = async (formData, mode, supplier) => {
     const token = Cookies.get('authToken');
     const payload = {
