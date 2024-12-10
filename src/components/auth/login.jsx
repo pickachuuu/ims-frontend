@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext } from 'react';
 import axios from 'axios';
 import { loginSchema } from '../validations/loginSchema';
 import { useForm } from 'react-hook-form';
@@ -8,14 +8,12 @@ import logo from '../../assets/logo.png';
 
 const Login = () => {
   const { register, handleSubmit, setError, formState: { errors } } = useForm();
-  const {isAuthenticated, setIsAuthenticated, login} = useContext(AuthContext);
+  const { isAuthenticated, setIsAuthenticated, login } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
     try {
       const response = await axios.post('http://localhost:3000/api/users/login', data);
-      console.log(response);
-
       if (response.status === 200) {
         const token = response.data.token;
         document.cookie = `authToken=${token}`;
@@ -23,9 +21,7 @@ const Login = () => {
         login(response.data.user);
         navigate('/Home');
       }
-      
     } catch (error) {
-      console.error(error);
       if (error.response?.status === 404) {
         setError('email', {
           type: 'server',
@@ -57,7 +53,7 @@ const Login = () => {
       </div>
       <div className="row align-items-center p-4">
         <h2 className='mb-1 p-1 text-center'>Login to your account</h2>
-          <div className="my-3">
+        <div className="my-3">
           <input 
             type="text" 
             className={`form-control form-control-lg bg-light fs-6 ${errors.email ? 'is-invalid border-danger' : ''}`}
@@ -76,32 +72,32 @@ const Login = () => {
           />
           {errors.password && <div className='text-danger mt-1 small'>{errors.password.message}</div>}
         </div>
-          
-          <div className="mb-3 mt-2 d-flex justify-content-start">
-            <div className="forgot">
-              <small>
-                <a href="#">Forgot Password?</a>
-              </small>
+        
+        <div className="mb-3 mt-2 d-flex justify-content-start">
+          <div className="forgot">
+            <small>
+              <Link to="/forgot-password">Forgot Password?</Link>
+            </small>
+          </div>
+        </div>
+        
+        <div className="input-group mb-3 flex-column"> 
+          <button type="submit" className="btn btn-lg btn-primary w-100 fs-6">
+            Login
+          </button>
+          {errors.root && errors.root.message && (
+            <div className="w-100 text-center mt-2">  
+              <span className="text-danger">{errors.root.message}</span>
             </div>
+          )}
+        </div>
+        <div className="row">
+          <div className="col-12 text-center">
+            <small>
+              Not registered yet? <Link to="/register" className='custom-text'>Create an account</Link>
+            </small>
           </div>
-          
-          <div className="input-group mb-3 flex-column"> 
-            <button type="submit" className="btn btn-lg btn-primary w-100 fs-6">
-              Login
-            </button>
-            {errors.root && errors.root.message && (
-              <div className="w-100 text-center mt-2">  
-                <span className="text-danger">{errors.root.message}</span>
-              </div>
-            )}
-          </div>
-          <div className="row">
-            <div className="col-12 text-center">
-              <small>
-                Not registered yet? < Link to="/register" className='custom-text'>Create an account</Link>
-              </small>
-            </div>
-          </div>
+        </div>
       </div>
     </form>
   );
