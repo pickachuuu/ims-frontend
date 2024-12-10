@@ -21,20 +21,20 @@ import { FaEdit, FaTrash } from 'react-icons/fa';
 
 const CategoryPage = () => {
     const [categories, setCategories] = useState([]);
-    const [products, setProducts] = useState([]); // State for products
+    const [products, setProducts] = useState([]); 
     const [newCategory, setNewCategory] = useState({ name: '', description: '' });
     const [loading, setLoading] = useState(true);
     const [open, setOpen] = useState(false);
     const [editingCategory, setEditingCategory] = useState(null);
-    const [selectedItems, setSelectedItems] = useState([]); // State for selected categories
-    const [searchTerm, setSearchTerm] = useState(''); // State for search term
-    const [sortOrder, setSortOrder] = useState(''); // State for sorting order
+    const [selectedItems, setSelectedItems] = useState([]); 
+    const [searchTerm, setSearchTerm] = useState(''); 
+    const [sortOrder, setSortOrder] = useState(''); 
 
     useEffect(() => {
         const loadData = async () => {
             try {
                 const categoriesData = await fetchCategories();
-                const productsData = await fetchProducts(); // Fetch products data
+                const productsData = await fetchProducts(); 
                 setCategories(categoriesData);
                 setProducts(productsData);
             } catch (err) {
@@ -58,7 +58,7 @@ const CategoryPage = () => {
         });
 
     const getProductCount = (categoryId) => {
-        return products.filter(product => product.categoryID === categoryId).length; // Count products in the category
+        return products.filter(product => product.categoryID === categoryId).length; 
     };
 
     const handleClickOpen = () => {
