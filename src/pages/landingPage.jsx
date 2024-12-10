@@ -1,7 +1,7 @@
 import React from 'react';
 import LoginForm from '../components/auth/login';
 import SideBanner from '../components/banners/sideBanner';
-import BG from '../assets/curve.svg';
+import BG from '../assets/auth.svg';
 import logo from '../assets/logo.png';
 
 const LandingPage = () => {

@@ -105,4 +105,20 @@ body {
       margin-left: 280px;
     }
   }
+
+
+.Toastify__toast--success .Toastify__toast-icon--sucess {
+  background-color: #0d6efd;
+}
+
+/* Change the progress bar color for success toasts */
+.Toastify__toast--success .Toastify__progress-bar {
+  background-color: blue !important; 
+}
+
+.Toastify__progress-bar--success {
+  background-color: blue !important; 
+}
+
+
   

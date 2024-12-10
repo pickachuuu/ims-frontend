@@ -1,133 +1,127 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import prodToast from './toastSuccess';
+import { submitProduct } from '../../utils/productUtils/productApi';
 import { useForm } from 'react-hook-form';
-import axios from 'axios';
-import Cookies from 'js-cookie';
-import { Select, MenuItem, TextField, Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 
-const CreateProductModal = ({ isOpen, onRequestClose, categories, suppliers }) => {
-    const { register, handleSubmit, setError, formState: { errors } } = useForm();
+const CreateProductModal = ({ isOpen, onRequestClose, categories, suppliers, product, mode }) => {
+    const { register, handleSubmit, formState: { errors }, setValue } = useForm();
+    const [serverError, setServerError] = useState('');
+
+    useEffect(() => {
+        if (mode === 'edit' && product) {
+            setValue('productName', product.productName);
+            setValue('quantity', product.quantity);
+            setValue('price', product.price);
+            setValue('categoryID', product.categoryID || '');
+            setValue('supplierID', product.supplierID || '');
+        } else {
+            setValue('productName', '');
+            setValue('quantity', 0);
+            setValue('price', 0);
+            setValue('categoryID', '');
+            setValue('supplierID', '');
+        }
+    }, [product, mode]);
 
     const onFormSubmit = async (data) => {
         try {
-            const token = Cookies.get('authToken');
-            const payload = {
-                productName: data.productName,
-                quantity: data.quantity || 0, 
-                price: data.price || 0, 
-                categoryID: data.categoryID || null, 
-                supplierID: data.supplierID || null, 
-            };
+            const response = await submitProduct(data, mode, product);
 
-            const response = await axios.post('http://localhost:3000/api/products/create', payload, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-
-            if (!response.data) {
-                setError('root', { type: 'server', message: 'Failed to create product.' });
-            }
-
-            if (response.status === 201) {
+            if (response.status === 201 || response.status === 200) {
+                prodToast(mode === 'edit' ? 'Product updated successfully!' : 'Product added successfully!');
                 onRequestClose();
+            } else {
+                setServerError('Failed to process the request.');
             }
-
         } catch (error) {
-            console.error("Error creating product:", error); 
-            setError('root', { type: 'server', message: 'Failed to create product.' });
+            setServerError(error.message); 
         }
     };
 
     return (
-        <Dialog open={isOpen} onClose={onRequestClose}>
-            <DialogTitle>Create New Product</DialogTitle>
-            <DialogContent>
-                <form onSubmit={handleSubmit(onFormSubmit)}>
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        label="Product Name"
-                        fullWidth
-                        {...register("productName", {
-                            required: 'Product name is required',
-                            maxLength: { value: 255, message: 'Product name cannot exceed 255 characters' }
-                        })}
-                        error={!!errors.productName}
-                        helperText={errors.productName ? errors.productName.message : ''}
-                    />
-                    <TextField
-                        margin="dense"
-                        label="Quantity"
-                        type="number"
-                        fullWidth
-                        {...register("quantity", {
-                            required: 'Quantity is required',
-                            min: { value: 0, message: 'Quantity cannot be negative' },
-                            valueAsNumber: true
-                        })}
-                        defaultValue={0} 
-                        error={!!errors.quantity}
-                        helperText={errors.quantity ? errors.quantity.message : ''}
-                    />
-                    <TextField
-                        margin="dense"
-                        label="Price"
-                        type="number"
-                        fullWidth
-                        {...register("price", {
-                            required: 'Price is required',
-                            min: { value: 0, message: 'Price cannot be negative' },
-                            valueAsNumber: true
-                        })}
-                        defaultValue={0} 
-                        error={!!errors.price}
-                        helperText={errors.price ? errors.price.message : ''}
-                    />
-                    <Select
-                        margin="dense"
-                        fullWidth
-                        displayEmpty
-                        defaultValue=""
-                        {...register("categoryID")}
-                    >
-                        <MenuItem value="">
-                            <em>Select Category (Optional)</em>
-                        </MenuItem>
-                        {categories.map((category) => (
-                            <MenuItem key={category.categoryID} value={category.categoryID}>
-                                {category.categoryName}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                    <Select
-                        margin="dense"
-                        fullWidth
-                        displayEmpty
-                        defaultValue="" 
-                        {...register("supplierID")}
-                    >
-                        <MenuItem value="">
-                            <em>Select Supplier (Optional)</em>
-                        </MenuItem>
-                        {suppliers.map((supplier) => (
-                            <MenuItem key={supplier.supplierID} value={supplier.supplierID}>
-                                {supplier.supplierName}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                    {errors.root && <div className='text-danger mt-2'>{errors.root.message}</div>}
-                    <DialogActions>
-                        <Button onClick={onRequestClose} color="primary">
-                            Cancel
-                        </Button>
-                        <Button type="submit" color="primary">
-                            Create Product
-                        </Button>
-                    </DialogActions>
-                </form>
-            </DialogContent>
-        </Dialog>
-    );
+        <div className={`modal fade ${isOpen ? 'show' : ''}`} style={{ display: isOpen ? 'block' : 'none', backgroundColor: 'rgba(0, 0, 0, 0.5)' }} tabIndex="-1" role="dialog">
+            <div className="modal-dialog" role="document">
+                <div className="modal-content">
+                    <div className="modal-header">
+                        <h5 className="modal-title">{mode === 'edit' ? 'Edit Product' : 'Create New Product'}</h5>
+                    </div>
+                    <div className="modal-body">
+                        <form onSubmit={handleSubmit(onFormSubmit)}>
+                            {serverError && <div className="alert alert-danger">{serverError}</div>}
+                            <div className="mb-3">
+                                <label htmlFor="productName" className="form-label">Product Name</label>
+                                <input
+                                    type="text"
+                                    className={`form-control ${errors.productName ? 'is-invalid' : ''}`}
+                                    id="productName"
+                                    {...register("productName", { required: "Product name is required" })}
+                                />
+                                {errors.productName && <div className="invalid-feedback">{errors.productName.message}</div>}
+                            </div>
+                            <div className="mb-3">
+                                <label htmlFor="quantity" className="form-label">Quantity</label>
+                                <input
+                                    type="number"
+                                    className={`form-control ${errors.quantity ? 'is-invalid' : ''}`}
+                                    id="quantity"
+                                    {...register("quantity", { required: "Quantity is required", min: 0 })}
+                                />
+                                {errors.quantity && <div className="invalid-feedback">{errors.quantity.message}</div>}
+                            </div>
+                            <div className="mb-3">
+                                <label htmlFor="price" className="form-label">Price</label>
+                                <input
+                                    type="number"
+                                    className={`form-control ${errors.price ? 'is-invalid' : ''}`}
+                                    id="price"
+                                    {...register("price", { required: "Price is required", min: 0 })}
+                                />
+                                {errors.price && <div className="invalid-feedback">{errors.price.message}</div>}
+                            </div>
+                            <div className="mb-3">
+                                <label htmlFor="categoryID" className="form-label">Category (Optional)</label>
+                                <select
+                                    className="form-select"
+                                    id="categoryID"
+                                    {...register("categoryID")}
+                                >
+                                    <option value="">Select Category</option>
+                                    {categories.map((category) => (
+                                        <option key={category.categoryID} value={category.categoryID}>
+                                            {category.categoryName}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div className="mb-3">
+                                <label htmlFor="supplierID" className="form-label">Supplier (Optional)</label>
+                                <select
+                                    className="form-select"
+                                    id="supplierID"
+                                    {...register("supplierID")}
+                                >
+                                    <option value="">Select Supplier</option>
+                                    {suppliers.map((supplier) => (
+                                        <option key={supplier.supplierID} value={supplier.supplierID}>
+                                            {supplier.supplierName}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div className="d-flex justify-content-end">
+                                <button type="button" className="btn btn-secondary me-2" onClick={onRequestClose}>
+                                    Cancel
+                                </button>
+                                <button type="submit" className="btn btn-primary">
+                                    {mode === 'edit' ? 'Update Product' : 'Create Product'}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );  
 };
 
 export default CreateProductModal;
