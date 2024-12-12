@@ -32,8 +32,9 @@ export const handleDelete = async (suppID) => {
 
 export const handleDeleteSelected = async (selectedItems) => {
     try {
+        console.log(selectedItems);
         const token = Cookies.get('authToken');
-        const res = await axios.delete('http://localhost:3000/api/suppliers/deleteAll/', { 
+        const res = await axios.delete('http://localhost:3000/api/suppliers/removeAll/', { 
             data: {
                 supplierIDs: selectedItems
             },
