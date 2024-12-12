@@ -137,11 +137,6 @@ const SuppliersPage = () => {
                         <TableHead> 
                             <TableRow sx={{ '& th': { fontWeight: 'bold' } }}>
                                 <TableCell padding="checkbox">
-                                    <Checkbox
-                                        checked={selectedItems.length === filteredSuppliers.length}
-                                        indeterminate={selectedItems.length > 0 && selectedItems.length < filteredSuppliers.length}
-                                        onChange={handleSelectAll}
-                                    />
                                 </TableCell>
                                 <TableCell>Supplier Name</TableCell>
                                 <TableCell>Contact No</TableCell>
