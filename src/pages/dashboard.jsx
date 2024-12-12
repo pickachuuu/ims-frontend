@@ -44,6 +44,7 @@ const Dashboard = () => {
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <Typography variant="h4">Dashboard</Typography>
             </div>
+            <hr/>
             <div className="row mb-4 justify-content-center">
                 <div className="col-6 col-md-3 mb-3">
                     <div className="card text-center">
