@@ -51,7 +51,7 @@ export const handleDeleteSelected = async (selectedItems) => {
     }
 };
 
-export const submitProduct = async (formData, mode, supplier) => {
+export const submitSupplier = async (formData, mode, supplier) => {
     const token = Cookies.get('authToken');
     const payload = {
         supplierName: formData.supplierName,
