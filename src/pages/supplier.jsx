@@ -11,17 +11,15 @@ import {
     TableHead,
     TableRow,
     TableCell,
-    TableBody
+    TableBody,
+    Checkbox
 } from '@mui/material';
 import { FaEdit, FaTrash } from 'react-icons/fa';
-
-const handleClickOpen = () => {
-    console.log("test");
-}
+import SupplierModal from '../components/supplier/supplierModal';
+import { fetchSuppliers } from '../utils/supplierUtils/supplierApi';
 
 const SuppliersPage = () => {
     const [suppliers, setSuppliers] = useState([]);
-    const [newCategory, setNewCategory] = useState({ name: '', description: '' });
     const [loading, setLoading] = useState(true);
     const [open, setOpen] = useState(false);
     const [editingSupplier, setEditingSupplier] = useState(null);
@@ -29,8 +27,23 @@ const SuppliersPage = () => {
     const [searchTerm, setSearchTerm] = useState(''); 
     const [sortOrder, setSortOrder] = useState('');
 
+    useEffect(() => {
+        const loadData = async () => {
+            try {
+                const suppliersData = await fetchSuppliers();
+                setSuppliers(suppliersData);
+            } catch (err) {
+                console.error(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+        loadData();
+    }, []);
+
+
     const filteredSuppliers = suppliers
-    .filter(category => category.categoryName.toLowerCase().includes(searchTerm.toLowerCase()))
+    .filter(supplier => supplier.supplierName.toLowerCase().includes(searchTerm.toLowerCase()))
     .sort((a, b) => {
         if (sortOrder === 'asc') {
             return a.supplierName.localeCompare(b.supplierName);
@@ -40,7 +53,23 @@ const SuppliersPage = () => {
         return 0;
     });
 
+    const handleClickOpen = () => {
+        setOpen(true);
+        setEditingSupplier(null);
+    }
 
+    const handleClose = () => {
+        setOpen(false);
+    }
+
+    const handleSelectItem = (supplierId) => {
+        setSelectedItems(prev => 
+            prev.includes(supplierId) 
+                ? prev.filter(id => id !== supplierId)
+                : [...prev, supplierId]
+        );
+    };
+    
     const handleSelectAll = () => {
         if (selectedItems.length === filteredSuppliers.length) {
             setSelectedItems([]);
@@ -49,17 +78,42 @@ const SuppliersPage = () => {
         }
     };
 
+    const handleEditSupplier = (supplier) => {
+        setEditingSupplier(supplier);
+        setOpen(true);
+    };
+
+    const handleDeleteSupplier = async (supplierId) => {
+        // Implement supplier deletion logic
+    };
+
     const handleConfirmDelete = async () => {
-        handleDeleteSelected(selectedItems)
-        const updatedSuppliers = await fetchCategories();
-        setCategories(updatedSuppliers);
+        // Implement bulk supplier deletion logic
+        const updatedSuppliers = await fetchSuppliers();
+        setSuppliers(updatedSuppliers);
         setSelectedItems([]);
     };
+
+    // Fetch suppliers on component mount
+    useEffect(() => {
+        const fetchInitialSuppliers = async () => {
+            try {
+                const supplierData = await fetchSuppliers();
+                setSuppliers(supplierData);
+                setLoading(false);
+            } catch (error) {
+                console.error('Error fetching suppliers:', error);
+                setLoading(false);
+            }
+        };
+
+        fetchInitialSuppliers();
+    }, []);
 
     return (
         <div className="border rounded-3 p-4 bg-white shadow mx-auto" style={{ margin: '0 auto', height: '95vh' }}>
             <div className="d-flex justify-content-between align-items-center mb-4">
-                <Typography variant="h4">Supplier</Typography>
+                <Typography variant="h4">Suppliers</Typography>
                 <Button variant="contained" color="primary" onClick={handleClickOpen}>
                     + Add Supplier
                 </Button>
@@ -95,9 +149,14 @@ const SuppliersPage = () => {
                         <TableHead> 
                             <TableRow sx={{ '& th': { fontWeight: 'bold' } }}>
                                 <TableCell padding="checkbox">
+                                    <Checkbox
+                                        checked={selectedItems.length === filteredSuppliers.length}
+                                        indeterminate={selectedItems.length > 0 && selectedItems.length < filteredSuppliers.length}
+                                        onChange={handleSelectAll}
+                                    />
                                 </TableCell>
-                                <TableCell>Supplier`</TableCell>
-                                <TableCell>Contact no</TableCell>
+                                <TableCell>Supplier Name</TableCell>
+                                <TableCell>Contact No</TableCell>
                                 <TableCell>Actions</TableCell>
                             </TableRow>
                         </TableHead>
@@ -111,15 +170,15 @@ const SuppliersPage = () => {
                                         />
                                     </TableCell>
                                     <TableCell>{supplier.supplierName}</TableCell>
-                                    <TableCell>{supplier.supplierID}</TableCell>
+                                    <TableCell>{supplier.contactNo}</TableCell>
                                     <TableCell>
                                         <FaEdit
                                             style={{ cursor: 'pointer', marginRight: '10px' }}
-                                            onClick={() => handleEditCategory(supplier)}
+                                            onClick={() => handleEditSupplier(supplier)}
                                         />
                                         <FaTrash
                                             style={{ cursor: 'pointer' }}
-                                            onClick={() => handleDeleteCategory(supplier.supplierID)}
+                                            onClick={() => handleDeleteSupplier(supplier.supplierID)}
                                         />
                                     </TableCell>
                                 </TableRow>
@@ -149,8 +208,13 @@ const SuppliersPage = () => {
                     Delete ({selectedItems.length})
                 </Button>
             </div>
-            <div>
-            </div>
+            <SupplierModal
+                isOpen={open}
+                onRequestClose={handleClose}
+                supplier={editingSupplier}
+                mode={editingSupplier ? 'edit' : 'create'}
+                editingSupplier={editingSupplier}
+            />
         </div>
     );
 };
