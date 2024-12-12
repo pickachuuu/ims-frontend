@@ -19,7 +19,7 @@ const Dashboard = () => {
             <h1 className="text-center">Dashboard</h1>
             <div className="row mb-4">
                 {/* Overview Cards */}
-                <div className="col-md-3">
+                <div className="col-6 col-md-3 mb-3"> {/* Added mb-3 for vertical margin on mobile */}
                     <div className="card text-center">
                         <div className="card-body">
                             <h5 className="card-title">Total Products</h5>
@@ -27,7 +27,7 @@ const Dashboard = () => {
                         </div>
                     </div>
                 </div>
-                <div className="col-md-3">
+                <div className="col-6 col-md-3 mb-3"> {/* Added mb-3 for vertical margin on mobile */}
                     <div className="card text-center">
                         <div className="card-body">
                             <h5 className="card-title">Low-Stock Alerts</h5>
@@ -35,7 +35,7 @@ const Dashboard = () => {
                         </div>
                     </div>
                 </div>
-                <div className="col-md-3">
+                <div className="col-6 col-md-3 mb-3"> {/* Added mb-3 for vertical margin on mobile */}
                     <div className="card text-center">
                         <div className="card-body">
                             <h5 className="card-title">Categories</h5>
@@ -43,7 +43,7 @@ const Dashboard = () => {
                         </div>
                     </div>
                 </div>
-                <div className="col-md-3">
+                <div className="col-6 col-md-3 mb-3"> {/* Added mb-3 for vertical margin on mobile */}
                     <div className="card text-center">
                         <div className="card-body">
                             <h5 className="card-title">Suppliers</h5>
