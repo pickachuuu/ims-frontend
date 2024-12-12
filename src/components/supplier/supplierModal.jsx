@@ -37,7 +37,7 @@ const SupplierModal = ({ isOpen, onRequestClose, supplier, mode }) => {
             <div className="modal-dialog" role="document">
                 <div className="modal-content">
                     <div className="modal-header">
-                        <h5 className="modal-title">{mode === 'edit' ? 'Edit Product' : 'Create New Product'}</h5>
+                        <h5 className="modal-title">{mode === 'edit' ? 'Edit supplier' : 'Add supplier profile'}</h5>
                     </div>
                     <div className="modal-body">
                         <form onSubmit={handleSubmit(onFormSubmit)}>
