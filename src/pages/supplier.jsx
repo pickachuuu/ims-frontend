@@ -16,7 +16,7 @@ import {
 } from '@mui/material';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import SupplierModal from '../components/supplier/supplierModal';
-import { fetchSuppliers } from '../utils/supplierUtils/supplierApi';
+import { fetchSuppliers, handleDeleteSelected } from '../utils/supplierUtils/supplierApi';
 
 const SuppliersPage = () => {
     const [suppliers, setSuppliers] = useState([]);
@@ -88,27 +88,15 @@ const SuppliersPage = () => {
     };
 
     const handleConfirmDelete = async () => {
-        // Implement bulk supplier deletion logic
+        handleDeleteSelected(selectedItems)
         const updatedSuppliers = await fetchSuppliers();
         setSuppliers(updatedSuppliers);
         setSelectedItems([]);
     };
 
-    // Fetch suppliers on component mount
-    useEffect(() => {
-        const fetchInitialSuppliers = async () => {
-            try {
-                const supplierData = await fetchSuppliers();
-                setSuppliers(supplierData);
-                setLoading(false);
-            } catch (error) {
-                console.error('Error fetching suppliers:', error);
-                setLoading(false);
-            }
-        };
 
-        fetchInitialSuppliers();
-    }, []);
+
+    
 
     return (
         <div className="border rounded-3 p-4 bg-white shadow mx-auto" style={{ margin: '0 auto', height: '95vh' }}>
