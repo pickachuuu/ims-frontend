@@ -116,7 +116,6 @@ const ProductPage = () => {
     };
 
     const handleConfirmDelete = async () => {
-        console.log("Selected Items before deletion:", selectedItems);
         await handleDeleteSelected(selectedItems);
         console.log(selectedItems);
         const updatedProducts = await fetchProducts(); 
