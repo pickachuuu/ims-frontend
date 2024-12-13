@@ -14,20 +14,26 @@ import {
     Button,
     Skeleton,
 } from '@mui/material';
-import { fetchProducts } from '../utils/productUtils/productApi';
+import { fetchProducts, fetchCategories, fetchSuppliers } from '../utils/productUtils/productApi';
 
 const Dashboard = () => {
     const [products, setProducts] = useState([]);
+    const [categories, setCategories] = useState([]);
+    const [suppliers, setSuppliers] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const loadProducts = async () => {
+        const loadData = async () => {
             const fetchedProducts = await fetchProducts();
+            const fetchedCategories = await fetchCategories();
+            const fetchedSuppliers = await fetchSuppliers();
             setProducts(fetchedProducts);
+            setCategories(fetchedCategories);
+            setSuppliers(fetchedSuppliers);
             setLoading(false);
         };
 
-        loadProducts();
+        loadData();
     }, []);
 
     const chartData = products.map(product => ({
@@ -77,7 +83,7 @@ const Dashboard = () => {
                             <div className="card text-center">
                                 <div className="card-body">
                                     <h5 className="card-title">Categories</h5>
-                                    <p className="card-text">10</p> 
+                                    <p className="card-text">{categories.length}</p> 
                                 </div>
                             </div>
                         </div>
@@ -85,7 +91,7 @@ const Dashboard = () => {
                             <div className="card text-center">
                                 <div className="card-body">
                                     <h5 className="card-title">Suppliers</h5>
-                                    <p className="card-text">8</p> 
+                                    <p className="card-text">{suppliers.length}</p> 
                                 </div>
                             </div>
                         </div>
