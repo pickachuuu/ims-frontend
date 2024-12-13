@@ -43,7 +43,7 @@ const Dashboard = () => {
     }));
 
     return (
-        <div className="border rounded-3 p-4 bg-white shadow mx-auto" style={{ margin: '0 auto', height: '95vh' }}>
+        <div className="border rounded-3 p-4 bg-white shadow mx-auto" style={{ margin: '0 auto', height: '95vh', overflow: 'auto' }}>
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <Typography variant="h4">Dashboard</Typography>
             </div>
@@ -99,18 +99,18 @@ const Dashboard = () => {
                 )}
             </div>
             <div className='row justify-content-center'>
-                <div className='col-md-12 text-center'>
-                    <ResponsiveContainer width='50%' height={300}>
-                        <BarChart data={chartData}>
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="name" />
-                            <YAxis />
-                            <Tooltip />
-                            <Legend />
-                            <Bar dataKey="quantity" fill="#82ca9d" />
-                        </BarChart>
-                    </ResponsiveContainer>
-                </div>
+            <div className='col-md-11 text-center'>
+                <ResponsiveContainer width="100%" height={window.innerWidth < 768 ? 300 : 400}>
+                    <BarChart data={chartData}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="name" />
+                        <YAxis />
+                        <Tooltip />
+                        <Legend />
+                        <Bar dataKey="quantity" fill="#82ca9d" />
+                    </BarChart>
+                </ResponsiveContainer>
+            </div>
             </div>
             <div className="mt-4">
                 <h2 className="text-center">Top Products</h2>
