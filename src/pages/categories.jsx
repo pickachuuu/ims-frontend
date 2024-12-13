@@ -16,9 +16,11 @@ import {
     Paper
 } from '@mui/material';
 import CategoryModal from '../components/category/categoryModal';
-import { fetchCategories, handleDelete, handleDeleteSelected } from '../utils/categoryUtils/categoryApi'; // Ensure fetchProducts is imported
-import { fetchProducts } from '../utils/productUtils/productApi'
+import { fetchCategories, handleDelete, handleDeleteSelected } from '../utils/categoryUtils/categoryApi'; 
+import { fetchProducts } from '../utils/productUtils/productApi';
 import { FaEdit, FaTrash } from 'react-icons/fa';
+import Skeleton from 'react-loading-skeleton'; 
+import 'react-loading-skeleton/dist/skeleton.css'; 
 
 const CategoryPage = () => {
     const [categories, setCategories] = useState([]);
@@ -150,19 +152,28 @@ const CategoryPage = () => {
                     <MenuItem value="desc">Z-A</MenuItem>
                 </Select>
             </Box>
-                <TableContainer style={{ maxHeight: 550, height: '50vh' }} component={Paper}> 
-                    <Table stickyHeader>
-                        <TableHead> 
-                            <TableRow sx={{ '& th': { fontWeight: 'bold' } }}>
-                                <TableCell padding="checkbox">
-                                </TableCell>
-                                <TableCell>Name</TableCell>
-                                <TableCell>Product Count</TableCell>
-                                <TableCell>Actions</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {filteredCategories.map((category) => (
+            <TableContainer style={{ maxHeight: 550, height: '50vh' }} component={Paper}> 
+                <Table stickyHeader>
+                    <TableHead> 
+                        <TableRow sx={{ '& th': { fontWeight: 'bold' } }}>
+                            <TableCell padding="checkbox"></TableCell>
+                            <TableCell>Name</TableCell>
+                            <TableCell>Product Count</TableCell>
+                            <TableCell>Actions</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {loading ? (
+                            [...Array(5)].map((_, index) => (
+                                <TableRow key={index}>
+                                    <TableCell padding="checkbox"><Skeleton circle width={20} height={20} /></TableCell>
+                                    <TableCell><Skeleton /></TableCell>
+                                    <TableCell><Skeleton /></TableCell>
+                                    <TableCell><Skeleton /></TableCell>
+                                </TableRow>
+                            ))
+                        ) : (
+                            filteredCategories.map((category) => (
                                 <TableRow key={category.categoryID}>
                                     <TableCell padding="checkbox">
                                         <Checkbox
@@ -183,10 +194,11 @@ const CategoryPage = () => {
                                         />
                                     </TableCell>
                                 </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
+                            ))
+                        )}
+                    </TableBody>
+                </Table>
+            </TableContainer>
             <div className='mt-3 d-flex align-items-center gap-2'>
                 <Button 
                     variant="outlined"

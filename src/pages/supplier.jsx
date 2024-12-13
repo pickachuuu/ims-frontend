@@ -18,6 +18,8 @@ import {
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import SupplierModal from '../components/supplier/supplierModal';
 import { fetchSuppliers, handleDeleteSelected } from '../utils/supplierUtils/supplierApi';
+import Skeleton from 'react-loading-skeleton'; 
+import 'react-loading-skeleton/dist/skeleton.css'; 
 
 const SuppliersPage = () => {
     const [suppliers, setSuppliers] = useState([]);
@@ -41,7 +43,6 @@ const SuppliersPage = () => {
         };
         loadData();
     }, []);
-
 
     const filteredSuppliers = suppliers
     .filter(supplier => supplier.supplierName.toLowerCase().includes(searchTerm.toLowerCase()))
@@ -95,10 +96,6 @@ const SuppliersPage = () => {
         setSelectedItems([]);
     };
 
-
-
-    
-
     return (
         <div className="border rounded-3 p-4 bg-white shadow mx-auto" style={{ margin: '0 auto', height: '95vh' }}>
             <div className="d-flex justify-content-between align-items-center mb-4">
@@ -132,19 +129,28 @@ const SuppliersPage = () => {
                     <MenuItem value="desc">Z-A</MenuItem>
                 </Select>
             </Box>
-                <TableContainer style={{ maxHeight: 550, height: '50vh' }} component={Paper}> 
-                    <Table stickyHeader>
-                        <TableHead> 
-                            <TableRow sx={{ '& th': { fontWeight: 'bold' } }}>
-                                <TableCell padding="checkbox">
-                                </TableCell>
-                                <TableCell>Supplier Name</TableCell>
-                                <TableCell>Contact No</TableCell>
-                                <TableCell>Actions</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {filteredSuppliers.map((supplier) => (
+            <TableContainer style={{ maxHeight: 550, height: '50vh' }} component={Paper}> 
+                <Table stickyHeader>
+                    <TableHead> 
+                        <TableRow sx={{ '& th': { fontWeight: 'bold' } }}>
+                            <TableCell padding="checkbox"></TableCell>
+                            <TableCell>Supplier Name</TableCell>
+                            <TableCell>Contact No</TableCell>
+                            <TableCell>Actions</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {loading ? (
+                            [...Array(5)].map((_, index) => (
+                                <TableRow key={index}>
+                                    <TableCell padding="checkbox"><Skeleton circle width={20} height={20} /></TableCell>
+                                    <TableCell><Skeleton /></TableCell>
+                                    <TableCell><Skeleton /></TableCell>
+                                    <TableCell><Skeleton /></TableCell>
+                                </TableRow>
+                            ))
+                        ) : (
+                            filteredSuppliers.map((supplier) => (
                                 <TableRow key={supplier.supplierID}>
                                     <TableCell padding="checkbox">
                                         <Checkbox
@@ -165,10 +171,11 @@ const SuppliersPage = () => {
                                         />
                                     </TableCell>
                                 </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
+                            ))
+                        )}
+                    </TableBody>
+                </Table>
+            </TableContainer>
             <div className='mt-3 d-flex align-items-center gap-2'>
                 <Button 
                     variant="outlined"
