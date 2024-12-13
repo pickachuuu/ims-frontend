@@ -7,7 +7,6 @@ import ProductPage from './product';
 import CategoriesPage from './categories';
 import LowStockPage from './lowstock';
 import SuppliersPage from './supplier';
-import ReportsPage from './reports';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 import Cookies from 'js-cookie';
