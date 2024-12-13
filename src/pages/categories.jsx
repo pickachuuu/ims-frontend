@@ -20,7 +20,8 @@ import { fetchCategories, handleDelete, handleDeleteSelected } from '../utils/ca
 import { fetchProducts } from '../utils/productUtils/productApi';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import Skeleton from 'react-loading-skeleton'; 
-import 'react-loading-skeleton/dist/skeleton.css'; 
+import 'react-loading-skeleton/dist/skeleton.css';
+import ConfirmModal from '../components/products/confirmModal';
 
 const CategoryPage = () => {
     const [categories, setCategories] = useState([]);
@@ -31,7 +32,8 @@ const CategoryPage = () => {
     const [editingCategory, setEditingCategory] = useState(null);
     const [selectedItems, setSelectedItems] = useState([]); 
     const [searchTerm, setSearchTerm] = useState(''); 
-    const [sortOrder, setSortOrder] = useState(''); 
+    const [sortOrder, setSortOrder] = useState('');
+    const [confirmModalOpen, setConfirmModalOpen] = useState(false);
 
     useEffect(() => {
         const loadData = async () => {
@@ -64,7 +66,12 @@ const CategoryPage = () => {
         return products.filter(product => product.categoryID === categoryId).length; 
     };
 
+    const handleAddCategory = () => {
+        setNewCategory({ name: '', description: '' }); 
+    };
+
     const handleClickOpen = () => {
+        handleAddCategory();
         setOpen(true); 
         setEditingCategory(null); 
     };
@@ -75,8 +82,8 @@ const CategoryPage = () => {
         setOpen(false); 
     };
 
-    const handleAddCategory = () => {
-        setNewCategory({ name: '', description: '' }); 
+    const handleCloseConfirmModal = () => {
+        setConfirmModalOpen(false); 
     };
 
     const handleEditCategory = (category) => {
@@ -85,13 +92,8 @@ const CategoryPage = () => {
     };
 
     const handleDeleteCategory = async (id) => {
-        try {
-            await handleDelete(id);
-            const updatedCategories = await fetchCategories();
-            setCategories(updatedCategories);
-        } catch (error) {
-            console.error('Error deleting category:', error);
-        }
+        setSelectedItems((prevItems) => [...prevItems, id]);
+        setConfirmModalOpen(true);
     };
 
     const handleSelectAll = () => {
@@ -117,6 +119,7 @@ const CategoryPage = () => {
         const updatedCategories = await fetchCategories();
         setCategories(updatedCategories);
         setSelectedItems([]);
+        setConfirmModalOpen(false);
     };
 
     return (
@@ -228,6 +231,14 @@ const CategoryPage = () => {
                     mode={editingCategory ? 'edit' : 'create'}
                     editingCategory={editingCategory}
                 />
+            <ConfirmModal 
+                isOpen={confirmModalOpen} 
+                onConfirm={handleConfirmDelete} 
+                onClose={handleCloseConfirmModal} 
+                message={selectedItems.length > 1 
+                    ? `Are you sure you want to delete ${selectedItems.length} items?` 
+                    : `Are you sure you want to delete this category?`}
+            />
             </div>
         </div>
     );
