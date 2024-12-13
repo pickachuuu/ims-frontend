@@ -10,19 +10,23 @@ import {
     Bar,
     PieChart,
     Pie,
-    Cell,
+    Cell
 } from 'recharts';
 import {
     Typography,
     Skeleton,
+    Button
 } from '@mui/material';
 import { fetchProducts, fetchCategories, fetchSuppliers } from '../utils/productUtils/productApi';
+import jsPDF from 'jspdf'; // Import jsPDF
+import 'jspdf-autotable'; // I
 
 const Dashboard = () => {
     const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]);
     const [suppliers, setSuppliers] = useState([]);
     const [loading, setLoading] = useState(true);
+    const lowStockThreshold = 5;
 
     useEffect(() => {
         const loadData = async () => {
@@ -37,6 +41,46 @@ const Dashboard = () => {
 
         loadData();
     }, []);
+
+
+    const generatePDF = () => {
+        const doc = new jsPDF();
+        doc.text("Inventory Report", 14, 16);
+        
+        // Prepare data for the first table (All Products)
+        const productTableData = products.map(item => [item.productName, item.quantity, item.price, item.supplierName]);
+        
+        // Add the first table to the PDF
+        doc.autoTable({
+            head: [['Product Name', 'Quantity', 'Price', 'Supplier']],
+            body: productTableData,
+        });
+
+        // Add a page break for the second table
+        doc.addPage();
+        doc.text("Low Stock Report", 14, 16);
+
+        // Prepare data for the second table (Low Stock Items)
+        const lowStockItems = products.filter(item => item.quantity <= lowStockThreshold);
+        const lowStockTableData = lowStockItems.map(item => {
+            const supplier = suppliers.find(supp => supp.supplierID === item.supplierID);
+            return [
+                item.productName,
+                item.quantity,
+                supplier ? supplier.supplierName : 'N/A',
+                supplier ? supplier.contactNo : 'N/A'
+            ];
+        });
+
+        // Add the second table to the PDF
+        doc.autoTable({
+            head: [['Product Name', 'Quantity', 'Supplier', 'Contact No']],
+            body: lowStockTableData,
+        });
+
+        // Save the PDF
+        doc.save('inventory_report.pdf');
+    };
 
     const chartData = products.map(product => ({
         name: product.productName,
@@ -59,6 +103,9 @@ const Dashboard = () => {
         <div className="border rounded-3 p-4 bg-white shadow mx-auto" style={{ margin: '0 auto', height: '95vh', overflow: 'auto' }}>
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <Typography variant="h4">Dashboard</Typography>
+                <Button variant="contained" color="primary" onClick={generatePDF}>
+                Generate Inventory Report
+            </Button>
             </div>
             <hr />
             <div className="row mb-4 justify-content-center">
