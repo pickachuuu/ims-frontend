@@ -113,6 +113,7 @@ const SuppliersPage = () => {
         const updatedSuppliers = await fetchSuppliers();
         setSuppliers(updatedSuppliers);
         setSelectedItems([]);
+        setConfirmModalOpen(false);
         refreshData();
     };
 
