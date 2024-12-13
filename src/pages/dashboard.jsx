@@ -113,7 +113,7 @@ const Dashboard = () => {
     const chartData = products.map(product => ({
         name: product.productName,
         quantity: product.quantity,
-        lowStock: product.quantity <= 20,
+        lowStock: product.quantity <= 5,
     }));
 
     const categoryData = categories.map(category => {
@@ -131,13 +131,12 @@ const Dashboard = () => {
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <Typography variant="h4">Dashboard</Typography>
                 <Button variant="contained" color="primary" onClick={generatePDF}>
-                Generate Inventory Report
-            </Button>
+                    Report
+                </Button>
             </div>
             <hr />
             <div className="row mb-4 justify-content-center">
                 {loading ? (
-                    // Skeleton loaders for cards
                     [1, 2, 3, 4].map((_, index) => (
                         <div key={index} className="col-6 col-md-3 mb-3">
                             <div className="card text-center">
