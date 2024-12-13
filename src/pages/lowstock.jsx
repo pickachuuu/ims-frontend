@@ -9,21 +9,27 @@ import {
     Typography,
     Paper,
 } from '@mui/material';
-import { fetchProducts } from '../utils/productUtils/productApi'; // Adjust the import path as necessary
+import { fetchProducts } from '../utils/productUtils/productApi';
+import { fetchSuppliers } from '../utils/supplierUtils/supplierApi';
 
 const LowStockPage = () => {
     const [lowStockItems, setLowStockItems] = useState([]);
-    const lowStockThreshold = 5; // Define the low stock threshold
+    const [supplier, setSuppliers] = useState([]);
+    const lowStockThreshold = 5;
 
     useEffect(() => {
         const loadProducts = async () => {
             const products = await fetchProducts();
             const lowStock = products.filter(product => product.quantity <= lowStockThreshold);
+            const suppliers = await fetchSuppliers();
             setLowStockItems(lowStock);
+            setSuppliers(suppliers);
         };
-
+        console.log(supplier);
         loadProducts();
     }, []);
+    
+
 
     return (
         <div className="border rounded-3 p-4 bg-white shadow mx-auto" style={{ margin: '0 auto', height: '95vh' }}>
