@@ -1,17 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
-import {
-    ResponsiveContainer,
-    BarChart,
-    CartesianGrid,
-    XAxis,
-    YAxis,
-    Tooltip,
-    Legend,
-    Bar,
-    PieChart,
-    Pie,
-    Cell
-} from 'recharts';
+import { Bar, Doughnut } from 'react-chartjs-2';  // Import Doughnut for pie chart
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement } from 'chart.js'; // Import necessary components for Chart.js
 import {
     Typography,
     Skeleton,
@@ -21,6 +10,8 @@ import { fetchProducts, fetchCategories, fetchSuppliers } from '../utils/product
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import { AuthContext } from '../context/AuthContext';
+
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement); // Register Chart.js components
 
 const Dashboard = () => {
     const [products, setProducts] = useState([]);
@@ -43,7 +34,6 @@ const Dashboard = () => {
 
         loadData();
     }, []);
-
 
     const generatePDF = () => {
         const doc = new jsPDF();
@@ -110,11 +100,14 @@ const Dashboard = () => {
         doc.save(`${business}_inventory_report`);
     };
 
-    const chartData = products.map(product => ({
-        name: product.productName,
-        quantity: product.quantity,
-        lowStock: product.quantity <= 5,
-    }));
+    const chartData = {
+        labels: products.map(product => product.productName),
+        datasets: [{
+            label: 'Quantity',
+            data: products.map(product => product.quantity),
+            backgroundColor: '#82ca9d',
+        }],
+    };
 
     const categoryData = categories.map(category => {
         const categoryQuantity = products
@@ -125,6 +118,14 @@ const Dashboard = () => {
             value: categoryQuantity,
         };
     }).filter(data => data.value > 0); 
+
+    const pieData = {
+        labels: categoryData.map(data => data.name),
+        datasets: [{
+            data: categoryData.map(data => data.value),
+            backgroundColor: categoryData.map((_, index) => index % 2 === 0 ? '#82ca9d' : '#8884d8'),
+        }],
+    };
 
     return (
         <div className="border rounded-3 p-4 bg-white shadow mx-auto" style={{ margin: '0 auto', height: '95vh', overflow: 'auto' }}>
@@ -184,39 +185,47 @@ const Dashboard = () => {
                     </>
                 )}
             </div>
-            <div className='row justify-content-center mt-4'>
-                <div className='col-md-7 text-center'> 
-                    <ResponsiveContainer width="100%" height={window.innerWidth < 768 ? 300 : 400}>
-                        <BarChart data={chartData}>
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="name" />
-                            <YAxis />
-                            <Tooltip />
-                            <Legend />
-                            <Bar dataKey="quantity" fill="#82ca9d" />
-                        </BarChart>
-                    </ResponsiveContainer>
+            <div className='row mt-4 justify-content-center'>
+                <div className='col-12 col-md-6 d-flex justify-content-center align-items-center' style={{ border: '1px solid #ccc', padding: '20px', height: '400px' }}> 
+                    <Bar 
+                        data={chartData} 
+                        options={{
+                            responsive: true,
+                            maintainAspectRatio: false, // Allow custom height
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Product Quantity',
+                                },
+                            },
+                        }}
+                        height={400} // Set height for the Bar chart
+                    />
                 </div>
-                <div className='col-md-5 text-center'> 
+                <div className='col-12 col-md-5 d-flex justify-content-center align-items-center' style={{ border: '1px solid #ccc', padding: '10px', height: '400px' }}> 
                     {categoryData.length > 0 ? (
-                        <ResponsiveContainer width="100%" height={window.innerWidth < 768 ? 300 : 400}>
-                            <PieChart>
-                                <Pie 
-                                    data={categoryData} 
-                                    dataKey="value" 
-                                    nameKey="name" 
-                                    cx="50%"    
-                                    cy="50%" 
-                                    outerRadius={150} 
-                                    fill="#82ca9d" 
-                                    label={({ name }) => name}
-                                >
-                                    {categoryData.map((entry, index) => (
-                                        <Cell key={`cell-${index}`} fill={index % 2 === 0 ? '#82ca9d' : '#8884d8'} />
-                                    ))}
-                                </Pie>
-                            </PieChart>
-                        </ResponsiveContainer>
+                        <div style={{ height: '100%', width: '100%' }}> {/* Ensure the container takes full height */}
+                            <Doughnut 
+                                data={pieData} 
+                                options={{
+                                    responsive: true,
+                                    maintainAspectRatio: false, // Allow custom height
+                                    plugins: {
+                                        legend: {
+                                            position: 'top',
+                                        },
+                                        title: {
+                                            display: true,
+                                            text: 'Category Distribution',
+                                        },
+                                    },
+                                }}
+                                height={400} // Set height for the Doughnut chart
+                            />
+                        </div>
                     ) : (
                         <Typography variant="h6">No data available for categories.</Typography>
                     )}
@@ -226,4 +235,4 @@ const Dashboard = () => {
     );
 };
 
-export default Dashboard;
+export default Dashboard
