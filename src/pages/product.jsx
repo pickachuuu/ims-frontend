@@ -140,7 +140,7 @@ const ProductPage = () => {
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <Typography variant="h4">Product</Typography>
                 <Button variant="contained" color="primary" onClick={handleClickOpen}>
-                    + New Product
+                    + Product
                 </Button>
             </div>
             <hr />
