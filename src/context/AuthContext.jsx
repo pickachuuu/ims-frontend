@@ -7,6 +7,7 @@ const AuthProvider = ({ children }) => {
     const [token, setToken] = useState();
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [user, setUser] = useState(null);
+    const [business, setBusiness] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -19,6 +20,10 @@ const AuthProvider = ({ children }) => {
                     const savedUser = localStorage.getItem('user');
                     if (savedUser) {
                         setUser(JSON.parse(savedUser));
+                    }
+                    const savedBusiness = localStorage.getItem('business');
+                    if (savedBusiness) {
+                        setBusiness(JSON.parse(savedBusiness));
                     }
                 }
             } catch (error) {
@@ -43,9 +48,12 @@ const AuthProvider = ({ children }) => {
         setIsAuthenticated(false);
     };
 
-    const login = (userData) => {
+    const login = (userData, businessData) => {
         setUser(userData);
+        setBusiness(businessData);
         localStorage.setItem('user', JSON.stringify(userData));
+        localStorage.setItem('business', JSON.stringify(businessData));
+        console.log(`business name = ${business}`);
     };
 
     const logout = () => {
@@ -56,7 +64,7 @@ const AuthProvider = ({ children }) => {
         setIsAuthenticated(false);
     };
 
-    const value = { token, isAuthenticated, loading, setIsAuthenticated, login, logout, user };
+    const value = { token, isAuthenticated, loading, setIsAuthenticated, login, logout, user, business };
 
     return (
         <AuthContext.Provider value={value}>
