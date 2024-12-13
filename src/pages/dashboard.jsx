@@ -8,10 +8,12 @@ import {
     Tooltip,
     Legend,
     Bar,
+    PieChart,
+    Pie,
+    Cell,
 } from 'recharts';
 import {
     Typography,
-    Button,
     Skeleton,
 } from '@mui/material';
 import { fetchProducts, fetchCategories, fetchSuppliers } from '../utils/productUtils/productApi';
@@ -41,6 +43,17 @@ const Dashboard = () => {
         quantity: product.quantity,
         lowStock: product.quantity <= 20,
     }));
+
+    // Create category data based on fetched categories
+    const categoryData = categories.map(category => {
+        const categoryQuantity = products
+            .filter(product => product.categoryID === category.categoryID) // Use categoryID for filtering
+            .reduce((acc, product) => acc + product.quantity, 0);
+        return {
+            name: category.categoryName, // Use categoryName for display
+            value: categoryQuantity,
+        };
+    }).filter(data => data.value > 0); // Filter out categories with zero quantity
 
     return (
         <div className="border rounded-3 p-4 bg-white shadow mx-auto" style={{ margin: '0 auto', height: '95vh', overflow: 'auto' }}>
@@ -98,38 +111,43 @@ const Dashboard = () => {
                     </>
                 )}
             </div>
-            <div className='row justify-content-center'>
-            <div className='col-md-11 text-center'>
-                <ResponsiveContainer width="100%" height={window.innerWidth < 768 ? 300 : 400}>
-                    <BarChart data={chartData}>
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="name" />
-                        <YAxis />
-                        <Tooltip />
-                        <Legend />
-                        <Bar dataKey="quantity" fill="#82ca9d" />
-                    </BarChart>
-                </ResponsiveContainer>
-            </div>
-            </div>
-            <div className="mt-4">
-                <h2 className="text-center">Top Products</h2>
-                <ul className="list-group">
-                    {loading ? (
-                        // Skeleton loader for the product list
-                        [1, 2, 3, 4, 5].map((_, index) => (
-                            <li key={index} className="list-group-item">
-                                <Skeleton variant="text" width="80%" />
-                            </li>
-                        ))
+            <div className='row justify-content-center mt-4'>
+                <div className='col-md-5 text-center'> 
+                    <ResponsiveContainer width="100%" height={window.innerWidth < 768 ? 300 : 400}>
+                        <BarChart data={chartData}>
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis dataKey="name" />
+                            <YAxis />
+                            <Tooltip />
+                            <Legend />
+                            <Bar dataKey="quantity" fill="#82ca9d" />
+                        </BarChart>
+                    </ResponsiveContainer>
+                </div>
+                <div className='col-md-5 text-center'> 
+                    {categoryData.length > 0 ? (
+                        <ResponsiveContainer width="100%" height={window.innerWidth < 768 ? 300 : 400}>
+                            <PieChart>
+                                <Pie 
+                                    data={categoryData} 
+                                    dataKey="value" 
+                                    nameKey="name" 
+                                    cx="50%"    
+                                    cy="50%" 
+                                    outerRadius={150} 
+                                    fill="#82ca9d" 
+                                    label={({ name }) => name}
+                                >
+                                    {categoryData.map((entry, index) => (
+                                        <Cell key={`cell-${index}`} fill={index % 2 === 0 ? '#82ca9d' : '#8884d8'} />
+                                    ))}
+                                </Pie>
+                            </PieChart>
+                        </ResponsiveContainer>
                     ) : (
-                        products.slice(0, 5).map(product => ( 
-                            <li key={product.productID} className="list-group-item">
-                                {product.productName} - Quantity: {product.quantity} {product.quantity <= 5 ? '(Low Stock)' : ''}
-                            </li>
-                        ))
+                        <Typography variant="h6">No data available for categories.</Typography>
                     )}
-                </ul>
+                </div>
             </div>
         </div>
     );
