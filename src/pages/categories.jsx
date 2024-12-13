@@ -149,7 +149,6 @@ const CategoryPage = () => {
                     <MenuItem value="desc">Z-A</MenuItem>
                 </Select>
             </Box>
-            <div className='p-3'>
                 <TableContainer style={{ maxHeight: 550, height: '50vh' }}> 
                     <Table stickyHeader>
                         <TableHead> 
@@ -187,7 +186,6 @@ const CategoryPage = () => {
                         </TableBody>
                     </Table>
                 </TableContainer>
-            </div>
             <div className='mt-3 d-flex align-items-center gap-2'>
                 <Button 
                     variant="outlined"
