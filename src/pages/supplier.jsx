@@ -155,7 +155,7 @@ const SuppliersPage = () => {
                     <TableHead> 
                         <TableRow sx={{ '& th': { fontWeight: 'bold' } }}>
                             <TableCell padding="checkbox"></TableCell>
-                            <TableCell>Supplier Name</TableCell>
+                            <TableCell>Supplier</TableCell>
                             <TableCell>Contact No</TableCell>
                             <TableCell>Actions</TableCell>
                         </TableRow>
@@ -170,6 +170,12 @@ const SuppliersPage = () => {
                                     <TableCell><Skeleton /></TableCell>
                                 </TableRow>
                             ))
+                        ) : filteredSuppliers.length === 0 ? (
+                            <TableRow>
+                                <TableCell colSpan={4} style={{ textAlign: 'center' }}>
+                                    No suppliers found.
+                                </TableCell>
+                            </TableRow>
                         ) : (
                             filteredSuppliers.map((supplier) => (
                                 <TableRow key={supplier.supplierID}>

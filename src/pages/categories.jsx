@@ -166,7 +166,7 @@ const CategoryPage = () => {
                     <TableHead> 
                         <TableRow sx={{ '& th': { fontWeight: 'bold' } }}>
                             <TableCell padding="checkbox"></TableCell>
-                            <TableCell>Name</TableCell>
+                            <TableCell>Category</TableCell>
                             <TableCell>Product Count</TableCell>
                             <TableCell>Actions</TableCell>
                         </TableRow>
@@ -181,6 +181,12 @@ const CategoryPage = () => {
                                     <TableCell><Skeleton /></TableCell>
                                 </TableRow>
                             ))
+                        ) : filteredCategories.length === 0 ? (
+                            <TableRow>
+                                <TableCell colSpan={4} style={{ textAlign: 'center' }}>
+                                    No categories found.
+                                </TableCell>
+                            </TableRow>
                         ) : (
                             filteredCategories.map((category) => (
                                 <TableRow key={category.categoryID}>
