@@ -28,7 +28,6 @@ const Sidebar = ({ onPageChange, currentPage }) => {
         { id: 'categories', icon: <MdCategory />, label: 'Categories' },
         { id: 'suppliers', icon: <MdLocalShipping />, label: 'Suppliers' },
         { id: 'products', icon: <MdInventory />, label: 'Products' },
-        { id: 'reports', icon: <MdAssessment />, label: 'Reports' },
         { id: 'lowstock', icon: <MdInventory2 />, label: 'Low Stock' },
     ];
 
