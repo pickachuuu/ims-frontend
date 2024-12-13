@@ -13,6 +13,7 @@ import Cookies from 'js-cookie';
 import BG from '../assets/curve.svg';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'; 
+import ProfilePage from './profilePage';
 
 const HomePage = () => {
     const { user } = useContext(AuthContext);
@@ -55,6 +56,8 @@ const HomePage = () => {
                 return <SuppliersPage />;
             case 'reports':
                 return <ReportsPage />;
+            case 'profile':
+                return <ProfilePage />;
             default:
                 navigate('/Home/dashboard'); 
                 return null;
