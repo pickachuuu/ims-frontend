@@ -55,12 +55,19 @@ const SuppliersPage = () => {
         return 0;
     });
 
+    const refreshData = async () => {
+        const suppliersData = await fetchSuppliers();
+        setSuppliers(suppliersData);
+    }
+
     const handleClickOpen = () => {
         setOpen(true);
         setEditingSupplier(null);
+        refreshData();
     }
 
-    const handleClose = () => {
+    const handleClose = async () => {
+        await refreshData();
         setOpen(false);
     }
 
@@ -94,6 +101,7 @@ const SuppliersPage = () => {
         const updatedSuppliers = await fetchSuppliers();
         setSuppliers(updatedSuppliers);
         setSelectedItems([]);
+        refreshData();
     };
 
     return (
