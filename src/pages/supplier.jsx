@@ -12,7 +12,8 @@ import {
     TableRow,
     TableCell,
     TableBody,
-    Checkbox
+    Checkbox,
+    Paper
 } from '@mui/material';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import SupplierModal from '../components/supplier/supplierModal';
@@ -131,7 +132,7 @@ const SuppliersPage = () => {
                     <MenuItem value="desc">Z-A</MenuItem>
                 </Select>
             </Box>
-                <TableContainer style={{ maxHeight: 550, height: '50vh' }}> 
+                <TableContainer style={{ maxHeight: 550, height: '50vh' }} component={Paper}> 
                     <Table stickyHeader>
                         <TableHead> 
                             <TableRow sx={{ '& th': { fontWeight: 'bold' } }}>

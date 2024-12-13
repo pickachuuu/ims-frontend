@@ -13,6 +13,7 @@ import {
     MenuItem,
     Select,
     Box,
+    Paper
 } from '@mui/material';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import CreateProductModal from '../components/products/createProductModal';
@@ -201,7 +202,7 @@ const ProductPage = () => {
                     <MenuItem value="lowToHigh">Lowest to Highest</MenuItem>
                 </Select>
             </Box>
-            <TableContainer style={{ maxHeight: 550, height: '50vh' }}> 
+            <TableContainer style={{ maxHeight: 550, height: '50vh' }} component={Paper}> 
                 <Table stickyHeader>
                     <TableHead>
                         <TableRow sx={{ '& th': { fontWeight: 'bold' } }}>

@@ -13,6 +13,7 @@ import {
     MenuItem,
     Select,
     Box,
+    Paper
 } from '@mui/material';
 import CategoryModal from '../components/category/categoryModal';
 import { fetchCategories, handleDelete, handleDeleteSelected } from '../utils/categoryUtils/categoryApi'; // Ensure fetchProducts is imported
@@ -149,7 +150,7 @@ const CategoryPage = () => {
                     <MenuItem value="desc">Z-A</MenuItem>
                 </Select>
             </Box>
-                <TableContainer style={{ maxHeight: 550, height: '50vh' }}> 
+                <TableContainer style={{ maxHeight: 550, height: '50vh' }} component={Paper}> 
                     <Table stickyHeader>
                         <TableHead> 
                             <TableRow sx={{ '& th': { fontWeight: 'bold' } }}>
