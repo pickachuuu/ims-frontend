@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Bar, Doughnut } from 'react-chartjs-2';  // Import Doughnut for pie chart
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement } from 'chart.js'; // Import necessary components for Chart.js
+import { Bar, Doughnut } from 'react-chartjs-2';  
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement } from 'chart.js'; 
 import {
     Typography,
     Skeleton,
@@ -11,7 +11,7 @@ import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import { AuthContext } from '../context/AuthContext';
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement); // Register Chart.js components
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement); 
 
 const Dashboard = () => {
     const [products, setProducts] = useState([]);
@@ -41,7 +41,7 @@ const Dashboard = () => {
         const startY = 16;
 
         doc.setFont("helvetica", "bold");
-        const title = `${business}`;
+        const title = `${business}'s Inventory Report`;
         const titleWidth = doc.getTextWidth(title);
         const pageWidth = doc.internal.pageSize.getWidth();
         const titleX = (pageWidth - titleWidth) / 2;
@@ -191,7 +191,7 @@ const Dashboard = () => {
                         data={chartData} 
                         options={{
                             responsive: true,
-                            maintainAspectRatio: false, // Allow custom height
+                            maintainAspectRatio: false,
                             plugins: {
                                 legend: {
                                     position: 'top',
@@ -202,17 +202,17 @@ const Dashboard = () => {
                                 },
                             },
                         }}
-                        height={400} // Set height for the Bar chart
+                        height={400} 
                     />
                 </div>
                 <div className='col-12 col-md-5 d-flex justify-content-center align-items-center' style={{ border: '1px solid #ccc', padding: '10px', height: '400px' }}> 
                     {categoryData.length > 0 ? (
-                        <div style={{ height: '100%', width: '100%' }}> {/* Ensure the container takes full height */}
+                        <div style={{ height: '100%', width: '100%' }}> 
                             <Doughnut 
                                 data={pieData} 
                                 options={{
                                     responsive: true,
-                                    maintainAspectRatio: false, // Allow custom height
+                                    maintainAspectRatio: false,
                                     plugins: {
                                         legend: {
                                             position: 'top',
@@ -223,7 +223,7 @@ const Dashboard = () => {
                                         },
                                     },
                                 }}
-                                height={400} // Set height for the Doughnut chart
+                                height={400}
                             />
                         </div>
                     ) : (
