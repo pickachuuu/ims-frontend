@@ -98,13 +98,9 @@ const Dashboard = () => {
                     </>
                 )}
             </div>
-            <div className="text-center mb-4">
-                <button className="btn btn-primary mx-2">Add Product</button>
-                <button className="btn btn-secondary mx-2">Generate Stock Report</button>
-            </div>
             <div className='row justify-content-center'>
                 <div className='col-md-12 text-center'>
-                    <ResponsiveContainer width='100%' height={300}>
+                    <ResponsiveContainer width='50%' height={300}>
                         <BarChart data={chartData}>
                             <CartesianGrid strokeDasharray="3 3" />
                             <XAxis dataKey="name" />
