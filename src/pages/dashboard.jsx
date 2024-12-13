@@ -47,29 +47,66 @@ const Dashboard = () => {
 
     const generatePDF = () => {
         const doc = new jsPDF();
-        doc.text(`${business}_inventory_report`, 14, 16);
-        
-        const productTableData = products.map(item => [item.productName, item.quantity, item.price, item.supplierName]);
+        const margin = 10; 
+        const startY = 16;
+
+        doc.setFont("helvetica", "bold");
+        const title = `${business}`;
+        const titleWidth = doc.getTextWidth(title);
+        const pageWidth = doc.internal.pageSize.getWidth();
+        const titleX = (pageWidth - titleWidth) / 2;
+        doc.text(title, titleX, startY);
+        doc.setFont("helvetica", "normal");
+        doc.text(`Products`, 14, 32);
+
+        const categoryMap = categories.reduce((acc, category) => {
+            acc[category.categoryID] = category.categoryName; 
+            return acc;
+        }, {});
+    
+        const supplierMap = suppliers.reduce((acc, supplier) => {
+            acc[supplier.supplierID] = supplier.supplierName; 
+            return acc;
+        }, {});
+    
+        const productTableData = products.map(item => [
+            item.productName, 
+            item.quantity, 
+            item.price, 
+            supplierMap[item.supplierID] || 'N/A', 
+            categoryMap[item.categoryID] || 'N/A' 
+        ]);
+    
+        const productTableStartY = startY + margin + 10; 
         doc.autoTable({
-            head: [['Product Name', 'Quantity', 'Price', 'Supplier']],
+            head: [['Product Name', 'Quantity', 'Price', 'Supplier', 'Category']],
             body: productTableData,
+            startY: productTableStartY,
         });
+    
         doc.addPage();
-        doc.text("Low Stock Report", 14, 16);
+        const lowStockTitleY = margin; 
+        doc.text("Low Stock Report", 14, 32);
+    
         const lowStockItems = products.filter(item => item.quantity <= lowStockThreshold);
         const lowStockTableData = lowStockItems.map(item => {
             const supplier = suppliers.find(supp => supp.supplierID === item.supplierID);
             return [
                 item.productName,
                 item.quantity,
-                supplier ? supplier.supplierName : 'N/A',
-                supplier ? supplier.contactNo : 'N/A'
+                supplier ? supplierMap[item.supplierID] : 'N/A', 
+                supplier ? supplier.contactNo : 'N/A',
+                categoryMap[item.categoryID] || 'N/A'  
             ];
         });
+    
+        const lowStockTableStartY = lowStockTitleY + margin + 16;
         doc.autoTable({
-            head: [['Product Name', 'Quantity', 'Supplier', 'Contact No']],
+            head: [['Product Name', 'Quantity', 'Supplier', 'Contact No', 'Category']], 
             body: lowStockTableData,
+            startY: lowStockTableStartY, 
         });
+
         doc.save(`${business}_inventory_report`);
     };
 
@@ -79,16 +116,15 @@ const Dashboard = () => {
         lowStock: product.quantity <= 20,
     }));
 
-    // Create category data based on fetched categories
     const categoryData = categories.map(category => {
         const categoryQuantity = products
-            .filter(product => product.categoryID === category.categoryID) // Use categoryID for filtering
+            .filter(product => product.categoryID === category.categoryID) 
             .reduce((acc, product) => acc + product.quantity, 0);
         return {
-            name: category.categoryName, // Use categoryName for display
+            name: category.categoryName, 
             value: categoryQuantity,
         };
-    }).filter(data => data.value > 0); // Filter out categories with zero quantity
+    }).filter(data => data.value > 0); 
 
     return (
         <div className="border rounded-3 p-4 bg-white shadow mx-auto" style={{ margin: '0 auto', height: '95vh', overflow: 'auto' }}>
