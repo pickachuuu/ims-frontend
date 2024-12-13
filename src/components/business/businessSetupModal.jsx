@@ -1,12 +1,14 @@
-import React from 'react';
+import { React, useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import logo from '../../assets/logo.png'; 
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { businessSetupSchema } from '../validations/businessSetupSchema';
+import { AuthContext } from '../../context/AuthContext';
 
 const BusinessSetupModal = ({ isOpen, onRequestClose }) => {
     const { register, handleSubmit, setError, formState: { errors } } = useForm();
+    const { business, updateBusiness } = useContext(AuthContext);
 
     const onFormSubmit = async (data) => {
         try {
@@ -26,6 +28,7 @@ const BusinessSetupModal = ({ isOpen, onRequestClose }) => {
             if (response.status === 201) {
                 const newToken = response.data.token;
                 Cookies.set('authToken', newToken);
+                updateBusiness(data.businessName);
                 onRequestClose(); 
             }
 

@@ -48,11 +48,15 @@ const AuthProvider = ({ children }) => {
         setIsAuthenticated(false);
     };
 
+    const updateBusiness = (data) => {
+        setBusiness(data);
+        localStorage.setItem('business', JSON.stringify(data));
+    }
+
     const login = (userData, businessData) => {
         setUser(userData);
-        setBusiness(businessData);
         localStorage.setItem('user', JSON.stringify(userData));
-        localStorage.setItem('business', JSON.stringify(businessData));
+        updateBusiness(businessData);
         console.log(`business name = ${business}`);
     };
 
@@ -64,7 +68,7 @@ const AuthProvider = ({ children }) => {
         setIsAuthenticated(false);
     };
 
-    const value = { token, isAuthenticated, loading, setIsAuthenticated, login, logout, user, business };
+    const value = { token, isAuthenticated, loading, setIsAuthenticated, login, logout, user, business, updateBusiness };
 
     return (
         <AuthContext.Provider value={value}>
