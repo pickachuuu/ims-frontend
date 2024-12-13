@@ -33,7 +33,7 @@ const LowStockPage = () => {
 
     return (
         <div className="border rounded-3 p-4 bg-white shadow mx-auto" style={{ margin: '0 auto', height: '95vh' }}>
-            <Typography variant="h4" className="mb-4">Low Stock Report</Typography>
+            <Typography variant="h4" className="mb-4">Low Stock</Typography>
             <hr />
             {lowStockItems.length > 0 ? (
                 <TableContainer component={Paper}>
