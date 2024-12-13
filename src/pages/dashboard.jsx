@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import {
     ResponsiveContainer,
     BarChart,
@@ -18,14 +18,16 @@ import {
     Button
 } from '@mui/material';
 import { fetchProducts, fetchCategories, fetchSuppliers } from '../utils/productUtils/productApi';
-import jsPDF from 'jspdf'; // Import jsPDF
-import 'jspdf-autotable'; // I
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
+import { AuthContext } from '../context/AuthContext';
 
 const Dashboard = () => {
     const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]);
     const [suppliers, setSuppliers] = useState([]);
     const [loading, setLoading] = useState(true);
+    const { business } = useContext(AuthContext); 
     const lowStockThreshold = 5;
 
     useEffect(() => {
@@ -45,22 +47,15 @@ const Dashboard = () => {
 
     const generatePDF = () => {
         const doc = new jsPDF();
-        doc.text("Inventory Report", 14, 16);
+        doc.text(`${business}_inventory_report`, 14, 16);
         
-        // Prepare data for the first table (All Products)
         const productTableData = products.map(item => [item.productName, item.quantity, item.price, item.supplierName]);
-        
-        // Add the first table to the PDF
         doc.autoTable({
             head: [['Product Name', 'Quantity', 'Price', 'Supplier']],
             body: productTableData,
         });
-
-        // Add a page break for the second table
         doc.addPage();
         doc.text("Low Stock Report", 14, 16);
-
-        // Prepare data for the second table (Low Stock Items)
         const lowStockItems = products.filter(item => item.quantity <= lowStockThreshold);
         const lowStockTableData = lowStockItems.map(item => {
             const supplier = suppliers.find(supp => supp.supplierID === item.supplierID);
@@ -71,15 +66,11 @@ const Dashboard = () => {
                 supplier ? supplier.contactNo : 'N/A'
             ];
         });
-
-        // Add the second table to the PDF
         doc.autoTable({
             head: [['Product Name', 'Quantity', 'Supplier', 'Contact No']],
             body: lowStockTableData,
         });
-
-        // Save the PDF
-        doc.save('inventory_report.pdf');
+        doc.save(`${business}_inventory_report`);
     };
 
     const chartData = products.map(product => ({
