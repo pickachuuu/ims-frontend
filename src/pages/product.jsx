@@ -18,7 +18,7 @@ import {
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import CreateProductModal from '../components/products/createProductModal';
 import ConfirmModal from '../components/products/confirmModal'; 
-import { fetchProducts, handleDeleteSelected } from '../utils/productUtils/productApi'; 
+import { fetchProducts, handleDeleteSelected, handleDelete } from '../utils/productUtils/productApi'; 
 import { fetchCategories } from '../utils/categoryUtils/categoryApi';
 import { fetchSuppliers } from '../utils/supplierUtils/supplierApi';
 import Skeleton from 'react-loading-skeleton'; 
@@ -105,16 +105,19 @@ const ProductPage = () => {
         });
     };
 
-    const handleDelete = () => {
-        setConfirmModalOpen(true)
+    const handleDelete = (productId) => {
+        // Add the product ID to the selectedItems array
+        setSelectedItems((prevItems) => [...prevItems, productId]);
+        setConfirmModalOpen(true);
     }
-
     const handleDeleteClick = () => {
         setConfirmModalOpen(true); 
     };
 
     const handleConfirmDelete = async () => {
-        await handleDeleteSelected(selectedItems); 
+        console.log("Selected Items before deletion:", selectedItems);
+        await handleDeleteSelected(selectedItems);
+        console.log(selectedItems);
         const updatedProducts = await fetchProducts(); 
         setProducts(updatedProducts); 
         setSelectedItems([]); 
@@ -245,11 +248,11 @@ const ProductPage = () => {
                                     <TableCell>
                                         <FaEdit 
                                             style={{ cursor: 'pointer', marginRight: '10px' }} 
-                                            onClick={() => handleEditClick(product)} 
+                                            onClick={() => handleEditClick(product.productID)} 
                                         />
                                         <FaTrash 
                                             style={{ cursor: 'pointer' }} 
-                                            onClick={handleDeleteClick} 
+                                            onClick={() => handleDelete(product.productID)} 
                                         />
                                     </TableCell>
                                 </TableRow>
@@ -299,7 +302,9 @@ const ProductPage = () => {
                 isOpen={confirmModalOpen} 
                 onConfirm={handleConfirmDelete} 
                 onClose={handleCloseConfirmModal} 
-                message={`Are you sure you want to delete ${selectedItems.length} items?`}
+                message={selectedItems.length > 1 
+                    ? `Are you sure you want to delete ${selectedItems.length} items?` 
+                    : `Are you sure you want to delete this item?`}
             />
         </div>
     );
