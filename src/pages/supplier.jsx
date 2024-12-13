@@ -19,7 +19,8 @@ import { FaEdit, FaTrash } from 'react-icons/fa';
 import SupplierModal from '../components/supplier/supplierModal';
 import { fetchSuppliers, handleDeleteSelected } from '../utils/supplierUtils/supplierApi';
 import Skeleton from 'react-loading-skeleton'; 
-import 'react-loading-skeleton/dist/skeleton.css'; 
+import 'react-loading-skeleton/dist/skeleton.css';
+import ConfirmModal from '../components/products/confirmModal';
 
 const SuppliersPage = () => {
     const [suppliers, setSuppliers] = useState([]);
@@ -29,6 +30,7 @@ const SuppliersPage = () => {
     const [selectedItems, setSelectedItems] = useState([]); 
     const [searchTerm, setSearchTerm] = useState(''); 
     const [sortOrder, setSortOrder] = useState('');
+    const [confirmModalOpen, setConfirmModalOpen] = useState(false);
 
     useEffect(() => {
         const loadData = async () => {
@@ -66,8 +68,13 @@ const SuppliersPage = () => {
         refreshData();
     }
 
+    const handleCloseConfirmModal = () => {
+        setConfirmModalOpen(false); 
+    };
+
     const handleClose = async () => {
         await refreshData();
+        setEditingSupplier([]);
         setOpen(false);
     }
 
@@ -93,8 +100,13 @@ const SuppliersPage = () => {
     };
 
     const handleDeleteSupplier = async (supplierId) => {
-        // Implement supplier deletion logic
+        setSelectedItems((prevItems) => [...prevItems, supplierId]);
+        setConfirmModalOpen(true);
     };
+    
+    const confirmDeleteSelected = () => {
+        setConfirmModalOpen(true);
+    }
 
     const handleConfirmDelete = async () => {
         handleDeleteSelected(selectedItems)
@@ -198,7 +210,7 @@ const SuppliersPage = () => {
                     variant="contained" 
                     color="error"
                     disabled={selectedItems.length === 0}
-                    onClick={handleConfirmDelete} 
+                    onClick={confirmDeleteSelected} 
                     startIcon={<FaTrash />}
                     sx={{ textTransform: 'none' }}
                 >
@@ -211,6 +223,14 @@ const SuppliersPage = () => {
                 supplier={editingSupplier}
                 mode={editingSupplier ? 'edit' : 'create'}
                 editingSupplier={editingSupplier}
+            />
+            <ConfirmModal 
+                isOpen={confirmModalOpen} 
+                onConfirm={handleConfirmDelete} 
+                onClose={handleCloseConfirmModal} 
+                message={selectedItems.length > 1 
+                    ? `Are you sure you want to delete ${selectedItems.length} items?` 
+                    : `Are you sure you want to delete this supplier?`}
             />
         </div>
     );
