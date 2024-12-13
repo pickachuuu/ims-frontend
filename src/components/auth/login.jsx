@@ -21,7 +21,7 @@ const Login = () => {
         const token = response.data.token;
         Cookies.set('authToken', token, { expires: 1, sameSite: 'Lax' });
         setIsAuthenticated(true);
-        login(response.data.user);
+        login(response.data.user, response.data.business);
         navigate('/Home');
       }
       
