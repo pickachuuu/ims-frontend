@@ -46,21 +46,21 @@ const SupplierModal = ({ isOpen, onRequestClose, supplier, mode }) => {
                                 <label htmlFor="supplierName" className="form-label">Supplier Name</label>
                                 <input
                                     type="text"
-                                    className={`form-control ${errors.productName ? 'is-invalid' : ''}`}
-                                    id="productName"
-                                    {...register("supplierName", { required: "Product name is required" })}
+                                    className={`form-control ${errors.supplierName ? 'is-invalid' : ''}`}
+                                    id="supplierName"
+                                    {...register("supplierName", { required: "Supplier name is required" })}
                                 />
-                                {errors.productName && <div className="invalid-feedback">{errors.productName.message}</div>}
+                                {errors.supplierName && <div className="invalid-feedback">{errors.supplierName.message}</div>}
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="contactNo" className="form-label">Contact no</label>
                                 <input
                                     type="text"
-                                    className={`form-control ${errors.quantity ? 'is-invalid' : ''}`}
-                                    id="quantity"
-                                    {...register("contactNo", { required: "Quantity is required", min: 0 })}
+                                    className={`form-control ${errors.contactNo ? 'is-invalid' : ''}`}
+                                    id="contactNo"
+                                    {...register("contactNo", { required: "Contact number is required", min: 0 })}
                                 />
-                                {errors.quantity && <div className="invalid-feedback">{errors.quantity.message}</div>}
+                                {errors.contactNo && <div className="invalid-feedback">{errors.contactNo.message}</div>}
                             </div>
 
                             <div className="d-flex justify-content-end">
@@ -68,7 +68,7 @@ const SupplierModal = ({ isOpen, onRequestClose, supplier, mode }) => {
                                     Cancel
                                 </button>
                                 <button type="submit" className="btn btn-primary">
-                                    {mode === 'edit' ? 'Update Product' : 'Create Product'}
+                                    {mode === 'edit' ? 'Update Supplier' : 'Create Supplier'}
                                 </button>
                             </div>
                         </form>
