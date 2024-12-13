@@ -10,6 +10,7 @@ import ProductPage from '../../pages/product';
 import CategoriesPage from '../../pages/categories';
 import LowStockPage from '../../pages/lowstock';
 import SuppliersPage from '../../pages/supplier';
+import ProfilePage from '../../pages/profilePage';
 
 const AppRoutes = () => {
   const { isAuthenticated, loading } = useContext(AuthContext); // Access loading state
@@ -31,6 +32,7 @@ const AppRoutes = () => {
             <Route path="categories" element={<CategoriesPage />} />
             <Route path="lowstock" element={<LowStockPage />} />
             <Route path="suppliers" element={<SuppliersPage />} />
+            <Route path="profile" element={<ProfilePage />} />
           </Route>
         </Route>
       </Routes>
