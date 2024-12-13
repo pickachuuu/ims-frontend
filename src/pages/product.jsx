@@ -79,6 +79,7 @@ const ProductPage = () => {
     const handleClose = async () => {
         const updateProducts = await fetchProducts();
         setProducts(updateProducts);
+        setEditingProduct([]);
         setOpen(false); 
     };
 
@@ -248,7 +249,7 @@ const ProductPage = () => {
                                     <TableCell>
                                         <FaEdit 
                                             style={{ cursor: 'pointer', marginRight: '10px' }} 
-                                            onClick={() => handleEditClick(product.productID)} 
+                                            onClick={() => handleEditClick(product)} 
                                         />
                                         <FaTrash 
                                             style={{ cursor: 'pointer' }} 
