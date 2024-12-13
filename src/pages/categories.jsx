@@ -51,6 +51,11 @@ const CategoryPage = () => {
         loadData();
     }, []);
 
+    const refreshData = async () => {
+        const categoriesData = await fetchCategories();
+        setCategories(categoriesData);
+    }
+
     const filteredCategories = categories
         .filter(category => category.categoryName.toLowerCase().includes(searchTerm.toLowerCase()))
         .sort((a, b) => {
@@ -120,6 +125,7 @@ const CategoryPage = () => {
         setCategories(updatedCategories);
         setSelectedItems([]);
         setConfirmModalOpen(false);
+        refreshData();
     };
 
     return (
