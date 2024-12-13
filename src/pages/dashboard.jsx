@@ -112,7 +112,7 @@ const Dashboard = () => {
                 )}
             </div>
             <div className='row justify-content-center mt-4'>
-                <div className='col-md-5 text-center'> 
+                <div className='col-md-7 text-center'> 
                     <ResponsiveContainer width="100%" height={window.innerWidth < 768 ? 300 : 400}>
                         <BarChart data={chartData}>
                             <CartesianGrid strokeDasharray="3 3" />
