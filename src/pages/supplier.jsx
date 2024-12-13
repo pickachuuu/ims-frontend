@@ -101,7 +101,7 @@ const SuppliersPage = () => {
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <Typography variant="h4">Suppliers</Typography>
                 <Button variant="contained" color="primary" onClick={handleClickOpen}>
-                    + Add Supplier
+                    + Supplier
                 </Button>
             </div>
             <hr />
