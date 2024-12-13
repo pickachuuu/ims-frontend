@@ -136,7 +136,7 @@ const ProductPage = () => {
     }, {});
 
     return (
-        <div className="border rounded-3 p-4 bg-white shadow mx-auto" style={{ margin: '0 auto', height: '95vh' }}>
+        <div className="border rounded-3 p-4 bg-white shadow mx-auto" style={{ margin: '0 auto', height: '95vh' , overflow: 'auto' }}>
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <Typography variant="h4">Product</Typography>
                 <Button variant="contained" color="primary" onClick={handleClickOpen}>
@@ -206,7 +206,7 @@ const ProductPage = () => {
                 <Table stickyHeader>
                     <TableHead>
                         <TableRow sx={{ '& th': { fontWeight: 'bold' } }}>
-                            <TableCell padding="checkbox"></TableCell>
+                            <TableCell padding="checkbox" ></TableCell>
                             <TableCell>Product</TableCell>
                             <TableCell>Quantity</TableCell>
                             <TableCell>Price</TableCell>
