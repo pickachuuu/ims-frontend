@@ -1,8 +1,8 @@
-import { Typography, Skeleton, Button } from '@mui/material'; // Import necessary components
+import { Typography, Skeleton, Button } from '@mui/material'; 
 import { useState, useEffect } from 'react';
 import logo from '../assets/logo.png';
 import { fetchUserProfile } from '../utils/userUtils/userApi';
-import EditProfileModal from '../components/business/editProfieModal'; // Import the new modal component
+import EditProfileModal from '../components/business/editProfieModal'; 
 import Cookies from 'js-cookie';
 
 const ProfilePage = () => {
@@ -17,7 +17,7 @@ const ProfilePage = () => {
         address: '',
         businessEmail: '',
     });
-    const [open, setOpen] = useState(false); // State for modal open/close
+    const [open, setOpen] = useState(false); 
 
     useEffect(() => {
         const loadData = async () => {
@@ -66,7 +66,7 @@ const ProfilePage = () => {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`,
                 },
-                body: JSON.stringify(data)  // Changed from 'data' to 'body: JSON.stringify(data)'
+                body: JSON.stringify(data)  
             });
     
             if (!response.ok) {
@@ -75,12 +75,11 @@ const ProfilePage = () => {
             }
     
             const result = await response.json();
-            console.log(result.message); // Handle success message
-            setProfileData(data); // Update the profile data with the new values
-            handleClose(); // Close the modal after saving
+            console.log(result.message);
+            setProfileData(data); 
+            handleClose(); 
         } catch (error) {
             console.error('Error updating profile:', error);
-            // Handle error (e.g., show a notification)
         }
     };
 
