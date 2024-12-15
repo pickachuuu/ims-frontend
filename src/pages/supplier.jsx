@@ -121,7 +121,7 @@ const SuppliersPage = () => {
         <div className="border rounded-3 p-4 bg-white shadow mx-auto" style={{ margin: '0 auto', height: '100vh' }}>
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <Typography variant="h4">Suppliers</Typography>
-                <Button variant="contained" color="primary" onClick={handleClickOpen}>
+                <Button variant="contained" color="primary" onClick={handleClickOpen} className='border rounded-3 p-2 bg-primary shadow'>
                     + Supplier
                 </Button>
             </div>
@@ -210,9 +210,11 @@ const SuppliersPage = () => {
                     onClick={handleSelectAll}
                     sx={{ textTransform: 'none' }}
                 >
-                    {selectedItems.length === filteredSuppliers.length 
-                        ? 'Unselect All' 
-                        : 'Select All'}
+                    {filteredSuppliers.length === 0 
+                        ? 'Select All' 
+                        : selectedItems.length === filteredSuppliers.length 
+                            ? 'Unselect All' 
+                            : 'Select All'}
                 </Button>
                 <Button 
                     variant="contained" 

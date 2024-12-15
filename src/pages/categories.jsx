@@ -222,9 +222,11 @@ const CategoryPage = () => {
                     onClick={handleSelectAll}
                     sx={{ textTransform: 'none' }}
                 >
-                    {selectedItems.length === filteredCategories.length 
-                        ? 'Unselect All' 
-                        : 'Select All'}
+                    {filteredCategories.length === 0 
+                        ? 'Select All' 
+                        : selectedItems.length === filteredCategories.length 
+                            ? 'Unselect All' 
+                            : 'Select All'}
                 </Button>
                 <Button 
                     variant="contained" 
