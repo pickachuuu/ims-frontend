@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { Bar, Doughnut } from 'react-chartjs-2';  
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement } from 'chart.js'; 
+import { Link } from 'react-router-dom';
 import {
     Typography,
     Skeleton,
@@ -20,6 +21,23 @@ const Dashboard = () => {
     const [loading, setLoading] = useState(true);
     const { business } = useContext(AuthContext); 
     const lowStockThreshold = 5;
+
+// Add or update the cardStyle and cardHoverStyle
+const cardStyle = {
+    transition: 'all 0.3s ease',
+    cursor: 'pointer',
+    textDecoration: 'none',
+    color: 'inherit',
+};
+
+// You can adjust the glow color by modifying the rgba values
+const cardHoverStyle = {
+    '&:hover': {
+        transform: 'translateY(-5px)',
+        boxShadow: '0 0 20px rgba(0, 123, 255, 0.4)', // Blue glow
+        background: '#f8f9fa',
+    }
+};
 
     useEffect(() => {
         const loadData = async () => {
@@ -128,7 +146,7 @@ const Dashboard = () => {
     };
 
     return (
-        <div className="border rounded-3 p-4 bg-white shadow mx-auto" style={{ margin: '0 auto', height: '95vh', overflow: 'auto' }}>
+        <div className="border rounded-3 p-4 bg-white shadow mx-auto" style={{ margin: '0 auto', height: '100vh', overflow: 'auto' }}>
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <Typography variant="h4">Dashboard</Typography>
                 <Button variant="contained" color="primary" onClick={generatePDF}>
@@ -151,42 +169,55 @@ const Dashboard = () => {
                 ) : (
                     <>
                         <div className="col-6 col-md-3 mb-3">
-                            <div className="card text-center">
-                                <div className="card-body">
-                                    <h5 className="card-title">Total Products</h5>
-                                    <p className="card-text">{products.length}</p>
+                            <Link to="/products" className="dashboard-card">
+                                <div className="card text-center border rounded-3 p-4 bg-white shadow">
+                                    <div className="card-body">
+                                        <h5 className="card-title">Total Products</h5>
+                                        <p className="card-text">{products.length}</p>
+                                    </div>
                                 </div>
-                            </div>
+                            </Link>
                         </div>
+
                         <div className="col-6 col-md-3 mb-3">
-                            <div className="card text-center">
-                                <div className="card-body">
-                                    <h5 className="card-title">Low-Stock Alerts</h5>
-                                    <p className="card-text">{products.filter(product => product.quantity <= 20).length}</p>
+                            <Link to="/low-stock" className="dashboard-card">
+                                <div className="card text-center border rounded-3 p-4 bg-white shadow">
+                                    <div className="card-body">
+                                        <h5 className="card-title">Low-Stock Alerts</h5>
+                                        <p className="card-text">
+                                            {products.filter(product => product.quantity <= lowStockThreshold).length}
+                                        </p>
+                                    </div>
                                 </div>
-                            </div>
+                            </Link>
                         </div>
+
                         <div className="col-6 col-md-3 mb-3">
-                            <div className="card text-center">
-                                <div className="card-body">
-                                    <h5 className="card-title">Categories</h5>
-                                    <p className="card-text">{categories.length}</p> 
+                            <Link to="/categories" className="dashboard-card">
+                                <div className="card text-center border rounded-3 p-4 bg-white shadow">
+                                    <div className="card-body">
+                                        <h5 className="card-title">Categories</h5>
+                                        <p className="card-text">{categories.length}</p>
+                                    </div>
                                 </div>
-                            </div>
+                            </Link>
                         </div>
+
                         <div className="col-6 col-md-3 mb-3">
-                            <div className="card text-center">
-                                <div className="card-body">
-                                    <h5 className="card-title">Suppliers</h5>
-                                    <p className="card-text">{suppliers.length}</p> 
+                            <Link to="/suppliers" className="dashboard-card">
+                                <div className="card text-center border rounded-3 p-4 bg-white shadow">
+                                    <div className="card-body">
+                                        <h5 className="card-title">Suppliers</h5>
+                                        <p className="card-text">{suppliers.length}</p>
+                                    </div>
                                 </div>
-                            </div>
+                            </Link>
                         </div>
                     </>
                 )}
             </div>
             <div className='row mt-4 justify-content-center'>
-                <div className='col-12 col-md-6 d-flex justify-content-center align-items-center' style={{ border: '1px solid #ccc', padding: '20px', height: '400px' }}> 
+                <div className='col-12 col-md-6 d-flex justify-content-center align-items-center mx-auto border rounded-3 p-4 bg-white shadow' > 
                     <Bar 
                         data={chartData} 
                         options={{
@@ -205,7 +236,7 @@ const Dashboard = () => {
                         height={400} 
                     />
                 </div>
-                <div className='col-12 col-md-5 d-flex justify-content-center align-items-center' style={{ border: '1px solid #ccc', padding: '10px', height: '400px' }}> 
+                <div className='col-12 col-md-5 d-flex justify-content-center align-items-center mx-auto border rounded-3 p-4 bg-white shadow' > 
                     {categoryData.length > 0 ? (
                         <div style={{ height: '100%', width: '100%' }}> 
                             <Doughnut 
