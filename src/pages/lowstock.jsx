@@ -8,41 +8,56 @@ import {
     TableRow,
     Typography,
     Paper,
+    Card
 } from '@mui/material';
 import { fetchProducts } from '../utils/productUtils/productApi';
 import { fetchSuppliers } from '../utils/supplierUtils/supplierApi';
 
 const LowStockPage = () => {
     const [lowStockItems, setLowStockItems] = useState([]);
-    const [supplier, setSuppliers] = useState([]);
+    const [suppliers, setSuppliers] = useState([]);
     const lowStockThreshold = 5;
 
     useEffect(() => {
         const loadProducts = async () => {
             const products = await fetchProducts();
-            const lowStock = products.filter(product => product.quantity <= lowStockThreshold);
-            const suppliers = await fetchSuppliers();
+            const suppliersData = await fetchSuppliers();
+            
+            // Create a map of suppliers for easy lookup
+            const supplierMap = suppliersData.reduce((acc, supplier) => {
+                acc[supplier.supplierID] = supplier;
+                return acc;
+            }, {});
+
+            // Filter low stock items and add supplier information
+            const lowStock = products
+                .filter(product => product.quantity <= lowStockThreshold)
+                .map(product => ({
+                    ...product,
+                    supplierName: supplierMap[product.supplierID]?.supplierName || 'N/A',
+                    supplierContact: supplierMap[product.supplierID]?.contactNo || 'N/A'
+                }));
+
             setLowStockItems(lowStock);
-            setSuppliers(suppliers);
+            setSuppliers(suppliersData);
         };
-        console.log(supplier);
         loadProducts();
     }, []);
-    
-
 
     return (
-        <div className="border rounded-3 p-4 bg-white shadow mx-auto" style={{ margin: '0 auto', height: '95vh' }}>
+        <div className="border rounded-3 p-4 bg-white shadow mx-auto" style={{ margin: '0 auto', height: '100vh' }}>
             <Typography variant="h4" className="mb-4">Low Stock</Typography>
             <hr />
+            <div className='border rounded-3 p-4 bg-white shadow'> 
             {lowStockItems.length > 0 ? (
-                <TableContainer component={Paper}>
+                <TableContainer component={Card}>
                     <Table>
                         <TableHead>
-                            <TableRow>
+                            <TableRow sx={{ '& th': { fontWeight: 'bold' } }}>
                                 <TableCell>Product Name</TableCell>
                                 <TableCell>Quantity</TableCell>
-                                <TableCell>Supplier</TableCell> 
+                                <TableCell>Supplier</TableCell>
+                                <TableCell>Contact Number</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -50,7 +65,8 @@ const LowStockPage = () => {
                                 <TableRow key={item.productID}>
                                     <TableCell>{item.productName}</TableCell>
                                     <TableCell>{item.quantity}</TableCell>
-                                    <TableCell>{item.supplierName}</TableCell> 
+                                    <TableCell>{item.supplierName}</TableCell>
+                                    <TableCell>{item.supplierContact}</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
@@ -59,6 +75,7 @@ const LowStockPage = () => {
             ) : (
                 <Typography variant="h6">No low stock items found.</Typography>
             )}
+            </div>
         </div>
     );
 };
