@@ -118,7 +118,7 @@ const SuppliersPage = () => {
     };
 
     return (
-        <div className="border rounded-3 p-4 bg-white shadow mx-auto" style={{ margin: '0 auto', height: '95vh' }}>
+        <div className="border rounded-3 p-4 bg-white shadow mx-auto" style={{ margin: '0 auto', height: '100vh' }}>
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <Typography variant="h4">Suppliers</Typography>
                 <Button variant="contained" color="primary" onClick={handleClickOpen}>
@@ -126,6 +126,7 @@ const SuppliersPage = () => {
                 </Button>
             </div>
             <hr />
+            <div className='border rounded-3 p-4 bg-white shadow'> 
             <TextField
                 label="Quick search"
                 variant="outlined"
@@ -240,6 +241,7 @@ const SuppliersPage = () => {
                     : `Are you sure you want to delete this supplier?`}
             />
         </div>
+    </div>
     );
 };
 
