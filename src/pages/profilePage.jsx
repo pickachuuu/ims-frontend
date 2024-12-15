@@ -92,7 +92,7 @@ const ProfilePage = () => {
     }
 
     return (
-        <div className="border rounded-3 p-4 bg-white shadow mx-auto" style={{ margin: '0 auto', height: '95vh', overflow: 'auto' }}>
+        <div className="border rounded-3 p-4 bg-white shadow mx-auto" style={{ margin: '0 auto', height: '100vh', overflow: 'auto' }}>
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <Typography variant="h4">Profile</Typography>
                 <Button variant="contained" color="primary" onClick={handleOpen}>Edit</Button> {/* Edit Button */}
