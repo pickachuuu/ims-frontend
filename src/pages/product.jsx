@@ -13,7 +13,8 @@ import {
     MenuItem,
     Select,
     Box,
-    Paper
+    Paper,
+    Card
 } from '@mui/material';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import CreateProductModal from '../components/products/createProductModal';
@@ -107,7 +108,6 @@ const ProductPage = () => {
     };
 
     const handleDelete = (productId) => {
-        // Add the product ID to the selectedItems array
         setSelectedItems((prevItems) => [...prevItems, productId]);
         setConfirmModalOpen(true);
     }
@@ -139,7 +139,7 @@ const ProductPage = () => {
     }, {});
 
     return (
-        <div className="border rounded-3 p-4 bg-white shadow mx-auto" style={{ margin: '0 auto', height: '95vh' , overflow: 'auto' }}>
+        <div className="border rounded-3 p-4 bg-white shadow mx-auto" style={{ margin: '0 auto', height: '100vh' , overflow: 'auto' }}>
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <Typography variant="h4">Product</Typography>
                 <Button variant="contained" color="primary" onClick={handleClickOpen}>
@@ -147,6 +147,7 @@ const ProductPage = () => {
                 </Button>
             </div>
             <hr />
+            <div className='border rounded-3 p-4 bg-white shadow'> 
             <TextField
                 label="Quick search"
                 variant="outlined"
@@ -205,7 +206,7 @@ const ProductPage = () => {
                     <MenuItem value="lowToHigh">Lowest to Highest</MenuItem>
                 </Select>
             </Box>
-            <TableContainer style={{ maxHeight: 550, height: '50vh' }} component={Paper}> 
+            <TableContainer style={{ maxHeight: 550, height: '50vh' }} component={Card}> 
                 <Table stickyHeader>
                     <TableHead>
                         <TableRow sx={{ '& th': { fontWeight: 'bold' } }}>
@@ -307,6 +308,7 @@ const ProductPage = () => {
                     : `Are you sure you want to delete this item?`}
             />
         </div>
+    </div>
     );
 };
 
