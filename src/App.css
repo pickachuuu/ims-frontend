@@ -121,4 +121,23 @@ body {
 }
 
 
+.dashboard-card {
+  transition: all 0.3s ease !important;
+  text-decoration: none !important;
+  color: inherit !important;
+}
+
+.dashboard-card .card {
+  transition: all 0.3s ease !important;
+}
+
+.dashboard-card:hover .card {
+  transform: translateY(-5px) !important;
+  box-shadow: 
+      0 0 10px rgba(33, 150, 243, 0.4),
+      0 0 20px rgba(33, 150, 243, 0.3),
+      0 0 30px rgba(33, 150, 243, 0.2) !important;
+  background-color: #ffffff !important;
+}
+
   
