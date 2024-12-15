@@ -254,8 +254,8 @@ const CategoryPage = () => {
                     : `Are you sure you want to delete this category?`}
             />
             </div>
-            </div>
         </div>
+    </div>
     );
 };
 
