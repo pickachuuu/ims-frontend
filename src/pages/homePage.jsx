@@ -10,7 +10,7 @@ import SuppliersPage from './supplier';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 import Cookies from 'js-cookie';
-import BG from '../assets/curve.svg';
+import BG from '../assets/stacked-waves-haikei.svg';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'; 
 import ProfilePage from './profilePage';
