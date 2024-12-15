@@ -169,7 +169,7 @@ const cardHoverStyle = {
                 ) : (
                     <>
                         <div className="col-6 col-md-3 mb-3">
-                            <Link to="/products" className="dashboard-card">
+                            <Link to="/home/products" className="dashboard-card">
                                 <div className="card text-center border rounded-3 p-4 bg-white shadow">
                                     <div className="card-body">
                                         <h5 className="card-title">Total Products</h5>
@@ -180,7 +180,7 @@ const cardHoverStyle = {
                         </div>
 
                         <div className="col-6 col-md-3 mb-3">
-                            <Link to="/low-stock" className="dashboard-card">
+                            <Link to="/home/lowstock" className="dashboard-card">
                                 <div className="card text-center border rounded-3 p-4 bg-white shadow">
                                     <div className="card-body">
                                         <h5 className="card-title">Low-Stock Alerts</h5>
@@ -193,7 +193,7 @@ const cardHoverStyle = {
                         </div>
 
                         <div className="col-6 col-md-3 mb-3">
-                            <Link to="/categories" className="dashboard-card">
+                            <Link to="/home/categories" className="dashboard-card">
                                 <div className="card text-center border rounded-3 p-4 bg-white shadow">
                                     <div className="card-body">
                                         <h5 className="card-title">Categories</h5>
@@ -204,7 +204,7 @@ const cardHoverStyle = {
                         </div>
 
                         <div className="col-6 col-md-3 mb-3">
-                            <Link to="/suppliers" className="dashboard-card">
+                            <Link to="/home/suppliers" className="dashboard-card">
                                 <div className="card text-center border rounded-3 p-4 bg-white shadow">
                                     <div className="card-body">
                                         <h5 className="card-title">Suppliers</h5>
