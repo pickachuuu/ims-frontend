@@ -123,3 +123,7 @@ To disable the animations in the application:
 - JWT Authentication
 - Express Middleware
 - Node.js
+
+### Screenshots
+![Login](https://github.com/user-attachments/assets/0a2ac338-44ae-41cf-934e-f62031e323c3)
+
