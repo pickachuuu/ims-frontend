@@ -124,6 +124,7 @@ To disable the animations in the application:
 - Express Middleware
 - Node.js
 
-### Screenshots
-![Login](https://github.com/user-attachments/assets/0a2ac338-44ae-41cf-934e-f62031e323c3)
+### Pages Demo
+![recording (7)](https://github.com/user-attachments/assets/d5da8389-beb0-4623-9510-d134681221ba)
+
 
