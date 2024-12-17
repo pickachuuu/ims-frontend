@@ -29,9 +29,10 @@ export const businessSetupSchema = {
         }
     },
     contactNumber: {
+        required: "Contact number is required",
         pattern: {
-            value: /^[0-9]+$/,
-            message: "Contact number must be only digits"
+            value: /^\+?\s*(?:\([0-9]+\))?[-.\s]*(?:[0-9][-.\s]*){10,15}$/,
+            message: "Please enter a valid phone number"
         },
         minLength: {
             value: 10,
