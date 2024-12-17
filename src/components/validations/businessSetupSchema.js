@@ -31,16 +31,16 @@ export const businessSetupSchema = {
     contactNumber: {
         required: "Contact number is required",
         pattern: {
-            value: /^\+?\s*(?:\([0-9]+\))?[-.\s]*(?:[0-9][-.\s]*){10,15}$/,
-            message: "Please enter a valid phone number"
+            value: /^(?:\+63|0)(?:2\d{7}|(?:9\d{2})\d{7})$/,
+            message: "Please enter a valid Philippine phone number (e.g., +63 917 123 4567 or 0917 123 4567)"
         },
         minLength: {
             value: 10,
             message: "Contact number must be at least 10 digits long"
         },
         maxLength: {
-            value: 15,
-            message: "Contact number cannot exceed 15 digits"
+            value: 13,
+            message: "Contact number cannot exceed 13 digits"
         }
     }
 };
