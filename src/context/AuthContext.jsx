@@ -27,7 +27,6 @@ const AuthProvider = ({ children }) => {
                     }
                 }
             } catch (error) {
-                console.error("Error fetching token:", error);
                 removeToken();
             } finally {
                 setLoading(false);
@@ -57,7 +56,6 @@ const AuthProvider = ({ children }) => {
         setUser(userData);
         localStorage.setItem('user', JSON.stringify(userData));
         updateBusiness(businessData);
-        console.log(`business name = ${business}`);
     };
 
     const logout = () => {
