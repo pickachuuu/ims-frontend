@@ -130,7 +130,7 @@ const CategoryPage = () => {
     };
 
     return (
-        <div className="border rounded-3 p-4 bg-white shadow mx-auto" style={{ margin: '0 auto', height: '100vh' }}>
+        <div className="border rounded-3 p-4 bg-white shadow mx-auto" style={{ margin: '0 auto', height: '95vh' }}>
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <Typography variant="h4">Categories</Typography>
                 <Button variant="contained" color="primary" onClick={handleClickOpen} className='border rounded-3 p-2 bg-primary shadow'>
@@ -163,7 +163,7 @@ const CategoryPage = () => {
                     <MenuItem value="desc">Z-A</MenuItem>
                 </Select>
             </Box>
-            <TableContainer style={{ maxHeight: 550, height: '50vh' }} component={Card}> 
+            <TableContainer style={{ maxHeight: 550, height: '45vh' }} component={Card}> 
                 <Table stickyHeader>
                     <TableHead> 
                         <TableRow sx={{ '& th': { fontWeight: 'bold' } }}>

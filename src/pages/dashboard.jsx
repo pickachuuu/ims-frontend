@@ -154,7 +154,7 @@ const Dashboard = () => {
     };
 
     return (
-        <div className="border rounded-3 p-4 bg-white shadow mx-auto" style={{ margin: '0 auto', height: '100vh', overflow: 'auto' }}>
+        <div className="border rounded-3 p-4 bg-white shadow mx-auto" style={{ margin: '0 auto', height: '95%', overflow: 'auto' }}>
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <Typography variant="h4">Dashboard</Typography>
                 <Button variant="contained" color="primary" onClick={generatePDF} className='border rounded-3 p-2 bg-primary shadow'>
@@ -229,7 +229,7 @@ const Dashboard = () => {
                 )}
             </div>
             <div className='row mt-4 justify-content-center'>
-                <div className='col-12 col-md-6 d-flex justify-content-center align-items-center mx-auto border rounded-3 p-4 bg-white shadow' > 
+                <div className='col-12 col-md-6 d-flex justify-content-center align-items-center mx-auto border rounded-3 p-4 bg-white shadow' style={{ height: '50vh' }}> 
                     <Bar 
                         data={chartData} 
                         options={{
@@ -245,10 +245,10 @@ const Dashboard = () => {
                                 },
                             },
                         }}
-                        height={400} 
+                        height={250}
                     />
                 </div>
-                <div className='col-12 col-md-5 d-flex justify-content-center align-items-center mx-auto border rounded-3 p-4 bg-white shadow' > 
+                <div className='col-12 col-md-5 d-flex justify-content-center align-items-center mx-auto border rounded-3 p-4 bg-white shadow' style={{ height: '50vh' }}> 
                     {categoryData.length > 0 ? (
                         <div style={{ height: '85%', width: '100%' }}> 
                             <Doughnut 
@@ -266,7 +266,7 @@ const Dashboard = () => {
                                         },
                                     },
                                 }}
-                                height={400}
+                                height={250}
                             />
                         </div>
                     ) : (

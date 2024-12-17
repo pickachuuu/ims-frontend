@@ -139,7 +139,7 @@ const ProductPage = () => {
     }, {});
 
     return (
-        <div className="border rounded-3 p-4 bg-white shadow mx-auto" style={{ margin: '0 auto', height: '100vh' , overflow: 'auto' }}>
+        <div className="border rounded-3 p-4 bg-white shadow mx-auto" style={{ margin: '0 auto', height: '95vh' , overflow: 'auto' }}>
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <Typography variant="h4">Products</Typography>
                 <Button variant="contained" color="primary" onClick={handleClickOpen} className='border rounded-3 p-2 bg-primary shadow'>
@@ -206,7 +206,7 @@ const ProductPage = () => {
                     <MenuItem value="lowToHigh">Lowest to Highest</MenuItem>
                 </Select>
             </Box>
-            <TableContainer style={{ maxHeight: 550, height: '50vh', overflow: 'auto' }} component={Card}> 
+            <TableContainer style={{ maxHeight: 550, height: '45vh', overflow: 'auto' }} component={Card}> 
                 <Table stickyHeader>
                     <TableHead>
                         <TableRow sx={{ '& th': { fontWeight: 'bold' } }}>

@@ -52,11 +52,11 @@ const LowStockPage = () => {
     }, []);
 
     return (
-        <div className="border rounded-3 p-4 bg-white shadow mx-auto" style={{ margin: '0 auto', height: '100vh' }}>
+        <div className="border rounded-3 p-4 bg-white shadow mx-auto" style={{ margin: '0 auto', height: '95vh' }}>
             <Typography variant="h4" className="mb-4">Low Stock</Typography>
             <hr />
             <div className='border rounded-3 p-4 bg-white shadow'> 
-                <TableContainer style={{ maxHeight: 550, height: '50vh', overflow: 'auto' }} component={Card}>
+                <TableContainer style={{ maxHeight: 550, height: '45vh', overflow: 'auto' }} component={Card}>
                     <Table>
                         <TableHead>
                             <TableRow sx={{ '& th': { fontWeight: 'bold' } }}>

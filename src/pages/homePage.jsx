@@ -90,7 +90,7 @@ const HomePage = () => {
     };
 
     return (
-        <div className="d-flex" id='root' >
+        <div className="d-flex" id='root' style={{overflow: 'hidden'}}>
             <Sidebar 
                 onPageChange={(page) => navigate(`/Home/${page}`)} 
                 currentPage={location.pathname.split('/')[2] || 'dashboard'} 
