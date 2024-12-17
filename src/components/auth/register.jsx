@@ -5,19 +5,33 @@ import { useForm } from 'react-hook-form';
 import { useNavigate, Link } from 'react-router-dom';
 import logo from '../../assets/logo.png';
 
-const Login = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm();
+const Register = () => {
+  const { register, handleSubmit, formState: { errors }, setError } = useForm();
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
     try {
-      console.log(data);
       const response = await axios.post('http://localhost:3000/api/users/register', data);
       if (response.status === 201) {
         navigate('/');
       }
     } catch (error) {
-      console.error(error);
+      if (error.response?.status === 404) {
+        setError('email', {
+          type: 'server',
+          message: error.response.data.message
+        });
+      } else if (error.response?.status === 401) {
+        setError('password', {
+          type: 'server',
+          message: error.response.data.message
+        });
+      } else {
+        setError('root', {
+          type: 'server',
+          message: error.response?.data?.message || 'Registration failed'
+        });
+      }
     }
   };
 
@@ -102,6 +116,11 @@ const Login = () => {
           <button type="submit" className="btn btn-lg btn-primary w-100 fs-6">
             Sign up
           </button>
+          {errors.root && errors.root.message && (
+              <div className="w-100 text-center mt-2">  
+                <span className="text-danger">{errors.root.message}</span>
+              </div>
+            )}
         </div>
         <div className="row">
           <div className="col-12">
@@ -115,4 +134,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;
