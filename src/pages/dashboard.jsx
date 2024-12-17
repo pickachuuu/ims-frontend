@@ -22,7 +22,6 @@ const Dashboard = () => {
     const { business } = useContext(AuthContext); 
     const lowStockThreshold = 50;
 
-// Add or update the cardStyle and cardHoverStyle
 const cardStyle = {
     transition: 'all 0.3s ease',
     cursor: 'pointer',
@@ -30,11 +29,10 @@ const cardStyle = {
     color: 'inherit',
 };
 
-// You can adjust the glow color by modifying the rgba values
 const cardHoverStyle = {
     '&:hover': {
         transform: 'translateY(-5px)',
-        boxShadow: '0 0 20px rgba(0, 123, 255, 0.4)', // Blue glow
+        boxShadow: '0 0 20px rgba(0, 123, 255, 0.4)',
         background: '#f8f9fa',
     }
 };
@@ -118,12 +116,27 @@ const cardHoverStyle = {
         doc.save(`${business}_inventory_report`);
     };
 
+    const websiteColors = [
+        '#0d6efd', // Bootstrap primary blue
+        '#3d8bfd', // lighter blue
+        '#6ea8fe', // even lighter blue
+        '#9ec5fe', // very light blue
+        '#cfe2ff', // extremely light blue
+        '#0b5ed7', // slightly darker blue
+        '#084298', // darker blue
+        '#032a5d', // very dark blue
+        '#5c636a', // gray blue
+        '#4d97ff', // bright blue
+        '#1e4faf', // muted blue
+        '#2563eb'  // vivid blue
+    ];
+
     const chartData = {
         labels: products.map(product => product.productName),
         datasets: [{
             label: 'Quantity',
             data: products.map(product => product.quantity),
-            backgroundColor: '#82ca9d',
+            backgroundColor: '#0d6efd', 
         }],
     };
 
@@ -141,7 +154,7 @@ const cardHoverStyle = {
         labels: categoryData.map(data => data.name),
         datasets: [{
             data: categoryData.map(data => data.value),
-            backgroundColor: categoryData.map((_, index) => index % 2 === 0 ? '#82ca9d' : '#8884d8'),
+            backgroundColor: websiteColors.slice(0, categoryData.length),
         }],
     };
 
