@@ -1,4 +1,4 @@
-import banner from '../../assets/rb_18760.png';
+import banner from '../../assets/Login.png';
 
 const SideBanner = () => {
     return (
@@ -6,7 +6,7 @@ const SideBanner = () => {
         style={{
             background: "#0358E3"
         }}>
-            <div className="featured-image mb-3">
+            <div className="featured-image mb-1">
                 <img 
                     src={banner} 
                     className="img-fluid" 
@@ -22,7 +22,7 @@ const SideBanner = () => {
             Catalog
             </p>
             <small 
-                className="text-white text-wrap text-center" 
+                className="text-white text-wrap text-center mb-4" 
                 style={{ 
                     width: '17rem',
                     fontFamily: 'Courier New, Courier, monospace'

@@ -1,4 +1,4 @@
-import banner from '../../assets/rb_18760.png';
+import banner from '../../assets/Register.png';
 
 const SideBanner = () => {
     return (
@@ -25,7 +25,7 @@ const SideBanner = () => {
                     width: '17rem',
                     fontFamily: 'Courier New, Courier, monospace'
                 }}>
-                Inventory Management System
+                Join us for a purr-fect inventory experience!
             </small>
         </div> 
     )
