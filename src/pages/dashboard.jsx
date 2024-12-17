@@ -158,7 +158,7 @@ const Dashboard = () => {
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <Typography variant="h4">Dashboard</Typography>
                 <Button variant="contained" color="primary" onClick={generatePDF} className='border rounded-3 p-2 bg-primary shadow'>
-                    Report
+                + Report
                 </Button>
             </div>
             <hr />
@@ -250,7 +250,7 @@ const Dashboard = () => {
                 </div>
                 <div className='col-12 col-md-5 d-flex justify-content-center align-items-center mx-auto border rounded-3 p-4 bg-white shadow' > 
                     {categoryData.length > 0 ? (
-                        <div style={{ height: '100%', width: '100%' }}> 
+                        <div style={{ height: '85%', width: '100%' }}> 
                             <Doughnut 
                                 data={pieData} 
                                 options={{
