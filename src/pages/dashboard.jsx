@@ -22,20 +22,6 @@ const Dashboard = () => {
     const { business } = useContext(AuthContext); 
     const lowStockThreshold = 50;
 
-const cardStyle = {
-    transition: 'all 0.3s ease',
-    cursor: 'pointer',
-    textDecoration: 'none',
-    color: 'inherit',
-};
-
-const cardHoverStyle = {
-    '&:hover': {
-        transform: 'translateY(-5px)',
-        boxShadow: '0 0 20px rgba(0, 123, 255, 0.4)',
-        background: '#f8f9fa',
-    }
-};
 
     useEffect(() => {
         const loadData = async () => {
@@ -113,7 +99,16 @@ const cardHoverStyle = {
             startY: lowStockTableStartY, 
         });
 
-        doc.save(`${business}_inventory_report`);
+        const date = new Date();
+        const month = date.toLocaleString('default', { month: 'long' }).toLowerCase();
+        const year = date.getFullYear();
+
+        const sanitizedBusinessName = business
+            .replace(/\./g, '')    
+            .replace(/\s+/g, '-')     
+            .toLowerCase();            
+
+        doc.save(`${sanitizedBusinessName}-${month}-${year}-report.pdf`);
     };
 
     const websiteColors = [
