@@ -1,16 +1,16 @@
+import { submitCategory } from "../../utils/categoryUtils/categoryApi";
 import React, { useEffect, useState } from 'react';
-import { createPortal } from 'react-dom';
-import { useForm } from 'react-hook-form';
 import prodToast from '../products/toastSuccess';
-import { submitCategory } from '../../utils/categoryUtils/categoryApi';
+import { useForm } from 'react-hook-form';
+import { createPortal } from "react-dom";
 
-const CategoryModal = ({ isOpen, onRequestClose, mode, category }) => {
+const CategoryModal = ({isOpen, onRequestClose, mode, category}) => { 
     const { register, handleSubmit, formState: { errors }, setValue } = useForm();
     const [serverError, setServerError] = useState('');
 
     useEffect(() => {
         if (mode === 'edit' && category) {
-            setValue('categoryName', category.categoryName);
+            setValue('categoryName', category.categoryName); 
         } else {
             setValue('categoryName', '');
         }
