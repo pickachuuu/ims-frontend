@@ -15,7 +15,6 @@ const Login = () => {
   const onSubmit = async (data) => {
     try {
       const response = await axios.post('http://localhost:3000/api/users/login', data);
-      console.log(response);
 
       if (response.status === 200) {
         const token = response.data.token;
@@ -26,7 +25,6 @@ const Login = () => {
       }
       
     } catch (error) {
-      console.error(error);
       if (error.response?.status === 404) {
         setError('email', {
           type: 'server',
