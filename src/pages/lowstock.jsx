@@ -16,7 +16,7 @@ import { fetchSuppliers } from '../utils/supplierUtils/supplierApi';
 const LowStockPage = () => {
     const [lowStockItems, setLowStockItems] = useState([]);
     const [suppliers, setSuppliers] = useState([]);
-    const lowStockThreshold = 5;
+    const lowStockThreshold = 50;
 
     useEffect(() => {
         const loadProducts = async () => {

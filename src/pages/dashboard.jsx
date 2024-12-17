@@ -20,7 +20,7 @@ const Dashboard = () => {
     const [suppliers, setSuppliers] = useState([]);
     const [loading, setLoading] = useState(true);
     const { business } = useContext(AuthContext); 
-    const lowStockThreshold = 5;
+    const lowStockThreshold = 50;
 
 // Add or update the cardStyle and cardHoverStyle
 const cardStyle = {
