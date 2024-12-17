@@ -49,7 +49,6 @@ const LowStockPage = () => {
             <Typography variant="h4" className="mb-4">Low Stock</Typography>
             <hr />
             <div className='border rounded-3 p-4 bg-white shadow'> 
-            {lowStockItems.length > 0 ? (
                 <TableContainer component={Card}>
                     <Table>
                         <TableHead>
@@ -61,20 +60,25 @@ const LowStockPage = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {lowStockItems.map((item) => (
-                                <TableRow key={item.productID}>
-                                    <TableCell>{item.productName}</TableCell>
-                                    <TableCell>{item.quantity}</TableCell>
-                                    <TableCell>{item.supplierName}</TableCell>
-                                    <TableCell>{item.supplierContact}</TableCell>
+                            {lowStockItems.length > 0 ? (
+                                lowStockItems.map((item) => (
+                                    <TableRow key={item.productID}>
+                                        <TableCell>{item.productName}</TableCell>
+                                        <TableCell>{item.quantity}</TableCell>
+                                        <TableCell>{item.supplierName}</TableCell>
+                                        <TableCell>{item.supplierContact}</TableCell>
+                                    </TableRow>
+                                ))
+                            ) : (
+                                <TableRow>
+                                    <TableCell colSpan={4} align="center">
+                                        No low stock items found.
+                                    </TableCell>
                                 </TableRow>
-                            ))}
+                            )}
                         </TableBody>
                     </Table>
                 </TableContainer>
-            ) : (
-                <Typography variant="h6">No low stock items found.</Typography>
-            )}
             </div>
         </div>
     );
