@@ -14,6 +14,7 @@ import BG from '../assets/stacked-waves-haikei.svg';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'; 
 import ProfilePage from './profilePage';
+import { useTransition, animated, useSpringRef } from '@react-spring/web';
 
 const HomePage = () => {
     const { user } = useContext(AuthContext);
@@ -21,6 +22,30 @@ const HomePage = () => {
     const navigate = useNavigate();
     const [showBusinessSetup, setShowBusinessSetup] = React.useState(false);
     const [isMobile, setIsMobile] = React.useState(window.innerWidth < 992);
+    
+    const transRef = useSpringRef();
+    const transitions = useTransition(location.pathname, {
+        // comment everything here if you want to disable the animations //
+        ref: transRef,
+        keys: location.pathname,
+        from: { opacity: 0, transform: 'translate3d(100%,0,0)' },
+        enter: { opacity: 1, transform: 'translate3d(0%,0,0)' },
+        leave: { opacity: 0, transform: 'translate3d(-50%,0,0)' },
+        config: {
+            tension: 400,
+            friction: 26,
+            mass: 0.8,
+            clamp: false,
+            precision: 0.01
+        },
+        immediate: false,
+        exitBeforeEnter: true
+        // comment everything here if you want to disable the animations //
+    });
+
+    useEffect(() => {
+        transRef.start();
+    }, [location.pathname]);
 
     useEffect(() => {
         const token = Cookies.get('authToken'); 
@@ -83,10 +108,31 @@ const HomePage = () => {
                     backgroundImage: `url(${BG})`, 
                     backgroundSize: 'cover', 
                     backgroundPosition: 'center',
+                    overflow: 'hidden',
+                    position: 'relative'
                 }}
             >
-                <div className="container-fluid px-0">
-                    {renderContent()}
+                <div className="container-fluid px-0" style={{ 
+                    position: 'relative', 
+                    overflow: 'hidden', 
+                    height: '100vh'
+                }}>
+                    {transitions((style, item) => (
+                        <animated.div
+                            style={{
+                                ...style,
+                                width: '100%',
+                                height: '100%',
+                                position: 'absolute',
+                                top: 0,
+                                left: 0,
+                                willChange: 'transform, opacity',
+                                backfaceVisibility: 'hidden',
+                            }}
+                        >
+                            {renderContent()}
+                        </animated.div>
+                    ))}
                 </div>
             </main>
             <BusinessSetupModal 
