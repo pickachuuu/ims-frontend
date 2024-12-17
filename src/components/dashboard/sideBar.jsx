@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
     MdDashboard,
@@ -12,11 +12,27 @@ import {
 } from 'react-icons/md';
 import { AuthContext } from '../../context/AuthContext';
 import Logo from '../../assets/Logo.png';
+import { fetchProducts } from '../../utils/productUtils/productApi';
 
 const Sidebar = ({ onPageChange, currentPage }) => {
     const [isOpen, setIsOpen] = useState(false);
     const { user, logout } = useContext(AuthContext);
     const navigate = useNavigate();
+    const [lowStockCount, setLowStockCount] = useState(0);
+
+    useEffect(() => {
+        const getLowStockCount = async () => {
+            try {
+                const products = await fetchProducts();
+                const lowStockItems = products.filter(product => product.quantity <= 50);
+                setLowStockCount(lowStockItems.length);
+            } catch (error) {
+                console.error('Error fetching products:', error);
+            }
+        };
+
+        getLowStockCount();
+    }, []);
 
     const handleSignOut = () => {
         logout();
@@ -28,7 +44,7 @@ const Sidebar = ({ onPageChange, currentPage }) => {
         { id: 'categories', icon: <MdCategory />, label: 'Categories' },
         { id: 'suppliers', icon: <MdLocalShipping />, label: 'Suppliers' },
         { id: 'products', icon: <MdInventory />, label: 'Products' },
-        { id: 'lowstock', icon: <MdInventory2 />, label: 'Low Stock' },
+        { id: 'lowstock', icon: <MdInventory2 />, label: 'Low Stock', count: lowStockCount },
     ];
 
     return (
@@ -103,8 +119,14 @@ const Sidebar = ({ onPageChange, currentPage }) => {
                                     setIsOpen(false);
                                 }}
                             >
-                                <span className="d-flex align-items-center">
+                                <span className="d-flex align-items-center position-relative">
                                     {React.cloneElement(item.icon, { size: 20 })}
+                                    {item.count > 0 && item.id === 'lowstock' && (
+                                        <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill" 
+                                              style={{ backgroundColor: '#007bff', color: 'white' }}>
+                                            {item.count}
+                                        </span>
+                                    )}
                                 </span>
                                 <span>{item.label}</span>
                             </button>
