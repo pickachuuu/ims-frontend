@@ -91,6 +91,7 @@ Before you begin, ensure you have the following installed:
 
 - **User Authentication and Business Profile Setup**: Secure login and registration process, allowing users to set up and manage their business profiles.
 - **Inventory Management**: Add, update, and delete inventory items to keep track of stock levels effectively.
+- **Low Stock Notifications**: Implement a function to notify users when stock levels fall below a certain threshold.
 - **Supplier Management**: Link suppliers to products, maintaining a comprehensive list of suppliers and their offerings.
 - **Stock Level Tracking**: Monitor inventory status in real-time to ensure optimal stock levels.
 - **Report Generation**: Generate detailed reports for inventory, suppliers, and stock levels, facilitating easy analysis and sharing of important data.
