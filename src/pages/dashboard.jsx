@@ -158,10 +158,14 @@ const cardHoverStyle = {
                 {loading ? (
                     [1, 2, 3, 4].map((_, index) => (
                         <div key={index} className="col-6 col-md-3 mb-3">
-                            <div className="card text-center">
+                            <div className="card text-center border rounded-3 p-4 bg-white shadow">
                                 <div className="card-body">
-                                    <Skeleton variant="text" width="80%" />
-                                    <Skeleton variant="text" width="60%" />
+                                    <h5 className="card-title">
+                                        <Skeleton variant="text" width="80%" style={{ margin: '0 auto' }} />
+                                    </h5>
+                                    <p className="card-text">
+                                        <Skeleton variant="text" width="40%" style={{ margin: '0 auto' }} />
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -183,7 +187,7 @@ const cardHoverStyle = {
                             <Link to="/home/lowstock" className="dashboard-card">
                                 <div className="card text-center border rounded-3 p-4 bg-white shadow">
                                     <div className="card-body">
-                                        <h5 className="card-title">Low-Stock Alerts</h5>
+                                        <h5 className="card-title">Low-Stock</h5>
                                         <p className="card-text">
                                             {products.filter(product => product.quantity <= lowStockThreshold).length}
                                         </p>
