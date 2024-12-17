@@ -22,7 +22,7 @@ const Login = () => {
         Cookies.set('authToken', token, { expires: 1, sameSite: 'Lax' });
         setIsAuthenticated(true);
         login(response.data.user, response.data.business);
-        navigate('/Home');
+        navigate('/Home/dashboard');
       }
       
     } catch (error) {
